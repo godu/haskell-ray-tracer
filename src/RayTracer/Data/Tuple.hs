@@ -4,22 +4,27 @@ module RayTracer.Data.Tuple where
 
 import           Prelude
 
-type Tuple a = Num a => (a, a, a, a)
+data Tuple a = Tuple a a a a deriving (Eq, Show)
+
+instance (Num a) => Num (Tuple a) where
+  (Tuple a b c d) + (Tuple a' b' c' d') =
+    Tuple (a + a') (b + b') (c + c') (d + d')
+
 
 x :: Num a => Tuple a -> a
-x (a, _, _, _) = a
+x (Tuple a _ _ _) = a
 
 y :: Num a => Tuple a -> a
-y (_, b, _, _) = b
+y (Tuple _ b _ _) = b
 
 z :: Num a => Tuple a -> a
-z (_, _, c, _) = c
+z (Tuple _ _ c _) = c
 
 w :: Num a => Tuple a -> a
-w (_, _, _, d) = d
+w (Tuple _ _ _ d) = d
 
 tuple :: Num a => a -> a -> a -> a -> Tuple a
-tuple a b c d = (a, b, c, d)
+tuple = Tuple
 
 vector :: Num a => a -> a -> a -> Tuple a
 vector a b c = tuple a b c 0

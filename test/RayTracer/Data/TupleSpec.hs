@@ -28,3 +28,8 @@ spec = do
   it "vectore() creates tuples with w=1" $ do
     let actual = vector 4 (-4) 3
     actual `shouldBe` tuple 4 (-4) 3 0
+
+  it "Adding two tuples" $ do
+    let a = tuple 3 (-2) 5 1
+        b = tuple (-2) 3 1 0
+    (a + b) `shouldBe` tuple 1 1 6 1
