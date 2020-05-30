@@ -10,6 +10,7 @@ instance (Num a) => Num (Tuple a) where
   (Tuple a b c d) + (Tuple a' b' c' d') =
     Tuple (a + a') (b + b') (c + c') (d + d')
   negate (Tuple a b c d) = Tuple (-a) (-b) (-c) (-d)
+  fromInteger i = Tuple a a a a where a = fromInteger i
 
 
 x :: Num a => Tuple a -> a
@@ -38,3 +39,6 @@ isVector = (== 0) . w
 
 isPoint :: Num a => Eq a => Tuple a -> Bool
 isPoint = (== 1) . w
+
+zero :: Num a => Tuple a
+zero = fromInteger 0

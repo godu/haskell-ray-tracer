@@ -41,3 +41,11 @@ spec = do
     let a = vector 3 2 1
         b = vector 5 6 7
     (a - b) `shouldBe` vector (-2) (-4) (-6)
+
+  it "Subtracting a vector from the zero vector" $ do
+    let actual = vector 1 (-2) 3
+    zero - actual `shouldBe` vector (-1) 2 (-3)
+
+  it "Negating a tuple" $ do
+    let actual = tuple 1 (-2) 3 (-4)
+    (-actual) `shouldBe` tuple (-1) 2 (-3) 4
