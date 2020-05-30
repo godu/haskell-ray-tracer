@@ -1,0 +1,39 @@
+name: haskell-ray-tracer
+version: 0.1.0.0
+description: |
+  Please see the README on GitHub
+  at <https://github.com/godu/haskell-ray-tracer#readme>
+author: Arthur Weber
+maintainer: arthur.weber@viacesi.fr
+license: BSD3
+github: godu/haskell-ray-tracer
+extra-source-files:
+  - README.md
+dependencies:
+  - base >= 4.7 && < 5
+library:
+  source-dirs: src
+  dependencies:
+    - foldl
+    - semirings
+executables:
+  haskell-ray-tracer-exe:
+    main: Main.hs
+    source-dirs: app
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - haskell-ray-tracer
+tests:
+  haskell-ray-tracer-test:
+    main: Spec.hs
+    source-dirs: test
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - haskell-ray-tracer
+      - hspec

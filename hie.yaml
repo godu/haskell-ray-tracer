@@ -1,0 +1,8 @@
+cradle:
+  stack:
+    - path: test
+      component: "haskell-ray-tracer:test:haskell-ray-tracer-test"
+    - path: src
+      component: "haskell-ray-tracer:lib"
+    - path: app
+      component: "haskell-ray-tracer:exe:haskell-ray-tracer-exe"
