@@ -9,6 +9,7 @@ data Tuple a = Tuple a a a a deriving (Eq, Show)
 instance (Num a) => Num (Tuple a) where
   (Tuple a b c d) + (Tuple a' b' c' d') =
     Tuple (a + a') (b + b') (c + c') (d + d')
+  negate (Tuple a b c d) = Tuple (-a) (-b) (-c) (-d)
 
 
 x :: Num a => Tuple a -> a

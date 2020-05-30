@@ -25,11 +25,19 @@ spec = do
   it "point() creates tuples with w=1" $ do
     let actual = point 4 (-4) 3
     actual `shouldBe` tuple 4 (-4) 3 1
-  it "vectore() creates tuples with w=1" $ do
+  it "vector() creates tuples with w=1" $ do
     let actual = vector 4 (-4) 3
     actual `shouldBe` tuple 4 (-4) 3 0
 
-  it "Adding two tuples" $ do
-    let a = tuple 3 (-2) 5 1
-        b = tuple (-2) 3 1 0
-    (a + b) `shouldBe` tuple 1 1 6 1
+  it "Subtracting two points" $ do
+    let a = point 3 2 1
+        b = point 5 6 7
+    (a - b) `shouldBe` vector (-2) (-4) (-6)
+  it "Subtracting a vector from a point" $ do
+    let a = point 3 2 1
+        b = vector 5 6 7
+    (a - b) `shouldBe` point (-2) (-4) (-6)
+  it "Subtracting two vectors" $ do
+    let a = vector 3 2 1
+        b = vector 5 6 7
+    (a - b) `shouldBe` vector (-2) (-4) (-6)
