@@ -1,8 +1,37 @@
 {-# LANGUAGE RankNTypes #-}
 
-module RayTracer.Data.Tuple where
+module RayTracer.Data.Tuple
+  ( Tuple(..)
+  , tuple
+  , vector
+  , point
+  , isVector
+  , isPoint
+  , zero
+  , (*^)
+  , (/^)
+  , magnitude
+  , normalize
+  , (.^)
+  )
+where
 
-import           Prelude
+import           Prelude                        ( Num
+                                                , Eq
+                                                , Show
+                                                , Fractional
+                                                , Floating
+                                                , Bool
+                                                , (.)
+                                                , (==)
+                                                , (+)
+                                                , (-)
+                                                , (*)
+                                                , (/)
+                                                , negate
+                                                , fromInteger
+                                                , sqrt
+                                                )
 
 data Tuple a = Tuple { x :: a
                      , y :: a

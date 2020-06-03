@@ -1,7 +1,36 @@
-module RayTracer.Data.TupleSpec where
+module RayTracer.Data.TupleSpec
+  ( spec
+  )
+where
 
-import           Test.Hspec
-import           RayTracer.Data.Tuple
+import           Prelude                        ( Bool(..)
+                                                , ($)
+                                                , (-)
+                                                , (+)
+                                                , (*)
+                                                , (/)
+                                                , sqrt
+                                                )
+import           Test.Hspec                     ( Spec
+                                                , it
+                                                , shouldBe
+                                                )
+import           RayTracer.Data.Tuple           ( (*^)
+                                                , (/^)
+                                                , (.^)
+                                                , tuple
+                                                , vector
+                                                , point
+                                                , x
+                                                , y
+                                                , z
+                                                , w
+                                                , isPoint
+                                                , isVector
+                                                , zero
+                                                , magnitude
+                                                , normalize
+                                                )
 
 spec :: Spec
 spec = do

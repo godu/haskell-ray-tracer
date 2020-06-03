@@ -12,6 +12,7 @@ import           Prelude                        ( IO
                                                 , pure
                                                 )
 import           RayTracer.Data.Tuple           ( Tuple(..)
+                                                , (*^)
                                                 , vector
                                                 , point
                                                 , normalize
@@ -57,8 +58,7 @@ main = do
     )
     where aboveFloor (Projectile position _) = 0 < y position
 
-  position   = point 0 1 0
-  projectile = Projectile position velocity
-    where velocity = normalize $ vector 1 1 0
-  secondProjectile = Projectile position velocity
-    where velocity = normalize $ vector 1 0.5 0
+  position         = point 0 1 0
+  velocity         = normalize $ vector 1 1 0
+  projectile       = Projectile position velocity
+  secondProjectile = Projectile position (velocity *^ 2)
