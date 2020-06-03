@@ -49,3 +49,14 @@ spec = do
   it "Negating a tuple" $ do
     let actual = tuple 1 (-2) 3 (-4)
     (-actual) `shouldBe` tuple (-1) 2 (-3) 4
+
+  it "Multiplying a tuple by a scalar" $ do
+    let actual = tuple 1 (-2) 3 (-4)
+    actual *^ 3.5 `shouldBe` tuple 3.5 (-7) 10.5 (-14)
+  it "Multiplying a tuple by a fraction" $ do
+    let actual = tuple 1 (-2) 3 (-4)
+    actual *^ 0.5 `shouldBe` tuple 0.5 (-1) 1.5 (-2)
+
+  it "Dividing a tuple by a fraction" $ do
+    let actual = tuple 1 (-2) 3 (-4)
+    actual /^ 2 `shouldBe` tuple 0.5 (-1) 1.5 (-2)

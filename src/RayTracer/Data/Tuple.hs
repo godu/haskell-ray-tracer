@@ -41,4 +41,10 @@ isPoint :: Num a => Eq a => Tuple a -> Bool
 isPoint = (== 1) . w
 
 zero :: Num a => Tuple a
-zero = fromInteger 0
+zero = 0
+
+(*^) :: Num a => Tuple a -> a -> Tuple a
+(Tuple a b c d) *^ x = tuple (a * x) (b * x) (c * x) (d * x)
+
+(/^) :: Fractional a => Tuple a -> a -> Tuple a
+a /^ x = a *^ (1 / x)
