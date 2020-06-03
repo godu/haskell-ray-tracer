@@ -76,3 +76,14 @@ spec = do
   it "Computing the magnitude of vector(0, 0, 1)" $ do
     let actual = vector (-1) (-2) (-3)
     magnitude actual `shouldBe` sqrt 14
+
+  it "Normalizing vector(4, 0, 0) gives (1, 0, 0)" $ do
+    let actual = vector 4 0 0
+    normalize actual `shouldBe` vector 1 0 0
+  it "Normalizing vector(1, 2, 3)" $ do
+    let actual = vector 1 2 3
+    normalize actual `shouldBe` vector (1 / sqrt 14) (2 / sqrt 14) (3 / sqrt 14)
+  it "The magnitude of a normalized vector" $ do
+    let actual = vector 1 2 3
+    magnitude (normalize actual) `shouldBe` 1
+
