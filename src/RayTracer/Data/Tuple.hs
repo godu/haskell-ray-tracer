@@ -12,7 +12,6 @@ instance (Num a) => Num (Tuple a) where
   negate (Tuple a b c d) = Tuple (-a) (-b) (-c) (-d)
   fromInteger i = Tuple a a a a where a = fromInteger i
 
-
 x :: Num a => Tuple a -> a
 x (Tuple a _ _ _) = a
 
@@ -58,3 +57,6 @@ normalize v = tuple (a / magnitude v)
                     (c / magnitude v)
                     (d / magnitude v)
   where (Tuple a b c d) = v
+
+(.^) :: Num a => Tuple a -> Tuple a -> a
+(Tuple a b c d) .^ (Tuple a' b' c' d') = a * a' + b * b' + c * c' + d * d'

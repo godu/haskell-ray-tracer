@@ -87,3 +87,7 @@ spec = do
     let actual = vector 1 2 3
     magnitude (normalize actual) `shouldBe` 1
 
+  it "The dot product of two tuple" $ do
+    let a = vector 1 2 3
+        b = vector 2 3 4
+    a .^ b `shouldBe` 20
