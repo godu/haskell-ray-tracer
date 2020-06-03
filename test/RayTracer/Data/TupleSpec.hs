@@ -60,3 +60,19 @@ spec = do
   it "Dividing a tuple by a fraction" $ do
     let actual = tuple 1 (-2) 3 (-4)
     actual /^ 2 `shouldBe` tuple 0.5 (-1) 1.5 (-2)
+
+  it "Computing the magnitude of vector(1, 0, 0)" $ do
+    let actual = vector 1 0 0
+    magnitude actual `shouldBe` 1
+  it "Computing the magnitude of vector(0, 1, 0)" $ do
+    let actual = vector 0 1 0
+    magnitude actual `shouldBe` 1
+  it "Computing the magnitude of vector(0, 0, 1)" $ do
+    let actual = vector 0 0 1
+    magnitude actual `shouldBe` 1
+  it "Computing the magnitude of vector(1, 2, 3)" $ do
+    let actual = vector 1 2 3
+    magnitude actual `shouldBe` sqrt 14
+  it "Computing the magnitude of vector(0, 0, 1)" $ do
+    let actual = vector (-1) (-2) (-3)
+    magnitude actual `shouldBe` sqrt 14

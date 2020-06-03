@@ -48,3 +48,6 @@ zero = 0
 
 (/^) :: Fractional a => Tuple a -> a -> Tuple a
 a /^ x = a *^ (1 / x)
+
+magnitude :: Floating a => Tuple a -> a
+magnitude (Tuple a b c d) = sqrt (a * a + b * b + c * c + d * d)
