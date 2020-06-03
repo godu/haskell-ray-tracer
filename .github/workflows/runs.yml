@@ -1,0 +1,33 @@
+name: Putting it Together 🎨
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  putting-it-together:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        exec:
+          - chapter-1
+
+    steps:
+      - name: Checkout source 📡
+        uses: actions/checkout@v2
+      - name: Cache Stack 📦
+        uses: actions/cache@v1
+        with:
+          path: ~/.stack
+          key: ${{ runner.os }}-stack-${{ hashFiles('**/stack.yaml.lock') }}-${{ hashFiles('**/package.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-stack-${{ hashFiles('**/stack.yaml.lock') }}-
+            ${{ runner.os }}-stack-
+      - name: Upgrade Stack 📡
+        run: stack upgrade
+      - name: Build ⚒
+        run: stack build
+      - name: Run 🚀
+        run: stack run ${{ matrix.chapter }}
