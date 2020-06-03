@@ -91,3 +91,9 @@ spec = do
     let a = vector 1 2 3
         b = vector 2 3 4
     a .^ b `shouldBe` 20
+
+  it "The corss product of two vectors" $ do
+    let a = vector 1 2 3
+        b = vector 2 3 4
+    a * b `shouldBe` vector (-1) 2 (-1)
+    b * a `shouldBe` vector 1 (-2) 1

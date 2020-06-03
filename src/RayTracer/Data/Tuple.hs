@@ -6,11 +6,16 @@ import           Prelude
 
 data Tuple a = Tuple a a a a deriving (Eq, Show)
 
-instance (Num a) => Num (Tuple a) where
+instance (Eq a, Num a) => Num (Tuple a) where
   (Tuple a b c d) + (Tuple a' b' c' d') =
     Tuple (a + a') (b + b') (c + c') (d + d')
+
   negate (Tuple a b c d) = Tuple (-a) (-b) (-c) (-d)
+
   fromInteger i = Tuple a a a a where a = fromInteger i
+
+  (Tuple a b c 0) * (Tuple a' b' c' 0) =
+    vector (b * c' - c * b') (c * a' - a * c') (a * b' - b * a')
 
 x :: Num a => Tuple a -> a
 x (Tuple a _ _ _) = a
@@ -39,7 +44,7 @@ isVector = (== 0) . w
 isPoint :: Num a => Eq a => Tuple a -> Bool
 isPoint = (== 1) . w
 
-zero :: Num a => Tuple a
+zero :: (Eq a, Num a) => Tuple a
 zero = 0
 
 (*^) :: Num a => Tuple a -> a -> Tuple a
