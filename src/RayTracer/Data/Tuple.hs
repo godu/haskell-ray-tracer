@@ -1,7 +1,5 @@
-{-# LANGUAGE RankNTypes #-}
-
 module RayTracer.Data.Tuple
-  ( Tuple(..)
+  ( Tuple(x, y, z, w)
   , tuple
   , vector
   , point
@@ -18,12 +16,14 @@ where
 
 import           Prelude                        ( Num
                                                 , Eq
+                                                , Ord
                                                 , Show
                                                 , Fractional
                                                 , Floating
                                                 , Bool
                                                 , (.)
                                                 , (==)
+                                                , (&&)
                                                 , (+)
                                                 , (-)
                                                 , (*)
@@ -32,12 +32,17 @@ import           Prelude                        ( Num
                                                 , fromInteger
                                                 , sqrt
                                                 )
+import           RayTracer.Data.Extra           ( (~=) )
 
 data Tuple a = Tuple { x :: a
                      , y :: a
                      , z :: a
                      , w :: a
-                     } deriving (Eq, Show)
+                     } deriving (Show)
+
+instance (Ord a, Fractional a) => Eq (Tuple a )where
+  (Tuple a b c d) == (Tuple a' b' c' d') =
+    (a ~= a') && (b ~= b') && (c ~= c') && (d ~= d')
 
 instance (Eq a, Num a) => Num (Tuple a) where
   (Tuple a b c d) + (Tuple a' b' c' d') =
