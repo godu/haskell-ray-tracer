@@ -16,6 +16,7 @@ library:
   dependencies:
     - foldl
     - semirings
+    - containers
 executables:
   chapter-1:
     main: RayTracer/Chapter1.hs
