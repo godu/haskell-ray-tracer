@@ -1,12 +1,12 @@
 module RayTracer.Data.Canvas
-    ( canvas
-    , width
-    , height
-    , pixels
-    , positions
-    , at
-    , replace
-    )
+  ( canvas
+  , width
+  , height
+  , pixels
+  , positions
+  , at
+  , replace
+  )
 where
 
 import           Prelude                        ( Show
@@ -28,6 +28,7 @@ import           Prelude                        ( Show
                                                 , otherwise
                                                 , length
                                                 , words
+                                                , unlines
                                                 )
 import           Data.Foldable                  ( concat
                                                 , concatMap
@@ -38,7 +39,6 @@ import           Data.Map.Strict                ( Map
                                                 , (!?)
                                                 , insert
                                                 )
-import           Data.List.Utils                ( join )
 import           Data.Maybe                     ( fromMaybe )
 import           RayTracer.Data.Color           ( Color
                                                 , color
@@ -59,28 +59,25 @@ replace :: (Int, Int) -> Color a -> Canvas a -> Canvas a
 replace i a (Canvas w h pixels) = Canvas w h $ insert i a pixels
 
 positions (Canvas w h _) =
-    (\a -> ((\b -> (b, a)) <$> range (0, w - 1))) <$> range (0, (h - 1))
+  (\a -> ((\b -> (b, a)) <$> range (0, w - 1))) <$> range (0, (h - 1))
 
 instance (Num a, RealFrac a) => Show (Canvas a) where
-    show c = "P3\n" <> show w <> " " <> show h <> "\n255\n" <> pixels <> "\n"
-      where
-        Canvas w h ps = c
-        pixels =
-            join "\n"
-                $   concat
-                $   (joinUntil " " ((<= 70) . length))
-                <$> concatMap (words)
-                <$> fmap (show . at c)
-                <$> positions c
+  show c = "P3\n" <> show w <> " " <> show h <> "\n255\n" <> pixels <> "\n"
+   where
+    Canvas w h ps = c
+    pixels =
+      unlines
+        $   concat
+        $   (joinUntil " " ((<= 70) . length))
+        <$> concatMap (words)
+        <$> fmap (show . at c)
+        <$> positions c
 
 joinUntil :: String -> (String -> Bool) -> [String] -> [String]
 joinUntil break cond (x : xs) = joinUntil_ break cond xs x
-  where
-    joinUntil_ break cond [] acc = [acc]
-    joinUntil_ break cond (x : xs) acc
-        | cond (acc <> break <> x) = joinUntil_ break
-                                                cond
-                                                xs
-                                                (acc <> break <> x)
-        | otherwise = acc : joinUntil_ break cond xs x
+ where
+  joinUntil_ break cond [] acc = [acc]
+  joinUntil_ break cond (x : xs) acc
+    | cond (acc <> break <> x) = joinUntil_ break cond xs (acc <> break <> x)
+    | otherwise                = acc : joinUntil_ break cond xs x
 joinUntil _ _ [] = []

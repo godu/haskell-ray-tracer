@@ -17,7 +17,6 @@ library:
     - foldl
     - semirings
     - containers
-    - MissingH
 executables:
   chapter-1:
     main: RayTracer/Chapter1.hs
