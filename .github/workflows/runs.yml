@@ -6,14 +6,14 @@ on:
       - master
 
 jobs:
-  putting-it-together:
+  run:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         exec:
           - chapter-1
-
+          - chapter-2
     steps:
       - name: Checkout source 📡
         uses: actions/checkout@v2
@@ -29,5 +29,20 @@ jobs:
         run: stack upgrade
       - name: Build ⚒
         run: stack build
+      - name: Create .output directory 🧹
+        run: mkdir .output
       - name: Run 🚀
-        run: stack run ${{ matrix.chapter }}
+        run: stack run ${{ matrix.exec }}
+      - name: PPM to JPEG 🖼
+        working-directory: ./.output
+        run: |
+          for i in *.ppm ; do
+            [ -f "$i" ] || continue;
+            mogrify -format jpg "$i";
+          done
+      - name: Deploy 🧾
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: .output

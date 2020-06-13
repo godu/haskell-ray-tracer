@@ -1,5 +1,6 @@
 module RayTracer.Data.Canvas
-  ( canvas
+  ( Canvas()
+  , canvas
   , width
   , height
   , pixels

@@ -44,7 +44,7 @@ instance (Ord a, Fractional a) => Eq (Tuple a )where
   (Tuple a b c d) == (Tuple a' b' c' d') =
     (a ~= a') && (b ~= b') && (c ~= c') && (d ~= d')
 
-instance (Eq a, Num a) => Num (Tuple a) where
+instance Num a => Num (Tuple a) where
   (Tuple a b c d) + (Tuple a' b' c' d') =
     Tuple (a + a') (b + b') (c + c') (d + d')
 
@@ -52,7 +52,7 @@ instance (Eq a, Num a) => Num (Tuple a) where
 
   fromInteger i = Tuple a a a a where a = fromInteger i
 
-  (Tuple a b c 0) * (Tuple a' b' c' 0) =
+  (Tuple a b c _) * (Tuple a' b' c' _) =
     vector (b * c' - c * b') (c * a' - a * c') (a * b' - b * a')
 
 tuple :: Num a => a -> a -> a -> a -> Tuple a
