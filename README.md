@@ -6,6 +6,8 @@
 
 ## Putting it Together 🎨
 
-### Chapter 2
-
-![chapter-2](https://raw.githubusercontent.com/godu/haskell-ray-tracer/gh-pages/chapter-2.jpg)
+<details> 
+  <summary>Chapter 2</summary>
+  
+  ![chapter-2](https://raw.githubusercontent.com/godu/haskell-ray-tracer/gh-pages/chapter-2.jpg)
+</details>
