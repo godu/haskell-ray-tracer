@@ -41,7 +41,6 @@ packages:
 #
 extra-deps:
   - sbv-8.6
-  - MissingH-1.4.3.0
 # Override default flag values for local packages and extra-deps
 # flags: {}
 
