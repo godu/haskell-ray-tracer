@@ -1,5 +1,5 @@
 module RayTracer.Data.Tuple
-  ( Tuple(x, y, z, w)
+  ( Tuple(Tuple, x, y, z, w)
   , tuple
   , vector
   , point
