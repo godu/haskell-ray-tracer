@@ -5,6 +5,7 @@ module RayTracer.Data.Matrix
   , at
   , one
   , transpose
+  , determinant
   )
 where
 
@@ -48,6 +49,7 @@ import qualified Data.Vector                   as V
                                                 ( Vector
                                                 , (!?)
                                                 , fromList
+                                                , toList
                                                 )
 
 data Matrix a = Matrix { dimension :: (Int, Int)
@@ -103,3 +105,8 @@ transpose (Matrix (w, h) as) = Matrix (w, h) bs
  where
   is = concatMap (\i -> (\j -> j * w + i) <$> [0 .. w - 1]) $ [0 .. h - 1]
   bs = V.fromList $ catMaybes $ (as V.!?) <$> is
+
+
+determinant :: Num a => Matrix a -> a
+determinant (Matrix (2, 2) as) = (a * d) - (b * c)
+  where [a, b, c, d] = V.toList as

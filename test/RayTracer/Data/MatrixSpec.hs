@@ -18,6 +18,7 @@ import           RayTracer.Data.Matrix          ( (*^)
                                                 , at
                                                 , one
                                                 , transpose
+                                                , determinant
                                                 )
 import           Debug.Trace                    ( trace )
 
@@ -102,3 +103,7 @@ spec = do
       `shouldBe` fromList 4 4 [0, 9, 1, 0, 9, 8, 8, 0, 3, 0, 5, 5, 0, 8, 3, 8]
   it "Transposing the identity matrix" $ do
     transpose (one 4) `shouldBe` (one 4)
+
+  it "Calculating the determinant of a 2x2 matrix" $ do
+    let a = fromList 2 2 [1, 5, (-3), 2]
+    determinant a `shouldBe` 17
