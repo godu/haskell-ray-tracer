@@ -20,6 +20,7 @@ import           RayTracer.Data.Matrix          ( (*^)
                                                 , transpose
                                                 , determinant
                                                 , submatrix
+                                                , minor
                                                 )
 import           Debug.Trace                    ( trace )
 
@@ -119,3 +120,9 @@ spec = do
           [(-6), 1, 1, 6, (-8), 5, 8, 6, (-1), 0, 8, 2, (-7), 1, (-1), 1]
     submatrix 2 1 a
       `shouldBe` fromList 3 3 [(-6), 1, 6, (-8), 8, 6, (-7), (-1), 1]
+
+  it "Calculating a minor of a 3x3 matrix" $ do
+    let a = fromList 3 3 [3, 5, 0, 2, (-1), (-7), 6, (-1), 5]
+    let b = submatrix 1 0 a
+    determinant b `shouldBe` 25
+    minor 1 0 a `shouldBe` 25

@@ -7,6 +7,7 @@ module RayTracer.Data.Matrix
   , transpose
   , determinant
   , submatrix
+  , minor
   )
 where
 
@@ -121,3 +122,6 @@ submatrix x y (Matrix (w, h) as) = Matrix (w - 1, h - 1)
  where
   belongsTo (w, h) (x, y) i = x' == x || y' == y
     where (x', y') = i `quotRem` h
+
+minor :: Num a => Int -> Int -> Matrix a -> a
+minor x y = determinant . submatrix x y
