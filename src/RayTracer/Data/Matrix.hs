@@ -4,6 +4,7 @@ module RayTracer.Data.Matrix
   , fromList
   , at
   , one
+  , transpose
   )
 where
 
@@ -32,7 +33,7 @@ import           Prelude                        ( Show
                                                 , fmap
                                                 , min
                                                 )
-import           Data.List                      ( concat
+import           Data.List                      ( concatMap
                                                 , replicate
                                                 )
 import           Data.Maybe                     ( Maybe(Nothing)
@@ -94,6 +95,11 @@ m *^ t = toTuple $ (m *) $ toMatrix t
 one :: Num a => Int -> Matrix a
 one x =
   fromList x x
-    $   concat
-    $   (\i -> replicate i 0 <> [1] <> replicate (x - i - 1) 0)
-    <$> [0 .. x]
+    $ concatMap (\i -> replicate i 0 <> [1] <> replicate (x - i - 1) 0)
+    $ [0 .. x]
+
+transpose :: Matrix a -> Matrix a
+transpose (Matrix (w, h) as) = Matrix (w, h) bs
+ where
+  is = concatMap (\i -> (\j -> j * w + i) <$> [0 .. w - 1]) $ [0 .. h - 1]
+  bs = V.fromList $ catMaybes $ (as V.!?) <$> is
