@@ -3,6 +3,7 @@ module RayTracer.Data.Matrix
   , (*^)
   , fromList
   , at
+  , one
   )
 where
 
@@ -30,6 +31,9 @@ import           Prelude                        ( Show
                                                 , show
                                                 , fmap
                                                 , min
+                                                )
+import           Data.List                      ( concat
+                                                , replicate
                                                 )
 import           Data.Maybe                     ( Maybe(Nothing)
                                                 , catMaybes
@@ -86,3 +90,10 @@ m *^ t = toTuple $ (m *) $ toMatrix t
                     (fromMaybe 0 $ m `at` (1, 0))
                     (fromMaybe 0 $ m `at` (2, 0))
                     (fromMaybe 0 $ m `at` (3, 0))
+
+one :: Num a => Int -> Matrix a
+one x =
+  fromList x x
+    $   concat
+    $   (\i -> replicate i 0 <> [1] <> replicate (x - i - 1) 0)
+    <$> [0 .. x]
