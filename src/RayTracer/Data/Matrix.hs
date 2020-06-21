@@ -6,6 +6,7 @@ module RayTracer.Data.Matrix
   , one
   , transpose
   , determinant
+  , submatrix
   )
 where
 
@@ -24,6 +25,8 @@ import           Prelude                        ( Show
                                                 , (*)
                                                 , (==)
                                                 , (&&)
+                                                , (||)
+                                                , not
                                                 , take
                                                 , quotRem
                                                 , uncurry
@@ -50,6 +53,7 @@ import qualified Data.Vector                   as V
                                                 , (!?)
                                                 , fromList
                                                 , toList
+                                                , ifilter
                                                 )
 
 data Matrix a = Matrix { dimension :: (Int, Int)
@@ -110,3 +114,10 @@ transpose (Matrix (w, h) as) = Matrix (w, h) bs
 determinant :: Num a => Matrix a -> a
 determinant (Matrix (2, 2) as) = (a * d) - (b * c)
   where [a, b, c, d] = V.toList as
+
+submatrix :: Int -> Int -> Matrix a -> Matrix a
+submatrix x y (Matrix (w, h) as) = Matrix (w - 1, h - 1)
+  $ V.ifilter (\i _ -> not (belongsTo (w, h) (x, y) i)) as
+ where
+  belongsTo (w, h) (x, y) i = x' == x || y' == y
+    where (x', y') = i `quotRem` h

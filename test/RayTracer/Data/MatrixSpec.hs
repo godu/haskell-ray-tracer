@@ -19,6 +19,7 @@ import           RayTracer.Data.Matrix          ( (*^)
                                                 , one
                                                 , transpose
                                                 , determinant
+                                                , submatrix
                                                 )
 import           Debug.Trace                    ( trace )
 
@@ -107,3 +108,14 @@ spec = do
   it "Calculating the determinant of a 2x2 matrix" $ do
     let a = fromList 2 2 [1, 5, (-3), 2]
     determinant a `shouldBe` 17
+
+  it "A submatrix of a 3x3 matrix is a 2x2 matrix" $ do
+    let a = fromList 3 3 [1, 5, 0, (-3), 2, 7, 0, 6, (-3)]
+    submatrix 0 2 a `shouldBe` fromList 2 2 [(-3), 2, 0, 6]
+  it "A submatrix of a 4x4 matrix is a 3x3 matrix" $ do
+    let a = fromList
+          4
+          4
+          [(-6), 1, 1, 6, (-8), 5, 8, 6, (-1), 0, 8, 2, (-7), 1, (-1), 1]
+    submatrix 2 1 a
+      `shouldBe` fromList 3 3 [(-6), 1, 6, (-8), 8, 6, (-7), (-1), 1]
