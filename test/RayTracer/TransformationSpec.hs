@@ -5,10 +5,14 @@ where
 
 import           Prelude                        ( ($)
                                                 , (*)
+                                                , (/)
+                                                , pi
+                                                , sqrt
                                                 )
 import           Data.Maybe                     ( fromJust )
 import           RayTracer.Transformation       ( translation
                                                 , scaling
+                                                , rotationX
                                                 )
 import           RayTracer.Data.Tuple           ( point
                                                 , vector
@@ -54,3 +58,15 @@ spec = do
     let transform = scaling (-1) 1 1
     let p         = point 2 3 4
     transform *^ p `shouldBe` point (-2) 3 4
+
+  it "Rotating a point around the x axis" $ do
+    let p           = point 0 1 0
+    let halfQuarter = rotationX (pi / 4)
+    let fullQuarter = rotationX (pi / 2)
+    halfQuarter *^ p `shouldBe` point 0 (sqrt 2 / 2) (sqrt 2 / 2)
+    fullQuarter *^ p `shouldBe` point 0 0 1
+  it "The inverse of an x-rotation rotates in the opposite direction" $ do
+    let p           = point 0 1 0
+    let halfQuarter = rotationX (pi / 4)
+    let inv         = fromJust $ inverse halfQuarter
+    inv *^ p `shouldBe` point 0 (sqrt 2 / 2) (-(sqrt 2) / 2)
