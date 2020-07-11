@@ -21,6 +21,7 @@ import           RayTracer.Data.Matrix          ( (*^)
                                                 , determinant
                                                 , submatrix
                                                 , minor
+                                                , cofactor
                                                 )
 import           Debug.Trace                    ( trace )
 
@@ -126,3 +127,10 @@ spec = do
     let b = submatrix 1 0 a
     determinant b `shouldBe` 25
     minor 1 0 a `shouldBe` 25
+
+  it "Calculating a cofactor of a 3x3 matrix" $ do
+    let a = fromList 3 3 [3, 5, 0, 2, (-1), (-7), 6, (-1), 5]
+    minor 0 0 a `shouldBe` (-12)
+    cofactor 0 0 a `shouldBe` (-12)
+    minor 1 0 a `shouldBe` 25
+    cofactor 1 0 a `shouldBe` (-25)

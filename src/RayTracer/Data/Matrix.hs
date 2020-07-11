@@ -8,6 +8,7 @@ module RayTracer.Data.Matrix
   , determinant
   , submatrix
   , minor
+  , cofactor
   )
 where
 
@@ -37,6 +38,9 @@ import           Prelude                        ( Show
                                                 , show
                                                 , fmap
                                                 , min
+                                                , negate
+                                                , odd
+                                                , otherwise
                                                 )
 import           Data.List                      ( concatMap
                                                 , replicate
@@ -125,3 +129,7 @@ submatrix x y (Matrix (w, h) as) = Matrix (w - 1, h - 1)
 
 minor :: Num a => Int -> Int -> Matrix a -> a
 minor x y = determinant . submatrix x y
+
+cofactor :: Num a => Int -> Int -> Matrix a -> a
+cofactor x y | odd $ x + y = negate . minor x y
+             | otherwise   = minor x y
