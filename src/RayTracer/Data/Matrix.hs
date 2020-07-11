@@ -119,6 +119,10 @@ transpose (Matrix (w, h) as) = Matrix (w, h) bs
 determinant :: Num a => Matrix a -> a
 determinant (Matrix (2, 2) as) = (a * d) - (b * c)
   where [a, b, c, d] = V.toList as
+determinant a = sum $ (go) <$> [0 .. (y - 1)]
+ where
+  (_, y) = dimension a
+  go y = (fromMaybe 0 $ at a (0, y)) * cofactor 0 y a
 
 submatrix :: Int -> Int -> Matrix a -> Matrix a
 submatrix x y (Matrix (w, h) as) = Matrix (w - 1, h - 1)

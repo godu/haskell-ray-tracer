@@ -134,3 +134,20 @@ spec = do
     cofactor 0 0 a `shouldBe` (-12)
     minor 1 0 a `shouldBe` 25
     cofactor 1 0 a `shouldBe` (-25)
+
+  it "Calculating the determinant of a 3x3 matrix" $ do
+    let a = fromList 3 3 [1, 2, 6, (-5), 8, (-4), 2, 6, 4]
+    cofactor 0 0 a `shouldBe` 56
+    cofactor 0 1 a `shouldBe` 12
+    cofactor 0 2 a `shouldBe` (-46)
+    determinant a `shouldBe` (-196)
+  it "Calculating the determinant of a 4x4 matrix" $ do
+    let a = fromList
+          4
+          4
+          [(-2), (-8), 3, 5, (-3), 1, 7, 3, 1, 2, (-9), 6, (-6), 7, 7, (-9)]
+    cofactor 0 0 a `shouldBe` 690
+    cofactor 0 1 a `shouldBe` 447
+    cofactor 0 2 a `shouldBe` 210
+    cofactor 0 3 a `shouldBe` 51
+    determinant a `shouldBe` (-4071)
