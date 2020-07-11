@@ -15,6 +15,7 @@ import           RayTracer.Transformation       ( translation
                                                 , rotationX
                                                 , rotationY
                                                 , rotationZ
+                                                , shearing
                                                 )
 import           RayTracer.Data.Tuple           ( point
                                                 , vector
@@ -87,3 +88,27 @@ spec = do
     halfQuarter *^ p `shouldBe` point (-(sqrt 2) / 2) (sqrt 2 / 2) 0
     fullQuarter *^ p `shouldBe` point (-1) 0 0
 
+  it "A shearing transformation moves x in propertion to y" $ do
+    let transform = shearing 1 0 0 0 0 0
+    let p         = point 2 3 4
+    transform *^ p `shouldBe` point 5 3 4
+  it "A shearing transformation moves x in proportion to z" $ do
+    let transform = shearing 0 1 0 0 0 0
+    let p         = point 2 3 4
+    transform *^ p `shouldBe` point 6 3 4
+  it "A shearing transformation moves y in proportion to x" $ do
+    let transform = shearing 0 0 1 0 0 0
+    let p         = point 2 3 4
+    transform *^ p `shouldBe` point 2 5 4
+  it "A shearing transformation moves y in proportion to Z" $ do
+    let transform = shearing 0 0 0 1 0 0
+    let p         = point 2 3 4
+    transform *^ p `shouldBe` point 2 7 4
+  it "A shearing transformation moves y in proportion to Z" $ do
+    let transform = shearing 0 0 0 0 1 0
+    let p         = point 2 3 4
+    transform *^ p `shouldBe` point 2 3 6
+  it "A shearing transformation moves y in proportion to Z" $ do
+    let transform = shearing 0 0 0 0 0 1
+    let p         = point 2 3 4
+    transform *^ p `shouldBe` point 2 3 7

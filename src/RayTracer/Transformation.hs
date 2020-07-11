@@ -4,6 +4,7 @@ module RayTracer.Transformation
     , rotationX
     , rotationY
     , rotationZ
+    , shearing
     )
 where
 
@@ -47,4 +48,14 @@ rotationZ r =
         $ update (0, 1) (-(sin r))
         $ update (1, 0) (-(sin r))
         $ update (1, 1) (cos r)
+        $ one 4
+
+shearing :: Num a => a -> a -> a -> a -> a -> a -> Matrix a
+shearing a b c d e f =
+    update (0, 1) a
+        $ update (0, 2) b
+        $ update (1, 0) c
+        $ update (1, 2) d
+        $ update (2, 0) e
+        $ update (2, 1) f
         $ one 4
