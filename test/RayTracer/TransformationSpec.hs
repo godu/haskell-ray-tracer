@@ -112,3 +112,22 @@ spec = do
     let transform = shearing 0 0 0 0 0 1
     let p         = point 2 3 4
     transform *^ p `shouldBe` point 2 3 7
+
+  it "Individual transformations are applied in sequence" $ do
+    let p  = point 1 0 1
+    let a  = rotationX (pi / 2)
+    let b  = scaling 5 5 5
+    let c  = translation 10 5 7
+    let p2 = a *^ p
+    p2 `shouldBe` point 1 (-1) 0
+    let p3 = b *^ p2
+    p3 `shouldBe` point 5 (-5) 0
+    let p4 = c *^ p3
+    p4 `shouldBe` point 15 0 7
+  it "Chained transformations must be applied in reverse order" $ do
+    let p = point 1 0 1
+    let a = rotationX (pi / 2)
+    let b = scaling 5 5 5
+    let c = translation 10 5 7
+    let t = c * b * a
+    t *^ p `shouldBe` point 15 0 7
