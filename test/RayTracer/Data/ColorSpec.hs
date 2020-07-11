@@ -25,7 +25,7 @@ spec :: Spec
 spec = do
   it "Colors are (red, green, blue) tuples" $ do
     let actual = color (-0.5) 0.4 1.7
-    red actual `shouldBe` (-0.5)
+    red actual `shouldBe` -0.5
     green actual `shouldBe` 0.4
     blue actual `shouldBe` 1.7
 

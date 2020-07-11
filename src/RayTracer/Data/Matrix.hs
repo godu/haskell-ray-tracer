@@ -9,13 +9,17 @@ module RayTracer.Data.Matrix
   , submatrix
   , minor
   , cofactor
+  , inverse
   )
 where
 
 import           Prelude                        ( Show
                                                 , Eq
                                                 , Num
+                                                , Fractional
                                                 , Int
+                                                , Ord
+                                                , Bool
                                                 , Maybe
                                                 , String
                                                 , ($)
@@ -28,6 +32,7 @@ import           Prelude                        ( Show
                                                 , (==)
                                                 , (&&)
                                                 , (||)
+                                                , (/)
                                                 , not
                                                 , take
                                                 , quotRem
@@ -36,11 +41,13 @@ import           Prelude                        ( Show
                                                 , product
                                                 , zip
                                                 , show
+                                                , foldr
                                                 , fmap
                                                 , min
                                                 , negate
                                                 , odd
                                                 , otherwise
+                                                , pure
                                                 )
 import           Data.List                      ( concatMap
                                                 , replicate
@@ -53,17 +60,25 @@ import           Data.Tuple                     ( swap )
 import           RayTracer.Data.Tuple           ( Tuple(x, y, z, w)
                                                 , tuple
                                                 )
+import           RayTracer.Data.Extra           ( (~=) )
 import qualified Data.Vector                   as V
                                                 ( Vector
                                                 , (!?)
                                                 , fromList
                                                 , toList
                                                 , ifilter
+                                                , imap
+                                                , and
+                                                , zipWith
                                                 )
 
 data Matrix a = Matrix { dimension :: (Int, Int)
                        , values :: V.Vector a
-                       } deriving (Show, Eq)
+                       } deriving (Show)
+
+instance (Ord a, Fractional a) => Eq (Matrix a) where
+  (Matrix (w, h) as) == (Matrix (w', h') as') =
+    (w == w') && (h == h') && (V.and $ V.zipWith (~=) as as')
 
 instance Num a => Num (Matrix a) where
   a * b = Matrix (w'', h'') $ V.fromList $ compute a b <$> cells
@@ -137,3 +152,14 @@ minor x y = determinant . submatrix x y
 cofactor :: Num a => Int -> Int -> Matrix a -> a
 cofactor x y | odd $ x + y = negate . minor x y
              | otherwise   = minor x y
+
+inverse :: (Num a, Eq a, Fractional a) => Matrix a -> Maybe (Matrix a)
+inverse a | determinant a == 0 = Nothing
+          | otherwise          = pure $ Matrix (w, h) $ V.imap go as
+ where
+  Matrix (w, h) as = a
+  d                = determinant a
+  go i v = c / d
+   where
+    (x, y) = i `quotRem` h
+    c      = cofactor y x a

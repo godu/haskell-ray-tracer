@@ -40,7 +40,7 @@ data Tuple a = Tuple { x :: a
                      , w :: a
                      } deriving (Show)
 
-instance (Ord a, Fractional a) => Eq (Tuple a )where
+instance (Ord a, Fractional a) => Eq (Tuple a) where
   (Tuple a b c d) == (Tuple a' b' c' d') =
     (a ~= a') && (b ~= b') && (c ~= c') && (d ~= d')
 
