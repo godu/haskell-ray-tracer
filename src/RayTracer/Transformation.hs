@@ -2,6 +2,7 @@ module RayTracer.Transformation
     ( translation
     , scaling
     , rotationX
+    , rotationY
     )
 where
 
@@ -28,5 +29,13 @@ rotationX r =
     update (1, 1) (cos r)
         $ update (1, 2) (-(sin r))
         $ update (2, 1) (sin r)
+        $ update (2, 2) (cos r)
+        $ one 4
+
+rotationY :: Floating a => a -> Matrix a
+rotationY r =
+    update (0, 0) (cos r)
+        $ update (0, 2) (sin r)
+        $ update (2, 0) (-(sin r))
         $ update (2, 2) (cos r)
         $ one 4

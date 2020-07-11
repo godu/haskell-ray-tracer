@@ -13,6 +13,7 @@ import           Data.Maybe                     ( fromJust )
 import           RayTracer.Transformation       ( translation
                                                 , scaling
                                                 , rotationX
+                                                , rotationY
                                                 )
 import           RayTracer.Data.Tuple           ( point
                                                 , vector
@@ -70,3 +71,11 @@ spec = do
     let halfQuarter = rotationX (pi / 4)
     let inv         = fromJust $ inverse halfQuarter
     inv *^ p `shouldBe` point 0 (sqrt 2 / 2) (-(sqrt 2) / 2)
+
+  it "Rotating a point around the y axis" $ do
+    let p           = point 0 0 1
+    let halfQuarter = rotationY (pi / 4)
+    let fullQuarter = rotationY (pi / 2)
+    halfQuarter *^ p `shouldBe` point (sqrt 2 / 2) 0 (sqrt 2 / 2)
+    fullQuarter *^ p `shouldBe` point 1 0 0
+
