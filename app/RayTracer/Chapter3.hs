@@ -15,6 +15,7 @@ import           Prelude                        ( IO
 import           RayTracer.Data.Tuple           ( vector )
 import           RayTracer.Data.Matrix          ( (*^)
                                                 , one
+                                                , update
                                                 , inverse
                                                 , transpose
                                                 , fromList
@@ -38,4 +39,4 @@ main = do
     print $ one 4 *^ v
     print
         "Now, try changin any single element of the identity matrix to a different number, and then multiplying it by a tuple. What happens to the tuple ?"
-    print $ fromList 4 4 [1, 0, 0, 0, 0, 1, 0, 0, 0, 4, 1, 0, 0, 0, 0, 1] *^ v
+    print $ (update (4, 1) 4 $ one 4) *^ v

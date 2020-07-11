@@ -3,6 +3,7 @@ module RayTracer.Data.Matrix
   , (*^)
   , fromList
   , at
+  , update
   , one
   , transpose
   , determinant
@@ -64,6 +65,7 @@ import           RayTracer.Data.Extra           ( (~=) )
 import qualified Data.Vector                   as V
                                                 ( Vector
                                                 , (!?)
+                                                , update
                                                 , fromList
                                                 , toList
                                                 , ifilter
@@ -108,6 +110,10 @@ fromList x y as = Matrix (x, y) $ V.fromList $ take (x * y) as
 
 at :: Matrix a -> (Int, Int) -> Maybe a
 at (Matrix (_, height) as) (x, y) = (V.!?) as (x * height + y)
+
+update :: (Int, Int) -> a -> Matrix a -> Matrix a
+update (x, y) a (Matrix (w, h) as) =
+  Matrix (w, h) $ V.update as $ V.fromList [((x * h + y), a)]
 
 (*^) :: Num a => Matrix a -> Tuple a -> Tuple a
 m *^ t = toTuple $ (m *) $ toMatrix t
