@@ -1,3 +1,5 @@
+{-# LANGUAGE TupleSections #-}
+
 module RayTracer.Data.Canvas
   ( Canvas()
   , canvas
@@ -60,7 +62,7 @@ replace :: (Int, Int) -> Color a -> Canvas a -> Canvas a
 replace i a (Canvas w h pixels) = Canvas w h $ insert i a pixels
 
 positions (Canvas w h _) =
-  (\a -> ((\b -> (b, a)) <$> range (0, w - 1))) <$> range (0, (h - 1))
+  (\a -> (, a) <$> range (0, w - 1)) <$> range (0, h - 1)
 
 instance (Num a, RealFrac a) => Show (Canvas a) where
   show c = "P3\n" <> show w <> " " <> show h <> "\n255\n" <> pixels <> "\n"
@@ -69,9 +71,8 @@ instance (Num a, RealFrac a) => Show (Canvas a) where
     pixels =
       unlines
         $   concat
-        $   (joinUntil " " ((<= 70) . length))
-        <$> concatMap (words)
-        <$> fmap (show . at c)
+        $   (joinUntil " " ((<= 70) . length) <$> concatMap words)
+        .   fmap (show . at c)
         <$> positions c
 
 joinUntil :: String -> (String -> Bool) -> [String] -> [String]

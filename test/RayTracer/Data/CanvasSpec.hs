@@ -50,7 +50,7 @@ spec = do
 
     it "Constructing the PPM header" $ do
         let actual = canvas (5, 3)
-        (take 3 $ lines $ show actual) `shouldBe` ["P3", "5 3", "255"]
+        take 3 (lines $ show actual) `shouldBe` ["P3", "5 3", "255"]
 
     it "Constructing the PPM pixel data" $ do
         let initial = canvas (5, 3)
@@ -58,12 +58,11 @@ spec = do
         let p2      = color 0 0.5 0
         let p3      = color (-0.5) 0 1
         let
-            actual =
-                replace (0, 0) p1
-                    $ replace (2, 1) p2
-                    $ replace (4, 2) p3
-                    $ initial
-        (drop 3 $ take 6 $ lines $ show actual)
+            actual = replace (0, 0) p1 $ replace (2, 1) p2 $ replace
+                (4, 2)
+                p3
+                initial
+        drop 3 (take 6 $ lines $ show actual)
             `shouldBe` [ "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
                        , "0 0 0 0 0 0 0 128 0 0 0 0 0 0 0"
                        , "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255"
@@ -74,7 +73,7 @@ spec = do
                 foldr (\p c -> replace p (color 1 0.8 0.6) c) initial
                     $ concat
                     $ positions initial
-        (drop 3 $ take 7 $ lines $ show actual)
+        drop 3 (take 7 $ lines $ show actual)
             `shouldBe` [ "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204"
                        , "153 255 204 153 255 204 153 255 204 153 255 204 153"
                        , "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204"
@@ -82,4 +81,4 @@ spec = do
                        ]
     it "PPM files are terminated by a newline character" $ do
         let actual = canvas (5, 2)
-        (last $ show actual) `shouldBe` '\n'
+        last (show actual) `shouldBe` '\n'

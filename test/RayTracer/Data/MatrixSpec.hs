@@ -100,17 +100,16 @@ spec = do
 
   it "Multiplying a matrix by the identity matrix" $ do
     let a = fromList 4 4 [0, 1, 2, 4, 1, 2, 4, 8, 2, 4, 8, 16, 4, 8, 16, 32]
-    a * (one 4) `shouldBe` a
+    a * one 4 `shouldBe` a
   it "Multiplying the identity matrix by a tuple" $ do
     let a = tuple 1 2 3 4
-    (one 4) *^ a `shouldBe` a
+    one 4 *^ a `shouldBe` a
 
   it "Transposing a matrix" $ do
     let a = fromList 4 4 [0, 9, 3, 0, 9, 8, 0, 8, 1, 8, 5, 3, 0, 0, 5, 8]
     transpose a
       `shouldBe` fromList 4 4 [0, 9, 1, 0, 9, 8, 8, 0, 3, 0, 5, 5, 0, 8, 3, 8]
-  it "Transposing the identity matrix" $ do
-    transpose (one 4) `shouldBe` (one 4)
+  it "Transposing the identity matrix" $ transpose (one 4) `shouldBe` one 4
 
   it "Calculating the determinant of a 2x2 matrix" $ do
     let a = fromList 2 2 [1, 5, -3, 2]

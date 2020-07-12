@@ -72,7 +72,7 @@ spec = do
     let p           = point 0 1 0
     let halfQuarter = rotationX (pi / 4)
     let inv         = fromJust $ inverse halfQuarter
-    inv *^ p `shouldBe` point 0 (sqrt 2 / 2) (-(sqrt 2) / 2)
+    inv *^ p `shouldBe` point 0 (sqrt 2 / 2) (-sqrt 2 / 2)
 
   it "Rotating a point around the y axis" $ do
     let p           = point 0 0 1
@@ -85,7 +85,7 @@ spec = do
     let p           = point 0 1 0
     let halfQuarter = rotationZ (pi / 4)
     let fullQuarter = rotationZ (pi / 2)
-    halfQuarter *^ p `shouldBe` point (-(sqrt 2) / 2) (sqrt 2 / 2) 0
+    halfQuarter *^ p `shouldBe` point (-sqrt 2 / 2) (sqrt 2 / 2) 0
     fullQuarter *^ p `shouldBe` point (-1) 0 0
 
   it "A shearing transformation moves x in propertion to y" $ do
@@ -112,12 +112,11 @@ spec = do
     let transform = shearing 0 0 0 0 0 1
     let p         = point 2 3 4
     transform *^ p `shouldBe` point 2 3 7
-
+  let p = point 1 0 1
+  let a = rotationX (pi / 2)
+  let b = scaling 5 5 5
+  let c = translation 10 5 7
   it "Individual transformations are applied in sequence" $ do
-    let p  = point 1 0 1
-    let a  = rotationX (pi / 2)
-    let b  = scaling 5 5 5
-    let c  = translation 10 5 7
     let p2 = a *^ p
     p2 `shouldBe` point 1 (-1) 0
     let p3 = b *^ p2
@@ -125,9 +124,5 @@ spec = do
     let p4 = c *^ p3
     p4 `shouldBe` point 15 0 7
   it "Chained transformations must be applied in reverse order" $ do
-    let p = point 1 0 1
-    let a = rotationX (pi / 2)
-    let b = scaling 5 5 5
-    let c = translation 10 5 7
     let t = c * b * a
     t *^ p `shouldBe` point 15 0 7

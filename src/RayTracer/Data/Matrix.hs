@@ -99,10 +99,10 @@ instance Num a => Num (Matrix a) where
 
     rowAt :: Matrix a -> Int -> [a]
     (Matrix (w, h) xs) `rowAt` i =
-      catMaybes $ ((V.!?) xs . (+) (h * i)) <$> [0 .. (h - 1)]
+      catMaybes $ (V.!?) xs . (+) (h * i) <$> [0 .. (h - 1)]
     columnAt :: Matrix a -> Int -> [a]
     (Matrix (_, h) xs) `columnAt` i =
-      catMaybes $ ((V.!?) xs . (+) i . (*) h) <$> [0 .. (w - 1)]
+      catMaybes $ (V.!?) xs . (+) i . (*) h <$> [0 .. (w - 1)]
 
 
 fromList :: Int -> Int -> [a] -> Matrix a
@@ -113,7 +113,7 @@ at (Matrix (_, height) as) (x, y) = (V.!?) as (x * height + y)
 
 update :: (Int, Int) -> a -> Matrix a -> Matrix a
 update (x, y) a (Matrix (w, h) as) =
-  Matrix (w, h) $ V.update as $ V.fromList [((x * h + y), a)]
+  Matrix (w, h) $ V.update as $ V.fromList [(x * h + y, a)]
 
 (*^) :: Num a => Matrix a -> Tuple a -> Tuple a
 m *^ t = toTuple $ (m *) $ toMatrix t
@@ -125,15 +125,13 @@ m *^ t = toTuple $ (m *) $ toMatrix t
                     (fromMaybe 0 $ m `at` (3, 0))
 
 one :: Num a => Int -> Matrix a
-one x =
-  fromList x x
-    $ concatMap (\i -> replicate i 0 <> [1] <> replicate (x - i - 1) 0)
-    $ [0 .. x]
+one x = fromList x x
+  $ concatMap (\i -> replicate i 0 <> [1] <> replicate (x - i - 1) 0) [0 .. x]
 
 transpose :: Matrix a -> Matrix a
 transpose (Matrix (w, h) as) = Matrix (w, h) bs
  where
-  is = concatMap (\i -> (\j -> j * w + i) <$> [0 .. w - 1]) $ [0 .. h - 1]
+  is = concatMap (\i -> (\j -> j * w + i) <$> [0 .. w - 1]) [0 .. h - 1]
   bs = V.fromList $ catMaybes $ (as V.!?) <$> is
 
 
@@ -143,7 +141,7 @@ determinant (Matrix (2, 2) as) = (a * d) - (b * c)
 determinant a = sum $ (go) <$> [0 .. (y - 1)]
  where
   (_, y) = dimension a
-  go y = (fromMaybe 0 $ at a (0, y)) * cofactor 0 y a
+  go y = fromMaybe 0 (at a (0, y)) * cofactor 0 y a
 
 submatrix :: Int -> Int -> Matrix a -> Matrix a
 submatrix x y (Matrix (w, h) as) = Matrix (w - 1, h - 1)
