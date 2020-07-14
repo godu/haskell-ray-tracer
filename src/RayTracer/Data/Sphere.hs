@@ -8,6 +8,7 @@ where
 import           Prelude                        ( Show
                                                 , Num
                                                 , Ord
+                                                , Eq
                                                 , Floating
                                                 , (+)
                                                 , (-)
@@ -17,20 +18,23 @@ import           Prelude                        ( Show
                                                 , sqrt
                                                 , otherwise
                                                 )
-import           RayTracer.Data.Ray             ( Ray(Ray) )
 import           RayTracer.Data.Tuple           ( Tuple
                                                 , point
                                                 , (.^)
                                                 )
+import           RayTracer.Data.Ray             ( Ray(Ray) )
+import           RayTracer.Data.Intersection    ( Intersection
+                                                , intersection
+                                                )
 
-newtype Sphere a = Sphere { origin :: Tuple a } deriving (Show)
+newtype Sphere a = Sphere { origin :: Tuple a } deriving (Show, Eq)
 
 sphere :: Num a => Sphere a
 sphere = Sphere (point 0 0 0)
 
-intersect :: (Ord a, Floating a) => Ray a -> Sphere a -> [a]
+intersect :: (Ord a, Floating a) => Ray a -> Sphere a -> [Intersection a Sphere]
 intersect r s | discriminant < 0 = []
-              | otherwise        = [t1, t2]
+              | otherwise        = [intersection t1 s, intersection t2 s]
  where
   Ray o d      = r
   sphereToRay  = o - point 0 0 0

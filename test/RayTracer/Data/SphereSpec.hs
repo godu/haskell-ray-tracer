@@ -4,6 +4,7 @@ module RayTracer.Data.SphereSpec
 where
 
 import           Prelude                        ( ($)
+                                                , (<$>)
                                                 , length
                                                 )
 import           RayTracer.Data.Tuple           ( point
@@ -13,6 +14,7 @@ import           RayTracer.Data.Ray             ( ray )
 import           RayTracer.Data.Sphere          ( sphere
                                                 , intersect
                                                 )
+import           RayTracer.Data.Intersection    ( Intersection(t, object) )
 import           Test.Hspec                     ( Spec
                                                 , it
                                                 , shouldBe
@@ -26,13 +28,13 @@ spec = do
     let s  = sphere
     let xs = r `intersect` s
     length xs `shouldBe` 2
-    xs `shouldBe` [4.0, 6.0]
+    (t <$> xs) `shouldBe` [4.0, 6.0]
   it "A ray intersects a sphere at a tangent" $ do
     let r  = ray (point 0 1 (-5)) (vector 0 0 1)
     let s  = sphere
     let xs = r `intersect` s
     length xs `shouldBe` 2
-    xs `shouldBe` [5.0, 5.0]
+    (t <$> xs) `shouldBe` [5.0, 5.0]
   it "A ray misses a sphere" $ do
     let r  = ray (point 0 2 (-5)) (vector 0 0 1)
     let s  = sphere
@@ -43,10 +45,17 @@ spec = do
     let s  = sphere
     let xs = r `intersect` s
     length xs `shouldBe` 2
-    xs `shouldBe` [-1.0, 1.0]
+    (t <$> xs) `shouldBe` [-1.0, 1.0]
   it "A sphere is behind a ray" $ do
     let r  = ray (point 0 0 5) (vector 0 0 1)
     let s  = sphere
     let xs = r `intersect` s
     length xs `shouldBe` 2
-    xs `shouldBe` [-6.0, -4.0]
+    (t <$> xs) `shouldBe` [-6.0, -4.0]
+  it "Intersect sets the object on the intersection" $ do
+    let r  = ray (point 0 0 (-5)) (vector 0 0 1)
+    let s  = sphere
+    let xs = r `intersect` s
+    length xs `shouldBe` 2
+    (object <$> xs) `shouldBe` [s, s]
+

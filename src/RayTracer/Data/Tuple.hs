@@ -55,7 +55,7 @@ instance Num a => Num (Tuple a) where
   (Tuple a b c _) * (Tuple a' b' c' _) =
     vector (b * c' - c * b') (c * a' - a * c') (a * b' - b * a')
 
-tuple :: Num a => a -> a -> a -> a -> Tuple a
+tuple :: a -> a -> a -> a -> Tuple a
 tuple = Tuple
 
 vector :: Num a => a -> a -> a -> Tuple a
