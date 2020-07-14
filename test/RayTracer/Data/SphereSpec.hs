@@ -14,7 +14,7 @@ import           RayTracer.Data.Ray             ( ray )
 import           RayTracer.Data.Sphere          ( Sphere(transformation)
                                                 , sphere
                                                 , intersect
-                                                , setTranformation
+                                                , setTransformation
                                                 )
 import           RayTracer.Data.Intersection    ( Intersection(t, object) )
 import           RayTracer.Transformation       ( identity
@@ -71,15 +71,15 @@ spec = do
   it "Changing a sphere's transformation" $ do
     let s = sphere
     let t = translation 2 3 4
-    transformation (setTranformation t s) `shouldBe` t
+    transformation (setTransformation t s) `shouldBe` t
   it "Intersectiong a scaled sphere with a ray" $ do
     let r  = ray (point 0 0 (-5)) (vector 0 0 1)
-    let s  = setTranformation (scaling 2 2 2) sphere
+    let s  = setTransformation (scaling 2 2 2) sphere
     let xs = intersect r s
     length xs `shouldBe` 2
     (t <$> xs) `shouldBe` [3, 7]
   it "Intersecting a translated sphere with a ray" $ do
     let r  = ray (point 0 0 (-5)) (vector 0 0 1)
-    let s  = setTranformation (translation 5 0 0) sphere
+    let s = setTransformation (translation 5 0 0) sphere
     let xs = intersect r s
     length xs `shouldBe` 0

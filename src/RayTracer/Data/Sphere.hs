@@ -2,7 +2,7 @@ module RayTracer.Data.Sphere
   ( Sphere(origin, transformation)
   , sphere
   , intersect
-  , setTranformation
+  , setTransformation
   )
 where
 
@@ -68,5 +68,5 @@ intersect r s = maybe [] (`intersect_` s) r2
     t1           = ((-b) - sqrt discriminant) / (2 * a)
     t2           = ((-b) + sqrt discriminant) / (2 * a)
 
-setTranformation :: Matrix a -> Sphere a -> Sphere a
-setTranformation t s = s { transformation = t }
+setTransformation :: Matrix a -> Sphere a -> Sphere a
+setTransformation t s = s { transformation = t }

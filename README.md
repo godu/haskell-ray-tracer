@@ -17,3 +17,9 @@
   
   ![chapter-4](https://raw.githubusercontent.com/godu/haskell-ray-tracer/gh-pages/chapter-4.jpg)
 </details>
+
+<details> 
+  <summary>Chapter 5</summary>
+  
+  ![chapter-5](https://raw.githubusercontent.com/godu/haskell-ray-tracer/gh-pages/chapter-5.jpg)
+</details>
