@@ -9,10 +9,10 @@ import           Prelude                        ( IO
                                                 , ($)
                                                 , (<$>)
                                                 , (.)
+                                                , (+)
                                                 , (-)
                                                 , (*)
                                                 , (/)
-                                                , floor
                                                 , fromIntegral
                                                 , quotRem
                                                 , filter
@@ -20,20 +20,13 @@ import           Prelude                        ( IO
 import           Data.Maybe                     ( isJust )
 import           RayTracer.Data.Canvas          ( canvas )
 import           RayTracer.Data.Intersection    ( hit )
-import           RayTracer.Data.Tuple           ( Tuple(x, y)
-                                                , point
-                                                , vector
+import           RayTracer.Data.Tuple           ( point
+                                                , normalize
                                                 )
 import           RayTracer.Data.Sphere          ( sphere
-                                                , setTransformation
                                                 , intersect
                                                 )
-import           RayTracer.Data.Ray             ( Ray(Ray)
-                                                , ray
-                                                )
-import           RayTracer.Transformation       ( translation
-                                                , scaling
-                                                )
+import           RayTracer.Data.Ray             ( ray )
 import           RayTracer.Projectile           ( updateCanvas
                                                 , fuchsia
                                                 )
@@ -42,23 +35,27 @@ main :: IO ()
 main = do
   writeFile "./.output/chapter-5.ppm" $ show finalCanvas
  where
-  width         = 550
-  height        = 550
-  initialCanvas = canvas (width, height)
+  rayOrigin     = point 0 0 (-5)
+  wallZ         = 10.0
+  wallSize      = 7.0
+  canvasPixels  = 100
+  pixelSize     = wallSize / (fromIntegral canvasPixels)
+  half          = wallSize / 2
+  initialCanvas = canvas (canvasPixels, canvasPixels)
+  color         = fuchsia
+  shape         = sphere
 
-  s             = setTransformation
-    ( (translation ((fromIntegral width) / 2) ((fromIntegral height) / 2) 0)
-    * (scaling (0.4 * (fromIntegral width)) (0.4 * (fromIntegral height)) 1)
-    )
-    sphere
+  pixels =
+    filter isHit
+      $   (`quotRem` canvasPixels)
+      <$> [0 .. canvasPixels * canvasPixels - 1]
 
-  rays = (toRay . (`quotRem` height)) <$> [0 .. width * height - 1]
+  isHit (x, y) = isJust $ hit xs
    where
-    toRay (x, y) =
-      ray (point (fromIntegral x) (fromIntegral y) 0) (vector 0 0 1)
-
-  toPixel (Ray t _) = (floor $ x t, floor $ y t)
-
-  pixels      = toPixel <$> filter (isJust . hit . (`intersect` s)) rays
+    worldX   = (-half) + pixelSize * (fromIntegral x)
+    worldY   = half - pixelSize * (fromIntegral y)
+    position = point worldX worldY wallZ
+    r        = ray rayOrigin (normalize (position - rayOrigin))
+    xs       = r `intersect` shape
 
   finalCanvas = updateCanvas fuchsia initialCanvas pixels
