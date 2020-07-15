@@ -85,7 +85,7 @@ spec = do
     let p           = point 0 1 0
     let halfQuarter = rotationZ (pi / 4)
     let fullQuarter = rotationZ (pi / 2)
-    halfQuarter *^ p `shouldBe` point (-sqrt 2 / 2) (sqrt 2 / 2) 0
+    halfQuarter *^ p `shouldBe` point (-(sqrt 2) / 2) (sqrt 2 / 2) 0
     fullQuarter *^ p `shouldBe` point (-1) 0 0
 
   it "A shearing transformation moves x in propertion to y" $ do

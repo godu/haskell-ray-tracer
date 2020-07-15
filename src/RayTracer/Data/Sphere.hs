@@ -2,7 +2,7 @@ module RayTracer.Data.Sphere
   ( Sphere(origin, transformation)
   , sphere
   , intersect
-  , setTransformation
+  , normalAt
   )
 where
 
@@ -14,6 +14,7 @@ import           Prelude                        ( Show
                                                 , Fractional
                                                 , ($)
                                                 , (<$>)
+                                                , (<*>)
                                                 , (+)
                                                 , (-)
                                                 , (*)
@@ -25,13 +26,17 @@ import           Prelude                        ( Show
                                                 )
 import           Data.Maybe                     ( Maybe
                                                 , maybe
+                                                , fromJust
                                                 )
 import           RayTracer.Data.Matrix          ( Matrix
                                                 , inverse
+                                                , transpose
+                                                , (*^)
                                                 )
-import           RayTracer.Data.Tuple           ( Tuple
+import           RayTracer.Data.Tuple           ( Tuple(w)
                                                 , point
                                                 , (.^)
+                                                , normalize
                                                 )
 import           RayTracer.Data.Ray             ( Ray(Ray)
                                                 , transform
@@ -68,5 +73,14 @@ intersect r s = maybe [] (`intersect_` s) r2
     t1           = ((-b) - sqrt discriminant) / (2 * a)
     t2           = ((-b) + sqrt discriminant) / (2 * a)
 
-setTransformation :: Matrix a -> Sphere a -> Sphere a
-setTransformation t s = s { transformation = t }
+normalAt
+  :: (Num a, Eq a, Fractional a, Floating a, Show a)
+  => Sphere a
+  -> Tuple a
+  -> Tuple a
+normalAt s worldPoint = normalize $ worldNormal { w = 0 }
+ where
+  t            = fromJust $ inverse (transformation s)
+  objectPoint  = t *^ worldPoint
+  objectNormal = objectPoint - point 0 0 0
+  worldNormal  = (transpose t) *^ objectNormal

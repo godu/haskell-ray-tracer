@@ -158,8 +158,8 @@ cofactor x y | odd $ x + y = negate . minor x y
              | otherwise   = minor x y
 
 inverse :: (Num a, Eq a, Fractional a) => Matrix a -> Maybe (Matrix a)
-inverse a | determinant a == 0 = Nothing
-          | otherwise          = pure $ Matrix (w, h) $ V.imap go as
+inverse a | d == 0    = Nothing
+          | otherwise = pure $ Matrix (w, h) $ V.imap go as
  where
   Matrix (w, h) as = a
   d                = determinant a

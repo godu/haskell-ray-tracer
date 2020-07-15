@@ -51,7 +51,7 @@ rotationZ :: Floating a => a -> Matrix a
 rotationZ r =
     update (0, 0) (cos r)
         $ update (0, 1) (-(sin r))
-        $ update (1, 0) (-(sin r))
+        $ update (1, 0) (sin r)
         $ update (1, 1) (cos r)
         $ identity
 
