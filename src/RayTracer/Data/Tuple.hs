@@ -11,6 +11,7 @@ module RayTracer.Data.Tuple
   , magnitude
   , normalize
   , (.^)
+  , reflect
   )
 where
 
@@ -91,3 +92,6 @@ normalize v = tuple (a / magnitude v)
 
 (.^) :: Num a => Tuple a -> Tuple a -> a
 (Tuple a b c d) .^ (Tuple a' b' c' d') = a * a' + b * b' + c * c' + d * d'
+
+reflect :: Num a => Tuple a -> Tuple a -> Tuple a
+reflect in_ normal = in_ - normal *^ 2 *^ (in_ .^ normal)

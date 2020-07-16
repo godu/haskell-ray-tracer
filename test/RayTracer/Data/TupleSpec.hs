@@ -30,6 +30,7 @@ import           RayTracer.Data.Tuple           ( (*^)
                                                 , zero
                                                 , magnitude
                                                 , normalize
+                                                , reflect
                                                 )
 
 spec :: Spec
@@ -121,8 +122,17 @@ spec = do
         b = vector 2 3 4
     a .^ b `shouldBe` 20
 
-  it "The corss product of two vectors" $ do
+  it "The cross product of two vectors" $ do
     let a = vector 1 2 3
         b = vector 2 3 4
     a * b `shouldBe` vector (-1) 2 (-1)
     b * a `shouldBe` vector 1 (-2) 1
+
+  it "Reflecting a vector approaching at 45°" $ do
+    let v = vector 1 (-1) 0
+    let n = vector 0 1 0
+    (v `reflect` n) `shouldBe` vector 1 1 0
+  it "Reflecting a vector off a slanted surface" $ do
+    let v = vector 0 (-1) 0
+    let n = vector (sqrt 2 / 2) (sqrt 2 / 2) 0
+    (v `reflect` n) `shouldBe` vector 1 0 0
