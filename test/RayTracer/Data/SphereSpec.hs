@@ -17,7 +17,10 @@ import           RayTracer.Data.Tuple           ( point
                                                 )
 import           RayTracer.Data.Matrix          ( fromList )
 import           RayTracer.Data.Ray             ( ray )
-import           RayTracer.Data.Sphere          ( Sphere(transformation)
+import           RayTracer.Data.Sphere          ( Sphere
+                                                  ( transformation
+                                                  , material
+                                                  )
                                                 , sphere
                                                 , intersect
                                                 , normalAt
@@ -27,6 +30,10 @@ import           RayTracer.Transformation       ( identity
                                                 , translation
                                                 , scaling
                                                 , rotationZ
+                                                )
+import qualified RayTracer.Data.Material       as M
+                                                ( Material(ambient)
+                                                , material
                                                 )
 import           Test.Hspec                     ( Spec
                                                 , it
@@ -119,3 +126,10 @@ spec = do
           sphere { transformation = (scaling 1 0.5 1) * (rotationZ (pi / 5)) }
     let n = s `normalAt` point 0 (sqrt 2 / 2) (-(sqrt 2) / 2)
     n `shouldBe` vector 0 0.97014 (-0.24254)
+  it "A sphere has a default material" $ do
+    let s = sphere
+    material s `shouldBe` M.material
+  it "A sphere may be assigned a material" $ do
+    let m = M.material { M.ambient = 1 }
+    let s = sphere { material = m }
+    material s `shouldBe` m

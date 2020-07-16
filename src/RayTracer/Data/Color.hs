@@ -1,6 +1,7 @@
 module RayTracer.Data.Color
     ( Color(red, green, blue)
     , color
+    , black
     , (*^)
     )
 where
@@ -51,3 +52,6 @@ instance Num a => Num (Color a) where
 
 (*^) :: (Num a) => Color a -> a -> Color a
 (Color a b c) *^ x = color (a * x) (b * x) (c * x)
+
+black :: Num a => Color a
+black = color 0 0 0

@@ -1,5 +1,5 @@
 module RayTracer.Data.Sphere
-  ( Sphere(origin, transformation)
+  ( Sphere(origin, transformation, material)
   , sphere
   , intersect
   , normalAt
@@ -41,16 +41,20 @@ import           RayTracer.Data.Tuple           ( Tuple(w)
 import           RayTracer.Data.Ray             ( Ray(Ray)
                                                 , transform
                                                 )
+import qualified RayTracer.Data.Material       as M
+                                                ( Material
+                                                , material
+                                                )
 import           RayTracer.Data.Intersection    ( Intersection
                                                 , intersection
                                                 , intersections
                                                 )
 import           RayTracer.Transformation       ( identity )
 
-data Sphere a = Sphere { origin :: Tuple a, transformation :: Matrix a } deriving (Show, Eq)
+data Sphere a = Sphere { origin :: Tuple a, transformation :: Matrix a, material :: M.Material a } deriving (Show, Eq)
 
-sphere :: Num a => Sphere a
-sphere = Sphere (point 0 0 0) identity
+sphere :: (Fractional a, Num a) => Sphere a
+sphere = Sphere (point 0 0 0) identity M.material
 
 intersect
   :: (Num a, Floating a, Eq a, Ord a, Fractional a)
