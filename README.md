@@ -23,3 +23,10 @@
   
   ![chapter-5](https://raw.githubusercontent.com/godu/haskell-ray-tracer/gh-pages/chapter-5.jpg)
 </details>
+
+
+<details> 
+  <summary>Chapter 6</summary>
+  
+  ![chapter-6](https://raw.githubusercontent.com/godu/haskell-ray-tracer/gh-pages/chapter-6.jpg)
+</details>

@@ -69,6 +69,16 @@ executables:
       - -main-is RayTracer.Chapter5
     dependencies:
       - haskell-ray-tracer
+  chapter-6:
+    main: RayTracer/Chapter6.hs
+    source-dirs: app
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+      - -main-is RayTracer.Chapter6
+    dependencies:
+      - haskell-ray-tracer
 tests:
   haskell-ray-tracer-test:
     main: Spec.hs

@@ -9,6 +9,7 @@ where
 
 import           Prelude                        ( Ord
                                                 , Num
+                                                , Fractional
                                                 , Bool
                                                 , Show
                                                 , Int
@@ -59,5 +60,5 @@ fire environment = takeWhile aboveFloor . unfoldr go
 updateCanvas :: Foldable t => Color a -> Canvas a -> t (Int, Int) -> Canvas a
 updateCanvas color = foldr (go color) where go color pos = replace pos color
 
-fuchsia :: Num a => Color a
-fuchsia = color 1 0 1
+fuchsia :: Fractional a => Color a
+fuchsia = color 1 0.2 1
