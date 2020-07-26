@@ -5,6 +5,7 @@ where
 
 import           Prelude                        ( IO
                                                 , ($)
+                                                , (<$>)
                                                 , (-)
                                                 , show
                                                 , writeFile
@@ -44,8 +45,7 @@ main = do
   projectile    = Projectile position velocity
 
   toPixel (Projectile position _) =
-    (floor $ x position, height - (floor $ y position))
+    (floor $ x position, height - floor (y position))
 
-  finalCanvas = updateCanvas fuchsia initialCanvas $ fmap toPixel $ fire
-    environment
-    projectile
+  finalCanvas =
+    updateCanvas fuchsia initialCanvas (toPixel <$> fire environment projectile)

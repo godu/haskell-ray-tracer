@@ -52,14 +52,14 @@ lighting m light point eyev normalv = ambient + diffuse + specular
  where
   Material color ambient_ diffuse_ specular_ shininess_ = m
   effectiveColor = color * intensity light
-  lightv         = normalize $ (position light) - point
+  lightv         = normalize $ position light - point
   ambient        = effectiveColor C.*^ ambient_
   lightDotNormal = lightv .^ normalv
   diffuse | lightDotNormal < 0 = C.black
           | otherwise = effectiveColor C.*^ diffuse_ C.*^ lightDotNormal
   reflectv      = reflect (-lightv) normalv
   reflectDotEye = reflectv .^ eyev
-  factor        = reflectDotEye ^ (floor shininess_)
+  factor        = reflectDotEye ^ floor shininess_
   specular | lightDotNormal < 0 = C.black
            | reflectDotEye <= 0 = C.black
-           | otherwise          = (intensity light) C.*^ specular_ C.*^ factor
+           | otherwise          = intensity light C.*^ specular_ C.*^ factor

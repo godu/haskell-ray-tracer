@@ -4,11 +4,13 @@ module RayTracer.Data.Light
     )
 where
 
-import           Prelude                        ( )
+import           Prelude                        ( Eq
+                                                , Show
+                                                )
 import           RayTracer.Data.Tuple           ( Tuple )
 import           RayTracer.Data.Color           ( Color )
 
-data Light a = Light {position :: Tuple a, intensity :: Color a}
+data Light a = Light {position :: Tuple a, intensity :: Color a} deriving (Show, Eq)
 
 pointLight :: Tuple a -> Color a -> Light a
 pointLight = Light

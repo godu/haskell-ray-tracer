@@ -31,8 +31,8 @@ spec = do
   it "An intersection encapsulates t and object" $ do
     let s = sphere
     let i = intersection 3.5 sphere
-    (t i) `shouldBe` 3.5
-    (object i) `shouldBe` s
+    t i `shouldBe` 3.5
+    object i `shouldBe` s
   it "Aggregating intersections" $ do
     let s  = sphere
     let i1 = intersection 1 sphere

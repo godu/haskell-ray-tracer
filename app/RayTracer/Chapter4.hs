@@ -58,8 +58,6 @@ main = do
       <$> [0 .. 11]
 
   toPixel t =
-    ( floor $ (x t) * (fromIntegral height)
-    , floor $ (z t) * (fromIntegral width)
-    )
+    (floor $ x t * fromIntegral height, floor $ z t * fromIntegral width)
 
   finalCanvas = updateCanvas fuchsia initialCanvas $ toPixel <$> points

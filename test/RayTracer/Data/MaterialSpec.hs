@@ -46,7 +46,7 @@ spec = do
     let light   = pointLight (point 0 0 (-10)) (C.color 1 1 1)
     lighting m light position eyev normalv `shouldBe` C.color 1.9 1.9 1.9
   it "Lighting with the eye between light and surface, eye offset 45°" $ do
-    let eyev    = vector 0 (sqrt 2 / 2) (-(sqrt 2) / 2)
+    let eyev    = vector 0 (sqrt 2 / 2) (-sqrt 2 / 2)
     let normalv = vector 0 0 (-1)
     let light   = pointLight (point 0 0 (-10)) (C.color 1 1 1)
     lighting m light position eyev normalv `shouldBe` C.color 1.0 1.0 1.0
@@ -57,7 +57,7 @@ spec = do
     lighting m light position eyev normalv
       `shouldBe` C.color 0.7364 0.7364 0.7364
   it "Lighting with eye in the path of the reflection vector" $ do
-    let eyev    = vector 0 (-(sqrt 2) / 2) (-(sqrt 2) / 2)
+    let eyev    = vector 0 (-sqrt 2 / 2) (-sqrt 2 / 2)
     let normalv = vector 0 0 (-1)
     let light   = pointLight (point 0 10 (-10)) (C.color 1 1 1)
     lighting m light position eyev normalv

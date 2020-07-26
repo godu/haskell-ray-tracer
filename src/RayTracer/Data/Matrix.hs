@@ -80,7 +80,7 @@ data Matrix a = Matrix { dimension :: (Int, Int)
 
 instance (Ord a, Fractional a) => Eq (Matrix a) where
   (Matrix (w, h) as) == (Matrix (w', h') as') =
-    (w == w') && (h == h') && (V.and $ V.zipWith (~=) as as')
+    w == w' && h == h' && V.and (V.zipWith (~=) as as')
 
 instance Num a => Num (Matrix a) where
   a * b = Matrix (w'', h'') $ V.fromList $ compute a b <$> cells
@@ -138,7 +138,7 @@ transpose (Matrix (w, h) as) = Matrix (w, h) bs
 determinant :: Num a => Matrix a -> a
 determinant (Matrix (2, 2) as) = (a * d) - (b * c)
   where [a, b, c, d] = V.toList as
-determinant a = sum $ (go) <$> [0 .. (y - 1)]
+determinant a = sum $ go <$> [0 .. (y - 1)]
  where
   (_, y) = dimension a
   go y = fromMaybe 0 (at a (0, y)) * cofactor 0 y a

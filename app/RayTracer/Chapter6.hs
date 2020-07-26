@@ -67,19 +67,19 @@ main = do
   wallZ         = 10.0
   wallSize      = 7.0
   canvasPixels  = 100
-  pixelSize     = wallSize / (fromIntegral canvasPixels)
+  pixelSize     = wallSize / fromIntegral canvasPixels
   half          = wallSize / 2
   initialCanvas = canvas (canvasPixels, canvasPixels)
   shape         = sphere { material = M.material { M.color = fuchsia } }
   light         = pointLight (T.point (-10) 10 (-10)) (C.color 1 1 1)
 
   pixels =
-    cast <$> (`quotRem` canvasPixels) <$> [0 .. canvasPixels * canvasPixels - 1]
+    cast . (`quotRem` canvasPixels) <$> [0 .. canvasPixels * canvasPixels - 1]
 
-  cast (x, y) = ((x, y), ) $ maybe C.black computeColor $ intersection
+  cast (x, y) = ((x, y), ) $ maybe C.black computeColor intersection
    where
-    worldX       = (-half) + pixelSize * (fromIntegral x)
-    worldY       = half - pixelSize * (fromIntegral y)
+    worldX       = (-half) + pixelSize * fromIntegral x
+    worldY       = half - pixelSize * fromIntegral y
     position     = T.point worldX worldY wallZ
     ray          = R.ray rayOrigin $ T.normalize (position - rayOrigin)
     xs           = ray `intersect` shape
@@ -89,7 +89,7 @@ main = do
     computeColor intersection = color
      where
       point  = R.position (t intersection) ray
-      normal = (object intersection) `normalAt` point
+      normal = object intersection `normalAt` point
       eye    = -(R.direction ray)
       color =
         M.lighting (material $ object intersection) light point eye normal

@@ -87,4 +87,4 @@ normalAt s worldPoint = normalize $ worldNormal { w = 0 }
   t            = fromJust $ inverse (transformation s)
   objectPoint  = t *^ worldPoint
   objectNormal = objectPoint - point 0 0 0
-  worldNormal  = (transpose t) *^ objectNormal
+  worldNormal  = transpose t *^ objectNormal

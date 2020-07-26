@@ -39,7 +39,7 @@ main = do
   wallZ         = 10.0
   wallSize      = 7.0
   canvasPixels  = 100
-  pixelSize     = wallSize / (fromIntegral canvasPixels)
+  pixelSize     = wallSize / fromIntegral canvasPixels
   half          = wallSize / 2
   initialCanvas = canvas (canvasPixels, canvasPixels)
   color         = fuchsia
@@ -52,8 +52,8 @@ main = do
 
   isHit (x, y) = isJust $ hit xs
    where
-    worldX   = (-half) + pixelSize * (fromIntegral x)
-    worldY   = half - pixelSize * (fromIntegral y)
+    worldX   = (-half) + pixelSize * fromIntegral x
+    worldY   = half - pixelSize * fromIntegral y
     position = point worldX worldY wallZ
     r        = ray rayOrigin (normalize (position - rayOrigin))
     xs       = r `intersect` shape
