@@ -12,12 +12,12 @@ jobs:
     strategy:
       matrix:
         exec:
-          - chapter-1
-          - chapter-2
-          - chapter-3
-          - chapter-4
-          - chapter-5
-          - chapter-6
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          - 6
     steps:
       - name: Checkout source 📡
         uses: actions/checkout@v2

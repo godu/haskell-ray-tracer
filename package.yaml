@@ -11,6 +11,11 @@ extra-source-files:
   - README.md
 dependencies:
   - base >= 4.7 && < 5
+ghc-options:
+  - -O2
+  - -threaded
+  - -rtsopts
+  - -with-rtsopts=-N
 library:
   source-dirs: src
   dependencies:
@@ -19,81 +24,15 @@ library:
     - containers
     - vector
 executables:
-  chapter-1:
-    main: RayTracer/Chapter1.hs
+  haskell-ray-tracer-exec:
+    main: RayTracer/Main.hs
     source-dirs: app
-    ghc-options:
-      - -O2
-      - -threaded
-      - -rtsopts
-      - -with-rtsopts=-N
-      - -main-is RayTracer.Chapter1
-    dependencies:
-      - haskell-ray-tracer
-  chapter-2:
-    main: RayTracer/Chapter2.hs
-    source-dirs: app
-    ghc-options:
-      - -O2
-      - -threaded
-      - -rtsopts
-      - -with-rtsopts=-N
-      - -main-is RayTracer.Chapter2
-    dependencies:
-      - haskell-ray-tracer
-  chapter-3:
-    main: RayTracer/Chapter3.hs
-    source-dirs: app
-    ghc-options:
-      - -O2
-      - -threaded
-      - -rtsopts
-      - -with-rtsopts=-N
-      - -main-is RayTracer.Chapter3
-    dependencies:
-      - haskell-ray-tracer
-  chapter-4:
-    main: RayTracer/Chapter4.hs
-    source-dirs: app
-    ghc-options:
-      - -O2
-      - -threaded
-      - -rtsopts
-      - -with-rtsopts=-N
-      - -main-is RayTracer.Chapter4
-    dependencies:
-      - haskell-ray-tracer
-  chapter-5:
-    main: RayTracer/Chapter5.hs
-    source-dirs: app
-    ghc-options:
-      - -O2
-      - -threaded
-      - -rtsopts
-      - -with-rtsopts=-N
-      - -main-is RayTracer.Chapter5
-    dependencies:
-      - haskell-ray-tracer
-  chapter-6:
-    main: RayTracer/Chapter6.hs
-    source-dirs: app
-    ghc-options:
-      - -O2
-      - -threaded
-      - -rtsopts
-      - -with-rtsopts=-N
-      - -main-is RayTracer.Chapter6
     dependencies:
       - haskell-ray-tracer
 tests:
   haskell-ray-tracer-test:
     main: Spec.hs
     source-dirs: test
-    ghc-options:
-      - -O2
-      - -threaded
-      - -rtsopts
-      - -with-rtsopts=-N
     dependencies:
       - haskell-ray-tracer
       - hspec
