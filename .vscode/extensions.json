@@ -1,6 +1,6 @@
 {
 	"recommendations": [
-		"alanz.vscode-hie-server",
+		"haskell.haskell",
 		"hoovercj.haskell-linter"
 	],
 	"unwantedRecommendations": []

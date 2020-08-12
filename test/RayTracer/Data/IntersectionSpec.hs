@@ -10,10 +10,23 @@ import RayTracer.Data.Intersection
     intersection,
     intersections,
   )
+import qualified RayTracer.Data.Intersection.Computation as C
+  ( Computation
+      ( eyev,
+        inside,
+        normalv,
+        object,
+        point,
+        t
+      ),
+    prepareComputations,
+  )
 import RayTracer.Data.Ray (ray)
-import RayTracer.Data.Sphere
+import RayTracer.Data.Shape
   ( intersect,
-    sphere,
+  )
+import RayTracer.Data.Shape.Sphere
+  ( sphere,
   )
 import RayTracer.Data.Tuple
   ( point,
@@ -25,7 +38,8 @@ import Test.Hspec
     shouldBe,
   )
 import Prelude
-  ( length,
+  ( Bool (..),
+    length,
     ($),
     (<$>),
   )
@@ -71,3 +85,29 @@ spec = do
     let i4 = intersection 2 s
     let xs = intersections [i1, i2, i3, i4]
     hit xs `shouldBe` Just i4
+
+  it "Precomputing the state of an intersection" $ do
+    let r = ray (point 0 0 (-5)) (vector 0 0 1)
+    let shape = sphere
+    let i = intersection 4 shape
+    let comps = C.prepareComputations i r
+    C.t comps `shouldBe` t i
+    C.object comps `shouldBe` object i
+    C.point comps `shouldBe` point 0 0 (-1)
+    C.eyev comps `shouldBe` vector 0 0 (-1)
+    C.normalv comps `shouldBe` vector 0 0 (-1)
+  it "The hit, when an intersection occurs on the outside" $ do
+    let r = ray (point 0 0 (-5)) (vector 0 0 1)
+    let shape = sphere
+    let i = intersection 4 shape
+    let comps = C.prepareComputations i r
+    C.inside comps `shouldBe` False
+  it "The hit, when an intersection occurs on the inside" $ do
+    let r = ray (point 0 0 0) (vector 0 0 1)
+    let shape = sphere
+    let i = intersection 1 shape
+    let comps = C.prepareComputations i r
+    C.point comps `shouldBe` point 0 0 1
+    C.eyev comps `shouldBe` vector 0 0 (-1)
+    C.inside comps `shouldBe` True
+    C.normalv comps `shouldBe` vector 0 0 (-1)

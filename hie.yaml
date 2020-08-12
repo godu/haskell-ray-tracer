@@ -1,8 +1,8 @@
 cradle:
   stack:
-    - path: test
-      component: "haskell-ray-tracer:test:haskell-ray-tracer-test"
-    - path: src
+    - path: "./src"
       component: "haskell-ray-tracer:lib"
-    - path: app
-      component: "haskell-ray-tracer:exe:haskell-ray-tracer-exe"
+    - path: "./exe"
+      component: "haskell-ray-tracer:exe:haskell-ray-tracer-exec"
+    - path: "./test"
+      component: "haskell-ray-tracer:test:haskell-ray-tracer-test"

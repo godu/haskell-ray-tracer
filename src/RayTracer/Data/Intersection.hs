@@ -11,8 +11,18 @@ import Data.List
     sortOn,
   )
 import Data.Maybe (Maybe (Nothing))
+import RayTracer.Data.Ray
+  ( Ray (direction),
+    position,
+  )
+import RayTracer.Data.Tuple
+  ( point,
+    vector,
+  )
 import Prelude
   ( Eq,
+    Floating,
+    Fractional,
     Num,
     Ord,
     Show,

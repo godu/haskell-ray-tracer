@@ -7,9 +7,11 @@ import Data.Maybe (isJust)
 import RayTracer.Data.Canvas (canvas)
 import RayTracer.Data.Intersection (hit)
 import RayTracer.Data.Ray (ray)
-import RayTracer.Data.Sphere
+import RayTracer.Data.Shape
   ( intersect,
-    sphere,
+  )
+import RayTracer.Data.Shape.Sphere
+  ( sphere,
   )
 import RayTracer.Data.Tuple
   ( normalize,
