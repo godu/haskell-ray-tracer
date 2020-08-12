@@ -23,6 +23,6 @@ jobs:
       - name: Upgrade Stack 📡
         run: stack upgrade
       - name: Build ⚒
-        run: stack build
+        run: stack build --test --no-run-tests
       - name: Test 🚧
         run: stack test
