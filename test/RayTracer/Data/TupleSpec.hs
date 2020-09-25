@@ -47,8 +47,8 @@ spec = do
     isPoint actual `shouldBe` True
     isVector actual `shouldBe` False
   it "A tuple with w=0 is a vector" $ do
-    let actual = tuple 4.3 (-4.2) 3.1 0.0
-    x actual `shouldBe` 4.3
+    let actual = tuple 4.4 (-4.2) 3.1 0.0
+    x actual `shouldBe` 4.4
     y actual `shouldBe` -4.2
     z actual `shouldBe` 3.1
     w actual `shouldBe` 0.0
