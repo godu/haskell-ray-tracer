@@ -1,25 +1,28 @@
 module RayTracer.Data.ColorSpec
-  ( spec
+  ( spec,
   )
 where
 
-import           Prelude                        ( Real
-                                                , ($)
-                                                , (+)
-                                                , (-)
-                                                , (/)
-                                                , (*)
-                                                )
-import           Test.Hspec                     ( Spec
-                                                , it
-                                                , shouldBe
-                                                )
-import           RayTracer.Data.Color           ( color
-                                                , red
-                                                , green
-                                                , blue
-                                                , (*^)
-                                                )
+import RayTracer.Data.Color
+  ( blue,
+    color,
+    green,
+    red,
+    (*^),
+  )
+import Test.Hspec
+  ( Spec,
+    it,
+    shouldBe,
+  )
+import Prelude
+  ( Real,
+    ($),
+    (*),
+    (+),
+    (-),
+    (/),
+  )
 
 spec :: Spec
 spec = do

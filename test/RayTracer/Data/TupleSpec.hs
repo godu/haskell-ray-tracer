@@ -1,37 +1,40 @@
 module RayTracer.Data.TupleSpec
-  ( spec
+  ( spec,
   )
 where
 
-import           Prelude                        ( Bool(..)
-                                                , ($)
-                                                , (-)
-                                                , (+)
-                                                , (*)
-                                                , (/)
-                                                , sqrt
-                                                )
-import           Test.Hspec                     ( Spec
-                                                , it
-                                                , shouldBe
-                                                )
-import           RayTracer.Data.Tuple           ( (*^)
-                                                , (/^)
-                                                , (.^)
-                                                , tuple
-                                                , vector
-                                                , point
-                                                , x
-                                                , y
-                                                , z
-                                                , w
-                                                , isPoint
-                                                , isVector
-                                                , zero
-                                                , magnitude
-                                                , normalize
-                                                , reflect
-                                                )
+import RayTracer.Data.Tuple
+  ( isPoint,
+    isVector,
+    magnitude,
+    normalize,
+    point,
+    reflect,
+    tuple,
+    vector,
+    w,
+    x,
+    y,
+    z,
+    zero,
+    (*^),
+    (.^),
+    (/^),
+  )
+import Test.Hspec
+  ( Spec,
+    it,
+    shouldBe,
+  )
+import Prelude
+  ( Bool (..),
+    sqrt,
+    ($),
+    (*),
+    (+),
+    (-),
+    (/),
+  )
 
 spec :: Spec
 spec = do
@@ -78,7 +81,7 @@ spec = do
 
   it "Negating a tuple" $ do
     let actual = tuple 1 (-2) 3 (-4)
-    (-actual) `shouldBe` tuple (-1) 2 (-3) 4
+    (- actual) `shouldBe` tuple (-1) 2 (-3) 4
 
   it "Multiplying a tuple by a scalar" $ do
     let actual = tuple 1 (-2) 3 (-4)

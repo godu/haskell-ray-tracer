@@ -1,45 +1,48 @@
 module RayTracer.Data.Tuple
-  ( Tuple(Tuple, x, y, z, w)
-  , tuple
-  , vector
-  , point
-  , isVector
-  , isPoint
-  , zero
-  , (*^)
-  , (/^)
-  , magnitude
-  , normalize
-  , (.^)
-  , reflect
+  ( Tuple (Tuple, x, y, z, w),
+    tuple,
+    vector,
+    point,
+    isVector,
+    isPoint,
+    zero,
+    (*^),
+    (/^),
+    magnitude,
+    normalize,
+    (.^),
+    reflect,
   )
 where
 
-import           Prelude                        ( Num
-                                                , Eq
-                                                , Ord
-                                                , Show
-                                                , Fractional
-                                                , Floating
-                                                , Bool
-                                                , (.)
-                                                , (==)
-                                                , (&&)
-                                                , (+)
-                                                , (-)
-                                                , (*)
-                                                , (/)
-                                                , negate
-                                                , fromInteger
-                                                , sqrt
-                                                )
-import           RayTracer.Data.Extra           ( (~=) )
+import RayTracer.Data.Extra ((~=))
+import Prelude
+  ( Bool,
+    Eq,
+    Floating,
+    Fractional,
+    Num,
+    Ord,
+    Show,
+    fromInteger,
+    negate,
+    sqrt,
+    (&&),
+    (*),
+    (+),
+    (-),
+    (.),
+    (/),
+    (==),
+  )
 
-data Tuple a = Tuple { x :: a
-                     , y :: a
-                     , z :: a
-                     , w :: a
-                     } deriving (Show)
+data Tuple a = Tuple
+  { x :: a,
+    y :: a,
+    z :: a,
+    w :: a
+  }
+  deriving (Show)
 
 instance (Ord a, Fractional a) => Eq (Tuple a) where
   (Tuple a b c d) == (Tuple a' b' c' d') =
@@ -49,7 +52,7 @@ instance Num a => Num (Tuple a) where
   (Tuple a b c d) + (Tuple a' b' c' d') =
     Tuple (a + a') (b + b') (c + c') (d + d')
 
-  negate (Tuple a b c d) = Tuple (-a) (-b) (-c) (-d)
+  negate (Tuple a b c d) = Tuple (- a) (- b) (- c) (- d)
 
   fromInteger i = Tuple a a a a where a = fromInteger i
 
@@ -84,11 +87,14 @@ magnitude :: Floating a => Tuple a -> a
 magnitude (Tuple a b c d) = sqrt (a * a + b * b + c * c + d * d)
 
 normalize :: (Fractional a, Floating a) => Tuple a -> Tuple a
-normalize v = tuple (a / magnitude v)
-                    (b / magnitude v)
-                    (c / magnitude v)
-                    (d / magnitude v)
-  where (Tuple a b c d) = v
+normalize v =
+  tuple
+    (a / magnitude v)
+    (b / magnitude v)
+    (c / magnitude v)
+    (d / magnitude v)
+  where
+    (Tuple a b c d) = v
 
 (.^) :: Num a => Tuple a -> Tuple a -> a
 (Tuple a b c d) .^ (Tuple a' b' c' d') = a * a' + b * b' + c * c' + d * d'

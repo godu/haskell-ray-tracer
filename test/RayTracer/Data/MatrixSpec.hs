@@ -1,58 +1,62 @@
 module RayTracer.Data.MatrixSpec
-  ( spec
+  ( spec,
   )
 where
 
-import           Prelude                        ( ($)
-                                                , (<$>)
-                                                , (=<<)
-                                                , (*)
-                                                , (/)
-                                                , pure
-                                                , map
-                                                )
-import           Data.Maybe                     ( fromJust )
-import           Test.Hspec                     ( Spec
-                                                , it
-                                                , shouldBe
-                                                , shouldNotBe
-                                                )
-import           RayTracer.Data.Tuple           ( tuple )
-import           RayTracer.Data.Matrix          ( (*^)
-                                                , fromList
-                                                , at
-                                                , one
-                                                , transpose
-                                                , determinant
-                                                , submatrix
-                                                , minor
-                                                , cofactor
-                                                , inverse
-                                                )
+import Data.Maybe (fromJust)
+import RayTracer.Data.Matrix
+  ( at,
+    cofactor,
+    determinant,
+    fromList,
+    inverse,
+    minor,
+    one,
+    submatrix,
+    transpose,
+    (*^),
+  )
+import RayTracer.Data.Tuple (tuple)
+import Test.Hspec
+  ( Spec,
+    it,
+    shouldBe,
+    shouldNotBe,
+  )
+import Prelude
+  ( map,
+    pure,
+    ($),
+    (*),
+    (/),
+    (<$>),
+    (=<<),
+  )
 
 spec :: Spec
 spec = do
   it "Constructing and inspecting a 4x4 matrix" $ do
-    let m = fromList
-          4
-          4
-          [ 1
-          , 2
-          , 3
-          , 4
-          , 5.5
-          , 6.5
-          , 7.5
-          , 8.5
-          , 9
-          , 10
-          , 11
-          , 12
-          , 13.5
-          , 14.5
-          , 15.5
-          , 16.5
-          ]
+    let m =
+          fromList
+            4
+            4
+            [ 1,
+              2,
+              3,
+              4,
+              5.5,
+              6.5,
+              7.5,
+              8.5,
+              9,
+              10,
+              11,
+              12,
+              13.5,
+              14.5,
+              15.5,
+              16.5
+            ]
     m `at` (0, 0) `shouldBe` pure 1
     m `at` (0, 3) `shouldBe` pure 4
     m `at` (1, 0) `shouldBe` pure 5.5
@@ -88,10 +92,11 @@ spec = do
   it "Multiplying two matrices" $ do
     let a = fromList 4 4 [1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2]
     let b = fromList 4 4 [-2, 1, 2, 3, 3, 2, 1, -1, 4, 3, 6, 5, 1, 2, 7, 8]
-    a * b `shouldBe` fromList
-      4
-      4
-      [20, 22, 50, 48, 44, 54, 114, 108, 40, 58, 110, 102, 16, 26, 46, 42]
+    a * b
+      `shouldBe` fromList
+        4
+        4
+        [20, 22, 50, 48, 44, 54, 114, 108, 40, 58, 110, 102, 16, 26, 46, 42]
 
   it "A matrix multiplied by a tuple" $ do
     let m = fromList 4 4 [1, 2, 3, 4, 2, 4, 4, 2, 8, 6, 4, 1, 0, 0, 0, 1]
@@ -163,26 +168,27 @@ spec = do
     (b `at` (3, 2)) `shouldBe` pure (-160 / 532)
     cofactor 3 2 a `shouldBe` 105
     (b `at` (2, 3)) `shouldBe` pure (105 / 532)
-    b `shouldBe` fromList
-      4
-      4
-      [ 0.21805
-      , 0.45113
-      , 0.24060
-      , -0.04511
-      , -0.80827
-      , -1.45677
-      , -0.44361
-      , 0.52068
-      , -0.07895
-      , -0.22368
-      , -0.05263
-      , 0.19737
-      , -0.52256
-      , -0.81391
-      , -0.30075
-      , 0.30639
-      ]
+    b
+      `shouldBe` fromList
+        4
+        4
+        [ 0.21805,
+          0.45113,
+          0.24060,
+          -0.04511,
+          -0.80827,
+          -1.45677,
+          -0.44361,
+          0.52068,
+          -0.07895,
+          -0.22368,
+          -0.05263,
+          0.19737,
+          -0.52256,
+          -0.81391,
+          -0.30075,
+          0.30639
+        ]
   it "Multiplying a product by its inverse" $ do
     let a = fromList 4 4 [3, -9, 7, 3, 3, -8, 2, -9, -4, 4, 4, 1, -6, 5, -1, 1]
     let b = fromList 4 4 [8, 2, 2, 2, 3, -1, 7, 0, 7, 0, 5, 4, 6, -2, 0, 5]

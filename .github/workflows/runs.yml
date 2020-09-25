@@ -22,7 +22,7 @@ jobs:
       - name: Checkout source 📡
         uses: actions/checkout@v2
       - name: Cache Stack 📦
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ~/.stack
           key: ${{ runner.os }}-stack-${{ hashFiles('**/stack.yaml.lock') }}-${{ hashFiles('**/package.yaml') }}
