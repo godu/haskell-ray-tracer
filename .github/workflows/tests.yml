@@ -6,9 +6,8 @@ on:
       - master
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout source 📡
         uses: actions/checkout@v2
@@ -20,8 +19,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-stack-${{ hashFiles('**/stack.yaml.lock') }}-
             ${{ runner.os }}-stack-
-      - name: Upgrade Stack 📡
-        run: stack upgrade
+      - name: Install Stack 📡
+        uses: actions/setup-haskell@v1.1
+        with:
+          ghc-version: "8.10.2"
+          cabal-version: "3.4.0.0"
+          enable-stack: true
       - name: Build ⚒
         run: stack build --test --no-run-tests
       - name: Test 🚧
