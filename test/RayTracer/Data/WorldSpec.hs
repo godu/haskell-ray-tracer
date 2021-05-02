@@ -4,6 +4,7 @@ module RayTracer.Data.WorldSpec
 where
 
 import RayTracer.Data.Color (color)
+import RayTracer.Data.Intersection (t)
 import RayTracer.Data.Light (pointLight)
 import qualified RayTracer.Data.Material as M
   ( Material (ambient, specular),
@@ -11,9 +12,10 @@ import qualified RayTracer.Data.Material as M
     diffuse,
     material,
   )
+import RayTracer.Data.Ray (ray)
 import RayTracer.Data.Sphere (material, sphere, transformation)
-import RayTracer.Data.Tuple (point)
-import RayTracer.Data.World (World (light, objects), defaultWorld, world)
+import RayTracer.Data.Tuple (point, vector)
+import RayTracer.Data.World (World (light, objects), defaultWorld, intersect, world)
 import RayTracer.Transformation (scaling)
 import Test.Hspec
   ( Spec,
@@ -23,6 +25,7 @@ import Test.Hspec
   )
 import Prelude
   ( Maybe (Nothing),
+    fmap,
     return,
     ($),
   )
@@ -53,3 +56,9 @@ spec = do
     light w `shouldBe` return l
     objects w `shouldContain` [s1]
     objects w `shouldContain` [s2]
+
+  it "Intersect a world with a ray" $ do
+    let w = defaultWorld
+    let r = ray (point 0 0 (-5)) (vector 0 0 1)
+    let xs = r `intersect` w
+    fmap t xs `shouldBe` [4, 4.5, 5.5, 6]

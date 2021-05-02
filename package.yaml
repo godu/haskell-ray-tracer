@@ -14,9 +14,10 @@ dependencies:
 library:
   source-dirs: src
   dependencies:
+    - containers
+    - data-ordlist
     - foldl
     - semirings
-    - containers
     - vector
 executables:
   haskell-ray-tracer-exec:
