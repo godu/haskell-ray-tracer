@@ -11,6 +11,7 @@ import Data.List
     sort,
   )
 import Data.Maybe (Maybe (Nothing))
+import RayTracer.Data.Tuple (Tuple)
 import Prelude
   ( Eq,
     Num,
