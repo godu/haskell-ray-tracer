@@ -7,16 +7,16 @@ import RayTracer.Data.Color (color)
 import RayTracer.Data.Intersection (intersection, t)
 import RayTracer.Data.Intersection.Computations (prepareComputations)
 import RayTracer.Data.Light (pointLight)
+import RayTracer.Data.Material (Material (ambient))
 import qualified RayTracer.Data.Material as M
-  ( Material (ambient, specular),
-    color,
+  ( Material (ambient, color, specular),
     diffuse,
     material,
   )
 import RayTracer.Data.Ray (ray)
-import RayTracer.Data.Sphere (material, sphere, transformation)
+import RayTracer.Data.Sphere (Sphere, material, sphere, transformation)
 import RayTracer.Data.Tuple (point, vector)
-import RayTracer.Data.World (World (lights, objects), defaultWorld, intersect, shadeHit, world)
+import RayTracer.Data.World (World (lights, objects), colorAt, defaultWorld, intersect, shadeHit, world)
 import RayTracer.Transformation (scaling)
 import Test.Hspec
   ( Spec,
@@ -25,7 +25,8 @@ import Test.Hspec
     shouldContain,
   )
 import Prelude
-  ( Maybe (Nothing),
+  ( Double,
+    Maybe (Nothing),
     fmap,
     head,
     return,
@@ -36,7 +37,8 @@ import Prelude
 spec :: Spec
 spec = do
   it "Creating a world" $ do
-    let actual = world
+    let actual :: World Sphere Double
+        actual = world
     objects actual `shouldBe` []
     lights actual `shouldBe` []
 
@@ -85,3 +87,26 @@ spec = do
         comps = prepareComputations i r
         c = shadeHit w comps
     c `shouldBe` color 0.90498 0.90498 0.90498
+
+  it "The color when a ray missing" $ do
+    let w = defaultWorld
+        r = ray (point 0 0 (-5)) (vector 0 1 0)
+        c = w `colorAt` r
+    c `shouldBe` color 0 0 0
+  it "The color when a hits" $ do
+    let w = defaultWorld
+        r = ray (point 0 0 (-5)) (vector 0 0 1)
+        c = w `colorAt` r
+    c `shouldBe` color 0.38066 0.47583 0.2855
+  it "The color with an intersection behind the ray" $ do
+    let [s1, s2] = objects defaultWorld
+        w =
+          defaultWorld
+            { objects =
+                [ s1 {material = (material s1) {ambient = 1}},
+                  s2 {material = (material s2) {ambient = 1}}
+                ]
+            }
+        r = ray (point 0 0 0.75) (vector 0 0 (-1))
+        c = w `colorAt` r
+    c `shouldBe` M.color (material s2)
