@@ -6,8 +6,8 @@ where
 
 import qualified RayTracer.Data.Intersection as I (Intersection (object, t))
 import RayTracer.Data.Ray (Ray (direction), position)
-import RayTracer.Data.Shape (Shape)
-import RayTracer.Data.Sphere (Sphere, normalAt)
+import RayTracer.Data.Shape (Shape, normalAt)
+import RayTracer.Data.Sphere (Sphere)
 import RayTracer.Data.Tuple (Tuple, (.^))
 import Prelude
   ( Bool (True),

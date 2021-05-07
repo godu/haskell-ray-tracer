@@ -10,7 +10,7 @@ import RayTracer.Data.Extra ((~=))
 import Prelude
   ( Eq,
     Fractional,
-    Num,
+    Num (fromInteger, (*), (+), (-)),
     Ord,
     RealFrac,
     Show,
@@ -22,9 +22,6 @@ import Prelude
     unwords,
     ($),
     (&&),
-    (*),
-    (+),
-    (-),
     (.),
     (<$>),
     (<=),
@@ -51,6 +48,9 @@ instance Num a => Num (Color a) where
   (Color a b c) + (Color a' b' c') = Color (a + a') (b + b') (c + c')
   (Color a b c) - (Color a' b' c') = Color (a - a') (b - b') (c - c')
   (Color a b c) * (Color a' b' c') = Color (a * a') (b * b') (c * c')
+  fromInteger a = Color a' a' a'
+    where
+      a' = fromInteger a
 
 (*^) :: (Num a) => Color a -> a -> Color a
 (Color a b c) *^ x = color (a * x) (b * x) (c * x)

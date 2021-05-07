@@ -35,10 +35,12 @@ import qualified RayTracer.Data.Ray as R
     position,
     ray,
   )
+import RayTracer.Data.Shape
+  ( intersect,
+    normalAt,
+  )
 import RayTracer.Data.Sphere
   ( Sphere (material),
-    intersect,
-    normalAt,
     sphere,
   )
 import qualified RayTracer.Data.Tuple as T

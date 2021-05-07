@@ -10,13 +10,15 @@ import qualified RayTracer.Data.Material as M
   )
 import RayTracer.Data.Matrix (fromList)
 import RayTracer.Data.Ray (ray)
+import RayTracer.Data.Shape
+  ( intersect,
+    normalAt,
+  )
 import RayTracer.Data.Sphere
   ( Sphere
       ( material,
         transformation
       ),
-    intersect,
-    normalAt,
     sphere,
   )
 import RayTracer.Data.Tuple

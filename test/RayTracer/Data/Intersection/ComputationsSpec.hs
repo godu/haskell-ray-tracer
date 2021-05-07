@@ -12,9 +12,11 @@ import RayTracer.Data.Intersection.Computations
     prepareComputations,
   )
 import RayTracer.Data.Ray (ray)
-import RayTracer.Data.Sphere
+import RayTracer.Data.Shape
   ( intersect,
-    sphere,
+  )
+import RayTracer.Data.Sphere
+  ( sphere,
   )
 import qualified RayTracer.Data.Tuple as T
   ( point,
