@@ -6,17 +6,20 @@ module RayTracer.Transformation
     rotationY,
     rotationZ,
     shearing,
+    viewTransform,
   )
 where
 
 import RayTracer.Data.Matrix
   ( Matrix,
+    fromList,
     one,
     update,
   )
+import RayTracer.Data.Tuple (Tuple (x, y, z), normalize)
 import Prelude
   ( Floating,
-    Num,
+    Num (negate, (*), (-)),
     cos,
     sin,
     ($),
@@ -61,3 +64,31 @@ shearing a b c d e f =
         update (1, 2) d $
           update (2, 0) e $
             update (2, 1) f identity
+
+viewTransform :: (Num a, Floating a) => Tuple a -> Tuple a -> Tuple a -> Matrix a
+viewTransform from to up = orientation * translation (negate $ x from) (negate $ y from) (negate $ z from)
+  where
+    forward = normalize $ to - from
+    left = forward * normalize up
+    trueUp = left * forward
+    orientation =
+      fromList
+        4
+        4
+        [ x left,
+          y left,
+          z left,
+          0,
+          x trueUp,
+          y trueUp,
+          z trueUp,
+          0,
+          negate $ x forward,
+          negate $ y forward,
+          negate $ z forward,
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
