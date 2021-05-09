@@ -1,4 +1,4 @@
-module RayTracer.Data.Extra
+module RayTracer.Extra
   ( (~=),
   )
 where

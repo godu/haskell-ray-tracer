@@ -35,11 +35,11 @@ import qualified Data.Vector as V
     zipWith,
     (!?),
   )
-import RayTracer.Data.Extra ((~=))
 import RayTracer.Data.Tuple
   ( Tuple (w, x, y, z),
     tuple,
   )
+import RayTracer.Extra ((~=))
 import Prelude
   ( Bool,
     Eq,

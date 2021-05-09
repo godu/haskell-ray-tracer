@@ -30,6 +30,7 @@ import RayTracer.Data.Color
   )
 import Prelude
   ( Bool,
+    Eq,
     Int,
     Num,
     RealFrac,
@@ -56,6 +57,7 @@ data Canvas a = Canvas
     height :: Int,
     pixels :: Map (Int, Int) (Color a)
   }
+  deriving (Eq)
 
 canvas :: (Int, Int) -> Canvas a
 canvas (w, h) = Canvas w h empty

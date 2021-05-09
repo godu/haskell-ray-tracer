@@ -15,7 +15,7 @@ module RayTracer.Data.Tuple
   )
 where
 
-import RayTracer.Data.Extra ((~=))
+import RayTracer.Extra ((~=))
 import Prelude
   ( Bool,
     Eq,

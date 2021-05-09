@@ -6,7 +6,7 @@ module RayTracer.Data.Ray
   )
 where
 
-import RayTracer.Data.Extra ((~=))
+import RayTracer.Extra ((~=))
 import qualified RayTracer.Data.Matrix as M
   ( Matrix,
     (*^),

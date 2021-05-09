@@ -6,7 +6,7 @@ module RayTracer.Data.Color
   )
 where
 
-import RayTracer.Data.Extra ((~=))
+import RayTracer.Extra ((~=))
 import Prelude
   ( Eq,
     Fractional,
