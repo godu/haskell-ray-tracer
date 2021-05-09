@@ -1,9 +1,11 @@
+{-# LANGUAGE TupleSections #-}
+
 module RayTracer.Data.Camera
   ( Camera
       ( hsize,
         vsize,
         fieldOfView,
-        transform,
+        transformation,
         halfHeight,
         halfWidth,
         pixelSize
@@ -15,6 +17,8 @@ module RayTracer.Data.Camera
 where
 
 import Control.Applicative (liftA2)
+import Data.Maybe (mapMaybe)
+import Debug.Trace (traceShowId)
 import RayTracer.Data.Canvas (Canvas, canvas, replace)
 import RayTracer.Data.Matrix (Matrix, inverse, (*^))
 import RayTracer.Data.Ray (Ray, ray)
@@ -47,7 +51,7 @@ data Camera a = Camera
   { hsize :: Int,
     vsize :: Int,
     fieldOfView :: a,
-    transform :: Matrix a,
+    transformation :: Matrix a,
     halfWidth :: a,
     halfHeight :: a,
     pixelSize :: a
@@ -79,21 +83,24 @@ rayForPixel c (px, py) = liftA2 ray origin direction
     worldX = halfWidth c - xOffset
     worldY = halfHeight c - yOffset
 
-    t = inverse $ transform c
+    t = inverse $ transformation c
     pixel = (*^ point worldX worldY (-1)) <$> t
     origin = (*^ point 0 0 0) <$> t
     direction = normalize <$> liftA2 (-) pixel origin
 
-render :: (Shape o a, Eq a, Floating a, RealFrac a, Eq (o a)) => Camera a -> World o a -> Canvas a
+render :: (Shape o a, Eq a, Floating a, RealFrac a, Eq (o a), Show a, Show (o a)) => Camera a -> World o a -> Canvas a
 render camera world = image
   where
-    pixels = (`quotRem` hsize camera) <$> [0 .. hsize camera * vsize camera - 1]
-    image = foldr updatePixel (canvas (hsize camera, vsize camera)) pixels
-    updatePixel pixel canvas =
-      maybe
-        canvas
-        (\c -> replace pixel c canvas)
-        color
+    pixels = (`quotRem` vsize camera) <$> [0 .. hsize camera * vsize camera - 1]
+    image =
+      foldr
+        updateCanvas
+        (canvas (hsize camera, vsize camera))
+        $ mapMaybe
+          (renderPixel canvas)
+          pixels
+    renderPixel canvas pixel = (pixel,) <$> color
       where
         ray = rayForPixel camera pixel
         color = colorAt world <$> ray
+    updateCanvas (pixel, color) canvas = replace pixel color canvas

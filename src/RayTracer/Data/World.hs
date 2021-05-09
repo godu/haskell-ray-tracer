@@ -8,10 +8,9 @@ module RayTracer.Data.World
   )
 where
 
-import Data.List.Ordered (mergeAll)
-import Debug.Trace (traceShowId)
+import Debug.Trace (traceShow, traceShowId)
 import RayTracer.Data.Color (Color, black, color)
-import RayTracer.Data.Intersection (Intersection, hit)
+import RayTracer.Data.Intersection (Intersection, hit, intersections)
 import RayTracer.Data.Intersection.Computations (prepareComputations)
 import qualified RayTracer.Data.Intersection.Computations as C (Computations (eyev, normalv, object, point))
 import RayTracer.Data.Light (Light, pointLight)
@@ -40,7 +39,7 @@ import RayTracer.Data.Tuple (point)
 import RayTracer.Transformation (scaling)
 import Prelude
   ( Double,
-    Eq,
+    Eq ((/=)),
     Floating,
     Foldable (sum),
     Fractional,
@@ -48,8 +47,9 @@ import Prelude
     Num,
     Ord,
     RealFrac,
-    Show,
-    concatMap,
+    Semigroup ((<>)),
+    Show (show),
+    concat,
     maybe,
     return,
     ($),
@@ -84,11 +84,11 @@ defaultWorld = World [s1, s2] (return l)
     l = pointLight (point (-10) 10 (-10)) (color 1 1 1)
 
 intersect ::
-  (Num a, Floating a, Eq a, Ord a, Fractional a, SS.Shape o a, Eq (o a)) =>
+  (Num a, Floating a, Eq a, Ord a, Fractional a, SS.Shape o a, Eq (o a), Show a, Show (o a)) =>
   Ray a ->
   World o a ->
   [Intersection a o]
-intersect r w = mergeAll $ SS.intersect r <$> objects w
+intersect r w = intersections $ concat $ SS.intersect r <$> objects w
 
 shadeHit :: (Num a, Floating a, RealFrac a, SS.Shape o a) => World o a -> C.Computations a o -> Color a
 shadeHit w c =
@@ -103,7 +103,7 @@ shadeHit w c =
     )
       <$> lights w
 
-colorAt :: (Fractional a, Eq (o a), Floating a, RealFrac a, Shape o a) => World o a -> Ray a -> Color a
+colorAt :: (Fractional a, Eq (o a), Floating a, RealFrac a, Shape o a, Show a, Show (o a)) => World o a -> Ray a -> Color a
 colorAt w r =
   maybe
     black

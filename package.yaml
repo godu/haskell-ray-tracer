@@ -15,7 +15,6 @@ library:
   source-dirs: src
   dependencies:
     - containers
-    - data-ordlist
     - foldl
     - semirings
     - vector

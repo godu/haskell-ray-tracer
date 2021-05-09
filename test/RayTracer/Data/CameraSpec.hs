@@ -4,7 +4,7 @@ module RayTracer.Data.CameraSpec
 where
 
 import RayTracer.Data.Camera
-  ( Camera (fieldOfView, hsize, transform, vsize),
+  ( Camera (fieldOfView, hsize, transformation, vsize),
     camera,
     pixelSize,
     rayForPixel,
@@ -50,7 +50,7 @@ spec = do
     hsize c `shouldBe` 160
     vsize c `shouldBe` 120
     fieldOfView c `shouldBe` pi / 2
-    transform c `shouldBe` identity
+    transformation c `shouldBe` identity
   it "The pixel size for a horizontal canvas" $ do
     let c = camera 200 125 (pi / 2)
     pixelSize c ~= 0.01 `shouldBe` True
@@ -69,7 +69,7 @@ spec = do
     origin <$> r `shouldBe` return (point 0 0 0)
     direction <$> r `shouldBe` return (vector 0.66519 0.33259 (-0.66851))
   it "Constructing a ray when the camera is transformed" $ do
-    let c = (camera 201 101 (pi / 2)) {transform = rotationY (pi / 4) * translation 0 (-2) 5}
+    let c = (camera 201 101 (pi / 2)) {transformation = rotationY (pi / 4) * translation 0 (-2) 5}
         r = rayForPixel c (100, 50)
     origin <$> r `shouldBe` return (point 0 2 (-5))
     direction <$> r `shouldBe` return (vector (sqrt 2 / 2) 0 (negate $ sqrt 2 / 2))
@@ -78,6 +78,6 @@ spec = do
         from = point 0 0 (-5)
         to = point 0 0 0
         up = vector 0 1 0
-        c = (camera 11 11 (pi / 2)) {transform = viewTransform from to up}
+        c = (camera 11 11 (pi / 2)) {transformation = viewTransform from to up}
         image = render c w
     at image (5, 5) `shouldBe` color 0.38066 0.47583 0.2855
