@@ -5,15 +5,16 @@ module RayTracer.Data.World
     intersect,
     shadeHit,
     colorAt,
+    isShadowed,
   )
 where
 
-import Debug.Trace (traceShow, traceShowId)
+import Data.Maybe (listToMaybe)
 import RayTracer.Data.Color (Color, black, color)
-import RayTracer.Data.Intersection (Intersection, hit, intersections)
+import RayTracer.Data.Intersection (Intersection (t), hit, intersections)
 import RayTracer.Data.Intersection.Computations (prepareComputations)
 import qualified RayTracer.Data.Intersection.Computations as C (Computations (eyev, normalv, object, point))
-import RayTracer.Data.Light (Light, pointLight)
+import RayTracer.Data.Light (Light (position), pointLight)
 import RayTracer.Data.Material (lighting)
 import qualified RayTracer.Data.Material as M
   ( color,
@@ -21,7 +22,7 @@ import qualified RayTracer.Data.Material as M
     material,
     specular,
   )
-import RayTracer.Data.Ray (Ray)
+import RayTracer.Data.Ray (Ray, ray)
 import RayTracer.Data.Shape (Shape)
 import qualified RayTracer.Data.Shape as SS
   ( Shape,
@@ -35,24 +36,27 @@ import qualified RayTracer.Data.Sphere as S
     sphere,
     transformation,
   )
-import RayTracer.Data.Tuple (point)
+import RayTracer.Data.Tuple (Tuple, magnitude, normalize, point)
 import RayTracer.Transformation (scaling)
 import Prelude
-  ( Double,
+  ( Bool (False, True),
+    Double,
     Eq ((/=)),
     Floating,
     Foldable (sum),
     Fractional,
-    Maybe (Nothing),
-    Num,
-    Ord,
+    Maybe (Just, Nothing),
+    Num ((-)),
+    Ord ((<)),
     RealFrac,
     Semigroup ((<>)),
     Show (show),
     concat,
+    head,
     maybe,
     return,
     ($),
+    (.),
     (<$>),
   )
 
@@ -84,7 +88,7 @@ defaultWorld = World [s1, s2] (return l)
     l = pointLight (point (-10) 10 (-10)) (color 1 1 1)
 
 intersect ::
-  (Num a, Floating a, Eq a, Ord a, Fractional a, SS.Shape o a, Eq (o a), Show a, Show (o a)) =>
+  (Num a, Floating a, Eq a, Ord a, Fractional a, SS.Shape o a, Eq (o a)) =>
   Ray a ->
   World o a ->
   [Intersection a o]
@@ -100,13 +104,26 @@ shadeHit w c =
           (C.point c)
           (C.eyev c)
           (C.normalv c)
+          False
     )
       <$> lights w
 
-colorAt :: (Fractional a, Eq (o a), Floating a, RealFrac a, Shape o a, Show a, Show (o a)) => World o a -> Ray a -> Color a
+colorAt :: (Fractional a, Eq (o a), Floating a, RealFrac a, Shape o a) => World o a -> Ray a -> Color a
 colorAt w r =
   maybe
     black
     (\i -> shadeHit w $ prepareComputations i r)
     $ hit $
       r `intersect` w
+
+isShadowed :: (Num a, Floating a, Ord a, Shape o a, Eq (o a)) => World o a -> Tuple a -> Bool
+isShadowed w p = case listToMaybe (lights w) of
+  Nothing -> True
+  Just l -> maybe False ((< distance) . t) h
+    where
+      v = position l - p
+      distance = magnitude v
+      direction = normalize v
+      r = ray p direction
+      intersections = intersect r w
+      h = hit intersections

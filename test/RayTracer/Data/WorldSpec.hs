@@ -16,7 +16,7 @@ import qualified RayTracer.Data.Material as M
 import RayTracer.Data.Ray (ray)
 import RayTracer.Data.Sphere (Sphere, material, sphere, transformation)
 import RayTracer.Data.Tuple (point, vector)
-import RayTracer.Data.World (World (lights, objects), colorAt, defaultWorld, intersect, shadeHit, world)
+import RayTracer.Data.World (World (lights, objects), colorAt, defaultWorld, intersect, isShadowed, shadeHit, world)
 import RayTracer.Transformation (scaling)
 import Test.Hspec
   ( Spec,
@@ -25,7 +25,8 @@ import Test.Hspec
     shouldContain,
   )
 import Prelude
-  ( Double,
+  ( Bool (False, True),
+    Double,
     Maybe (Nothing),
     fmap,
     head,
@@ -110,3 +111,20 @@ spec = do
         r = ray (point 0 0 0.75) (vector 0 0 (-1))
         c = w `colorAt` r
     c `shouldBe` M.color (material s2)
+
+  it "There is no shadow when nothing is collinear with point and light" $ do
+    let w = defaultWorld
+        p = point 0 10 0
+    isShadowed w p `shouldBe` False
+  it "The shadow when an object is between the point and the light" $ do
+    let w = defaultWorld
+        p = point 10 (-10) 10
+    isShadowed w p `shouldBe` True
+  it "There is no shadow when an object is behind the light" $ do
+    let w = defaultWorld
+        p = point (-20) 20 (-20)
+    isShadowed w p `shouldBe` False
+  it "There is no shadow when an object is behind the point" $ do
+    let w = defaultWorld
+        p = point (-2) 2 (-2)
+    isShadowed w p `shouldBe` False

@@ -19,7 +19,8 @@ import RayTracer.Data.Tuple
     (.^),
   )
 import Prelude
-  ( Eq,
+  ( Bool,
+    Eq,
     Floating,
     Fractional,
     Num,
@@ -49,8 +50,9 @@ lighting ::
   Tuple a ->
   Tuple a ->
   Tuple a ->
+  Bool ->
   C.Color a
-lighting m light point eyev normalv = ambient + diffuse + specular
+lighting m light point eyev normalv inShadow = if inShadow then ambient else ambient + diffuse + specular
   where
     Material color ambient_ diffuse_ specular_ shininess_ = m
     effectiveColor = color * intensity light

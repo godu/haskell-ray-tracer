@@ -49,7 +49,8 @@ import qualified RayTracer.Data.Tuple as T
   )
 import RayTracer.Projectile (fuchsia)
 import Prelude
-  ( IO,
+  ( Bool (False),
+    IO,
     Int,
     filter,
     fromIntegral,
@@ -99,7 +100,7 @@ main = do
             normal = object intersection `normalAt` point
             eye = - (R.direction ray)
             color =
-              M.lighting (material $ object intersection) light point eye normal
+              M.lighting (material $ object intersection) light point eye normal False
     finalCanvas = updateCanvas initialCanvas pixels
 
 updateCanvas :: Foldable t => Canvas a -> t ((Int, Int), C.Color a) -> Canvas a

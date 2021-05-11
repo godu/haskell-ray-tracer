@@ -18,7 +18,6 @@ where
 
 import Control.Applicative (liftA2)
 import Data.Maybe (mapMaybe)
-import Debug.Trace (traceShowId)
 import RayTracer.Data.Canvas (Canvas, canvas, replace)
 import RayTracer.Data.Matrix (Matrix, inverse, (*^))
 import RayTracer.Data.Ray (Ray, ray)
@@ -88,7 +87,7 @@ rayForPixel c (px, py) = liftA2 ray origin direction
     origin = (*^ point 0 0 0) <$> t
     direction = normalize <$> liftA2 (-) pixel origin
 
-render :: (Shape o a, Eq a, Floating a, RealFrac a, Eq (o a), Show a, Show (o a)) => Camera a -> World o a -> Canvas a
+render :: (Shape o a, Eq a, Floating a, RealFrac a, Eq (o a)) => Camera a -> World o a -> Canvas a
 render camera world = image
   where
     pixels = (`quotRem` vsize camera) <$> [0 .. hsize camera * vsize camera - 1]
