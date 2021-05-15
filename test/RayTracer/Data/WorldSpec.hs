@@ -17,12 +17,14 @@ import RayTracer.Data.Ray (ray)
 import RayTracer.Data.Sphere (Sphere, material, sphere, transformation)
 import RayTracer.Data.Tuple (point, vector)
 import RayTracer.Data.World (World (lights, objects), colorAt, defaultWorld, intersect, isShadowed, shadeHit, world)
-import RayTracer.Transformation (scaling)
+import RayTracer.Transformation (scaling, translation)
 import Test.Hspec
   ( Spec,
     it,
     shouldBe,
     shouldContain,
+    shouldNotSatisfy,
+    shouldSatisfy,
   )
 import Prelude
   ( Bool (False, True),
@@ -31,6 +33,7 @@ import Prelude
     fmap,
     head,
     return,
+    words,
     (!!),
     ($),
   )
@@ -115,16 +118,29 @@ spec = do
   it "There is no shadow when nothing is collinear with point and light" $ do
     let w = defaultWorld
         p = point 0 10 0
-    isShadowed w p `shouldBe` False
+    p `shouldNotSatisfy` isShadowed w
   it "The shadow when an object is between the point and the light" $ do
     let w = defaultWorld
         p = point 10 (-10) 10
-    isShadowed w p `shouldBe` True
+    p `shouldSatisfy` isShadowed w
   it "There is no shadow when an object is behind the light" $ do
     let w = defaultWorld
         p = point (-20) 20 (-20)
-    isShadowed w p `shouldBe` False
+    p `shouldNotSatisfy` isShadowed w
   it "There is no shadow when an object is behind the point" $ do
     let w = defaultWorld
         p = point (-2) 2 (-2)
-    isShadowed w p `shouldBe` False
+    p `shouldNotSatisfy` isShadowed w
+
+  it "shadeHit() is given an intersection in shadow" $ do
+    let s1 = sphere
+        s2 = sphere {transformation = translation 0 0 10}
+        w =
+          world
+            { lights = [pointLight (point 0 0 (-10)) (color 1 1 1)],
+              objects = [s1, s2]
+            }
+        r = ray (point 0 0 5) (vector 0 0 1)
+        i = intersection 4 s2
+        comps = prepareComputations i r
+    shadeHit w comps `shouldBe` color 0.1 0.1 0.1

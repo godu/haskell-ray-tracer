@@ -21,7 +21,7 @@ import qualified RayTracer.Chapter5 as Chapter5
 import qualified RayTracer.Chapter6 as Chapter6
   ( main,
   )
-import qualified RayTracer.Chapter7 as Chapter7
+import qualified RayTracer.Chapter8 as Chapter8
   ( main,
   )
 import System.Environment (getArgs)
@@ -45,5 +45,5 @@ run ("3" : _) = Chapter3.main
 run ("4" : _) = Chapter4.main
 run ("5" : _) = Chapter5.main
 run ("6" : _) = Chapter6.main
-run ("7" : _) = Chapter7.main
+run ("8" : _) = Chapter8.main
 run args = print $ "Chapter not found: " <> show args

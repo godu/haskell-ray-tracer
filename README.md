@@ -33,3 +33,9 @@
   
   ![chapter-7](https://raw.githubusercontent.com/godu/haskell-ray-tracer/gh-pages/chapter-7.jpg)
 </details>
+
+<details>
+  <summary>Chapter 8</summary>
+  
+  ![chapter-8](https://raw.githubusercontent.com/godu/haskell-ray-tracer/gh-pages/chapter-8.jpg)
+</details>

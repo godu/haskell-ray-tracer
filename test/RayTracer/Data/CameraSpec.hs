@@ -26,6 +26,7 @@ import Test.Hspec
   ( Spec,
     it,
     shouldBe,
+    shouldSatisfy,
   )
 import Prelude
   ( Bool (True),
@@ -53,10 +54,10 @@ spec = do
     transformation c `shouldBe` identity
   it "The pixel size for a horizontal canvas" $ do
     let c = camera 200 125 (pi / 2)
-    pixelSize c ~= 0.01 `shouldBe` True
+    pixelSize c `shouldSatisfy` (~= 0.01)
   it "The pixel size for a vertical canvas" $ do
     let c = camera 125 200 (pi / 2)
-    pixelSize c ~= 0.01 `shouldBe` True
+    pixelSize c `shouldSatisfy` (~= 0.01)
 
   it "Constructing a ray through the center of the canvas" $ do
     let c = camera 201 101 (pi / 2)

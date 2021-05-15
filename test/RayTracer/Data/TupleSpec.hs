@@ -25,6 +25,8 @@ import Test.Hspec
   ( Spec,
     it,
     shouldBe,
+    shouldNotSatisfy,
+    shouldSatisfy,
   )
 import Prelude
   ( Bool (..),
@@ -44,16 +46,16 @@ spec = do
     y actual `shouldBe` -4.2
     z actual `shouldBe` 3.1
     w actual `shouldBe` 1.0
-    isPoint actual `shouldBe` True
-    isVector actual `shouldBe` False
+    actual `shouldSatisfy` isPoint
+    actual `shouldNotSatisfy` isVector
   it "A tuple with w=0 is a vector" $ do
     let actual = tuple 4.4 (-4.2) 3.1 0.0
     x actual `shouldBe` 4.4
     y actual `shouldBe` -4.2
     z actual `shouldBe` 3.1
     w actual `shouldBe` 0.0
-    isPoint actual `shouldBe` False
-    isVector actual `shouldBe` True
+    actual `shouldNotSatisfy` isPoint
+    actual `shouldSatisfy` isVector
 
   it "point() creates tuples with w=1" $ do
     let actual = point 4 (-4) 3

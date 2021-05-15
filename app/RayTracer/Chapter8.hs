@@ -1,6 +1,6 @@
 {-# LANGUAGE TupleSections #-}
 
-module RayTracer.Chapter7
+module RayTracer.Chapter8
   ( main,
   )
 where
@@ -74,7 +74,7 @@ import Prelude
 
 main :: IO ()
 main = do
-  writeFile "./.output/chapter-7.ppm" $ show canvas
+  writeFile "./.output/chapter-8.ppm" $ show canvas
   where
     floor =
       sphere

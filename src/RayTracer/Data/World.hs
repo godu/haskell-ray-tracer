@@ -13,7 +13,7 @@ import Data.Maybe (listToMaybe)
 import RayTracer.Data.Color (Color, black, color)
 import RayTracer.Data.Intersection (Intersection (t), hit, intersections)
 import RayTracer.Data.Intersection.Computations (prepareComputations)
-import qualified RayTracer.Data.Intersection.Computations as C (Computations (eyev, normalv, object, point))
+import qualified RayTracer.Data.Intersection.Computations as C (Computations (eyev, normalv, object, overPoint, point))
 import RayTracer.Data.Light (Light (position), pointLight)
 import RayTracer.Data.Material (lighting)
 import qualified RayTracer.Data.Material as M
@@ -94,17 +94,17 @@ intersect ::
   [Intersection a o]
 intersect r w = intersections $ concat $ SS.intersect r <$> objects w
 
-shadeHit :: (Num a, Floating a, RealFrac a, SS.Shape o a) => World o a -> C.Computations a o -> Color a
+shadeHit :: (Num a, Floating a, RealFrac a, SS.Shape o a, Eq (o a)) => World o a -> C.Computations a o -> Color a
 shadeHit w c =
   sum $
     ( \light ->
         lighting
           (SS.material $ C.object c)
           light
-          (C.point c)
+          (C.overPoint c)
           (C.eyev c)
           (C.normalv c)
-          False
+          (isShadowed w $ C.overPoint c)
     )
       <$> lights w
 

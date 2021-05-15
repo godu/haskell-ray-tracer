@@ -1,5 +1,6 @@
 module RayTracer.Extra
   ( (~=),
+    epsilon,
   )
 where
 
@@ -17,5 +18,8 @@ import Prelude
     (>=),
   )
 
+epsilon :: Fractional a => a
+epsilon = 0.0001
+
 (~=) :: (Ord a, Fractional a) => a -> a -> Bool
-a ~= b = (>=) precision $ abs $ a - b where precision = 1 / 1000
+a ~= b = (>=) epsilon $ abs $ a - b

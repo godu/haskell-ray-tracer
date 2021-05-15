@@ -26,6 +26,8 @@ import Test.Hspec
   ( Spec,
     it,
     shouldBe,
+    shouldNotSatisfy,
+    shouldSatisfy,
   )
 import Prelude
   ( Bool (False, True),
@@ -50,7 +52,7 @@ spec = do
         shape = sphere
         i = 4 `I.intersection` shape
         comps = prepareComputations i r
-    inside comps `shouldBe` False
+    comps `shouldNotSatisfy` inside
 
   it "The hit, when an intersection occurs on the inside" $ do
     let r = ray (T.point 0 0 0) (T.vector 0 0 1)
@@ -59,5 +61,5 @@ spec = do
         comps = prepareComputations i r
     point comps `shouldBe` T.point 0 0 1
     eyev comps `shouldBe` T.vector 0 0 (-1)
-    inside comps `shouldBe` True
+    comps `shouldSatisfy` inside
     normalv comps `shouldBe` T.vector 0 0 (-1)

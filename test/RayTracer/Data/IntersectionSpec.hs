@@ -10,25 +10,34 @@ import RayTracer.Data.Intersection
     intersection,
     intersections,
   )
+import qualified RayTracer.Data.Intersection.Computations as C (overPoint, point, prepareComputations)
 import RayTracer.Data.Ray (ray)
 import RayTracer.Data.Shape
   ( intersect,
   )
 import RayTracer.Data.Sphere
-  ( sphere,
+  ( Sphere (transformation),
+    sphere,
   )
 import RayTracer.Data.Tuple
   ( point,
     vector,
+    z,
   )
+import RayTracer.Extra (epsilon)
+import RayTracer.Transformation (translation)
 import Test.Hspec
   ( Spec,
     it,
     shouldBe,
+    shouldSatisfy,
   )
 import Prelude
-  ( length,
+  ( Ord ((<), (>)),
+    length,
+    negate,
     ($),
+    (/),
     (<$>),
   )
 
@@ -73,3 +82,11 @@ spec = do
         i4 = intersection 2 s
         xs = intersections [i1, i2, i3, i4]
     hit xs `shouldBe` Just i4
+
+  it "The hit should offset the point" $ do
+    let r = ray (point 0 0 (-5)) (vector 0 0 1)
+        shape = sphere {transformation = translation 0 0 1}
+        i = intersection 5 shape
+        comps = C.prepareComputations i r
+    z (C.overPoint comps) `shouldSatisfy` (< negate (epsilon / 2))
+    z (C.point comps) `shouldSatisfy` (> z (C.overPoint comps))
