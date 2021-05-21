@@ -53,9 +53,9 @@ import Prelude
   )
 
 data Canvas a = Canvas
-  { width :: Int,
-    height :: Int,
-    pixels :: Map (Int, Int) (Color a)
+  { width :: !Int,
+    height :: !Int,
+    pixels :: !(Map (Int, Int) (Color a))
   }
   deriving (Eq)
 

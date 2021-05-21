@@ -1,5 +1,3 @@
-{-# LANGUAGE TupleSections #-}
-
 module RayTracer.Chapter8
   ( main,
   )
@@ -7,7 +5,6 @@ where
 
 import Data.Foldable
   ( Foldable,
-    foldr,
   )
 import Data.Maybe (maybe)
 import qualified RayTracer.Data.Camera as C (camera, render, transformation)

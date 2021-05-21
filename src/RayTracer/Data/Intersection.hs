@@ -23,7 +23,7 @@ import Prelude
     (>),
   )
 
-data Intersection a o = Intersection {t :: a, object :: o a} deriving (Show, Eq)
+data Intersection a o = Intersection {t :: !a, object :: !(o a)} deriving (Show, Eq)
 
 instance (Ord a, Eq (o a)) => Ord (Intersection a o) where
   a <= b = t a <= t b

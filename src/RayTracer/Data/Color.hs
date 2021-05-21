@@ -29,9 +29,9 @@ import Prelude
   )
 
 data Color a = Color
-  { red :: a,
-    green :: a,
-    blue :: a
+  { red :: !a,
+    green :: !a,
+    blue :: !a
   }
 
 color :: a -> a -> a -> Color a

@@ -38,14 +38,14 @@ import Prelude
   )
 
 data Projectile a = Projectile
-  { position :: Tuple a,
-    velocity :: Tuple a
+  { position :: !(Tuple a),
+    velocity :: !(Tuple a)
   }
   deriving (Show)
 
 data Environment a = Environment
-  { gravity :: Tuple a,
-    wind :: Tuple a
+  { gravity :: !(Tuple a),
+    wind :: !(Tuple a)
   }
   deriving (Show)
 

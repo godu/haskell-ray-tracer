@@ -61,8 +61,8 @@ import Prelude
   )
 
 data World o a = World
-  { objects :: [o a],
-    lights :: [Light a]
+  { objects :: ![o a],
+    lights :: ![Light a]
   }
   deriving (Show, Eq)
 

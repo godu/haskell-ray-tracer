@@ -37,10 +37,10 @@ import Prelude
   )
 
 data Tuple a = Tuple
-  { x :: a,
-    y :: a,
-    z :: a,
-    w :: a
+  { x :: !a,
+    y :: !a,
+    z :: !a,
+    w :: !a
   }
   deriving (Show)
 
@@ -89,11 +89,12 @@ magnitude (Tuple a b c d) = sqrt (a * a + b * b + c * c + d * d)
 normalize :: (Fractional a, Floating a) => Tuple a -> Tuple a
 normalize v =
   tuple
-    (a / magnitude v)
-    (b / magnitude v)
-    (c / magnitude v)
-    (d / magnitude v)
+    (a / m)
+    (b / m)
+    (c / m)
+    (d / m)
   where
+    m = magnitude v
     (Tuple a b c d) = v
 
 (.^) :: Num a => Tuple a -> Tuple a -> a

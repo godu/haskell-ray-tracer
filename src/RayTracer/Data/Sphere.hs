@@ -60,9 +60,9 @@ import Prelude
   )
 
 data Sphere a = Sphere
-  { origin :: Tuple a,
-    transformation :: Matrix a,
-    material :: M.Material a
+  { origin :: !(Tuple a),
+    transformation :: !(Matrix a),
+    material :: !(M.Material a)
   }
   deriving (Show, Eq)
 

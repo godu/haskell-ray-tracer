@@ -38,7 +38,14 @@ import Prelude
     (^),
   )
 
-data Material a = Material {color :: C.Color a, ambient :: a, diffuse :: a, specular :: a, shininess :: a} deriving (Show, Eq)
+data Material a = Material
+  { color :: !(C.Color a),
+    ambient :: !a,
+    diffuse :: !a,
+    specular :: !a,
+    shininess :: !a
+  }
+  deriving (Show, Eq)
 
 material :: Fractional a => Material a
 material = Material (C.color 1 1 1) 0.1 0.9 0.9 200.0

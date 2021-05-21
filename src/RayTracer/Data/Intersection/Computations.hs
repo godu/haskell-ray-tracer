@@ -21,13 +21,13 @@ import Prelude
   )
 
 data Computations a o = Computations
-  { t :: a,
-    object :: o a,
-    point :: Tuple a,
-    eyev :: Tuple a,
-    normalv :: Tuple a,
-    inside :: Bool,
-    overPoint :: Tuple a
+  { t :: !a,
+    object :: !(o a),
+    point :: !(Tuple a),
+    eyev :: !(Tuple a),
+    normalv :: !(Tuple a),
+    inside :: !Bool,
+    overPoint :: !(Tuple a)
   }
   deriving (Eq, Show)
 

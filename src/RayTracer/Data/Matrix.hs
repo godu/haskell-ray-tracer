@@ -79,8 +79,8 @@ import Prelude
   )
 
 data Matrix a = Matrix
-  { dimension :: (Int, Int),
-    values :: V.Vector a
+  { dimension :: !(Int, Int),
+    values :: !(V.Vector a)
   }
   deriving (Show)
 

@@ -11,7 +11,11 @@ import Prelude
     Show,
   )
 
-data Light a = Light {position :: Tuple a, intensity :: Color a} deriving (Show, Eq)
+data Light a = Light
+  { position :: !(Tuple a),
+    intensity :: !(Color a)
+  }
+  deriving (Show, Eq)
 
 pointLight :: Tuple a -> Color a -> Light a
 pointLight = Light

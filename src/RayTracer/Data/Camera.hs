@@ -47,13 +47,13 @@ import Prelude
   )
 
 data Camera a = Camera
-  { hsize :: Int,
-    vsize :: Int,
-    fieldOfView :: a,
-    transformation :: Matrix a,
-    halfWidth :: a,
-    halfHeight :: a,
-    pixelSize :: a
+  { hsize :: !Int,
+    vsize :: !Int,
+    fieldOfView :: !a,
+    transformation :: !(Matrix a),
+    halfWidth :: !a,
+    halfHeight :: !a,
+    pixelSize :: !a
   }
   deriving (Show, Eq)
 
