@@ -19,20 +19,17 @@ import Data.Foldable
     concatMap,
   )
 import Data.Ix (range)
-import Data.Map.Strict
-  ( Map,
-    empty,
-    insert,
-    (!?),
-  )
 import Data.Maybe (fromMaybe)
+import Data.Vector (Vector, replicate, (!?), (//))
 import RayTracer.Data.Color
   ( Color,
+    black,
     color,
   )
 import Prelude
   ( Bool,
     Eq,
+    Functor,
     Int,
     Num,
     RealFrac,
@@ -40,6 +37,7 @@ import Prelude
     String,
     fmap,
     length,
+    map,
     otherwise,
     show,
     uncurry,
@@ -58,21 +56,25 @@ import Prelude
 data Canvas a = Canvas
   { width :: !Int,
     height :: !Int,
-    pixels :: !(Map (Int, Int) (Color a))
+    pixels :: !(Vector (Color a))
   }
   deriving (Eq)
 
-canvas :: (Int, Int) -> Canvas a
-canvas (w, h) = Canvas w h empty
+canvas :: Num a => (Int, Int) -> Canvas a
+canvas (w, h) = Canvas w h $ replicate (w * h) black
 
 at :: Num a => Canvas a -> (Int, Int) -> Color a
-at (Canvas _ _ pixels) i = fromMaybe (color 0 0 0) $ pixels !? i
+at (Canvas w _ pixels) (x, y) = fromMaybe (color 0 0 0) $ pixels !? (x + y * w)
 
 replace :: (Int, Int) -> Color a -> Canvas a -> Canvas a
-replace i a (Canvas w h pixels) = Canvas w h $ insert i a pixels
+replace i a c = bulk c [(i, a)]
 
-bulk :: Foldable t => Canvas a -> t ((Int, Int), Color a) -> Canvas a
-bulk = foldr (uncurry replace)
+bulk :: (Functor t, Foldable t) => Canvas a -> t ((Int, Int), Color a) -> Canvas a
+bulk (Canvas w h pixels) ps = Canvas w h nextPixels
+  where
+    toList = foldr (:) []
+    ops = (\((x, y), c) -> (x + y * w, c)) <$> ps
+    nextPixels = pixels // toList ops
 
 positions (Canvas w h _) =
   (\a -> (,a) <$> range (0, w - 1)) <$> range (0, h - 1)
