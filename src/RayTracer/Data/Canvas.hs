@@ -9,11 +9,13 @@ module RayTracer.Data.Canvas
     positions,
     at,
     replace,
+    bulk,
   )
 where
 
 import Data.Foldable
-  ( concat,
+  ( Foldable (foldr),
+    concat,
     concatMap,
   )
 import Data.Ix (range)
@@ -40,6 +42,7 @@ import Prelude
     length,
     otherwise,
     show,
+    uncurry,
     unlines,
     words,
     ($),
@@ -67,6 +70,9 @@ at (Canvas _ _ pixels) i = fromMaybe (color 0 0 0) $ pixels !? i
 
 replace :: (Int, Int) -> Color a -> Canvas a -> Canvas a
 replace i a (Canvas w h pixels) = Canvas w h $ insert i a pixels
+
+bulk :: Foldable t => Canvas a -> t ((Int, Int), Color a) -> Canvas a
+bulk = foldr (uncurry replace)
 
 positions (Canvas w h _) =
   (\a -> (,a) <$> range (0, w - 1)) <$> range (0, h - 1)

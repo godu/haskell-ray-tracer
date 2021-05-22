@@ -18,7 +18,7 @@ where
 
 import Control.Applicative (liftA2)
 import Data.Maybe (mapMaybe)
-import RayTracer.Data.Canvas (Canvas, canvas, replace)
+import RayTracer.Data.Canvas (Canvas, bulk, canvas)
 import RayTracer.Data.Matrix (Matrix, inverse, (*^))
 import RayTracer.Data.Ray (Ray, ray)
 import RayTracer.Data.Shape (Shape)
@@ -92,8 +92,7 @@ render camera world = image
   where
     pixels = (`quotRem` vsize camera) <$> [0 .. hsize camera * vsize camera - 1]
     image =
-      foldr
-        updateCanvas
+      bulk
         (canvas (hsize camera, vsize camera))
         $ mapMaybe
           (renderPixel canvas)
@@ -102,4 +101,3 @@ render camera world = image
       where
         ray = rayForPixel camera pixel
         color = colorAt world <$> ray
-    updateCanvas (pixel, color) canvas = replace pixel color canvas

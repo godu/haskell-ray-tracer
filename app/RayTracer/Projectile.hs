@@ -1,3 +1,5 @@
+{-# LANGUAGE TupleSections #-}
+
 module RayTracer.Projectile
   ( Projectile (Projectile),
     Environment (Environment),
@@ -17,7 +19,7 @@ import Data.List
   )
 import RayTracer.Data.Canvas
   ( Canvas,
-    replace,
+    bulk,
   )
 import RayTracer.Data.Color
   ( Color,
@@ -27,14 +29,17 @@ import RayTracer.Data.Tuple (Tuple (y))
 import Prelude
   ( Bool,
     Fractional,
+    Functor,
     Int,
     Num,
     Ord,
     Show,
     pure,
+    ($),
     (+),
     (.),
     (<),
+    (<$>),
   )
 
 data Projectile a = Projectile
@@ -68,8 +73,8 @@ fire environment = takeWhile aboveFloor . unfoldr go
       where
         nextProjectile = tick environment projectile
 
-updateCanvas :: Foldable t => Color a -> Canvas a -> t (Int, Int) -> Canvas a
-updateCanvas color = foldr (go color) where go color pos = replace pos color
+updateCanvas :: (Functor t, Foldable t) => Color a -> Canvas a -> t (Int, Int) -> Canvas a
+updateCanvas color canvas ps = bulk canvas $ (,color) <$> ps
 
 fuchsia :: Fractional a => Color a
 fuchsia = color 1 0.2 1

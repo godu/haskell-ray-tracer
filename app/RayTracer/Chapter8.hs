@@ -11,7 +11,6 @@ import qualified RayTracer.Data.Camera as C (camera, render, transformation)
 import RayTracer.Data.Canvas
   ( Canvas,
     canvas,
-    replace,
   )
 import qualified RayTracer.Data.Color as C
   ( Color,

@@ -10,11 +10,7 @@ import Data.Foldable
     foldr,
   )
 import Data.Maybe (maybe)
-import RayTracer.Data.Canvas
-  ( Canvas,
-    canvas,
-    replace,
-  )
+import RayTracer.Data.Canvas (Canvas, bulk, canvas)
 import qualified RayTracer.Data.Color as C
   ( Color,
     black,
@@ -101,7 +97,4 @@ main = do
             eye = - (R.direction ray)
             color =
               M.lighting (material $ object intersection) light point eye normal False
-    finalCanvas = updateCanvas initialCanvas pixels
-
-updateCanvas :: Foldable t => Canvas a -> t ((Int, Int), C.Color a) -> Canvas a
-updateCanvas = foldr go where go (pos, color) = replace pos color
+    finalCanvas = bulk initialCanvas pixels

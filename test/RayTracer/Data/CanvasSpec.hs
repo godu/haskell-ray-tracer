@@ -11,6 +11,7 @@ import Data.Foldable
 import Data.Ix (range)
 import RayTracer.Data.Canvas
   ( at,
+    bulk,
     canvas,
     height,
     pixels,
@@ -62,12 +63,12 @@ spec = do
     let p2 = color 0 0.5 0
     let p3 = color (-0.5) 0 1
     let actual =
-          replace (0, 0) p1 $
-            replace (2, 1) p2 $
-              replace
-                (4, 2)
-                p3
-                initial
+          bulk
+            initial
+            [ ((0, 0), p1),
+              ((2, 1), p2),
+              ((4, 2), p3)
+            ]
     drop 3 (take 6 $ lines $ show actual)
       `shouldBe` [ "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0",
                    "0 0 0 0 0 0 0 128 0 0 0 0 0 0 0",
