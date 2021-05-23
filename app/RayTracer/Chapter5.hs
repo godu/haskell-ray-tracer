@@ -18,12 +18,11 @@ import RayTracer.Projectile
     updateCanvas,
   )
 import Prelude
-  ( IO,
+  ( String,
     filter,
     fromIntegral,
     quotRem,
     show,
-    writeFile,
     ($),
     (*),
     (+),
@@ -33,9 +32,8 @@ import Prelude
     (<$>),
   )
 
-main :: IO ()
-main = do
-  writeFile "./.output/chapter-5.ppm" $ show finalCanvas
+main :: [String]
+main = [show finalCanvas]
   where
     rayOrigin = point 0 0 (-5)
     wallZ = 10.0

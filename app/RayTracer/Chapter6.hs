@@ -46,14 +46,13 @@ import qualified RayTracer.Data.Tuple as T
 import RayTracer.Projectile (fuchsia)
 import Prelude
   ( Bool (False),
-    IO,
     Int,
+    String,
     filter,
     fromIntegral,
     otherwise,
     quotRem,
     show,
-    writeFile,
     ($),
     (*),
     (+),
@@ -63,14 +62,13 @@ import Prelude
     (<$>),
   )
 
-main :: IO ()
-main = do
-  writeFile "./.output/chapter-6.ppm" $ show finalCanvas
+main :: [String]
+main = [show finalCanvas]
   where
     rayOrigin = T.point 0 0 (-5)
     wallZ = 10.0
     wallSize = 7.0
-    canvasPixels = 100
+    canvasPixels = 200
     pixelSize = wallSize / fromIntegral canvasPixels
     half = wallSize / 2
     initialCanvas = canvas (canvasPixels, canvasPixels)

@@ -16,17 +16,21 @@ import RayTracer.Projectile
     fire,
   )
 import Prelude
-  ( IO,
-    print,
+  ( Monad (return),
+    Semigroup ((<>)),
+    Show (show),
+    String,
+    Traversable (traverse),
     ($),
+    (<$>),
   )
 
-main :: IO ()
-main = do
-  print "Fire projectile"
-  traverse_ print $ fire environment projectile
-  print "Fire optimal projectile"
-  traverse_ print $ fire environment secondProjectile
+main :: [String]
+main =
+  "Fire projectile" :
+  (show <$> fire environment projectile)
+    <> ["Fire optimal projectile"]
+    <> (show <$> fire environment secondProjectile)
   where
     gravity = vector 0 (-0.1) 0
     wind = vector (-0.1) 0 0

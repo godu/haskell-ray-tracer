@@ -27,14 +27,12 @@ import RayTracer.Transformation
 import Prelude
   ( Double,
     Floating,
-    IO,
     Int,
+    String,
     floor,
     fromIntegral,
     pi,
-    print,
     show,
-    writeFile,
     ($),
     (*),
     (-),
@@ -42,9 +40,8 @@ import Prelude
     (<$>),
   )
 
-main :: IO ()
-main = do
-  writeFile "./.output/chapter-4.ppm" $ show finalCanvas
+main :: [String]
+main = [show finalCanvas]
   where
     width = 550
     height = 550

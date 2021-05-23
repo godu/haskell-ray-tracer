@@ -21,19 +21,17 @@ import RayTracer.Projectile
   )
 import Prelude
   ( IO,
+    String,
     floor,
     fmap,
-    print,
     show,
-    writeFile,
     ($),
     (-),
     (<$>),
   )
 
-main :: IO ()
-main = do
-  writeFile "./.output/chapter-2.ppm" $ show finalCanvas
+main :: [String]
+main = [show finalCanvas]
   where
     width = 900
     height = 550
