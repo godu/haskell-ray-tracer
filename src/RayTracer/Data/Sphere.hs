@@ -2,7 +2,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 module RayTracer.Data.Sphere
-  ( Sphere (origin, transformation, material),
+  ( Sphere (transformation, material),
     sphere,
   )
 where
@@ -30,8 +30,7 @@ import qualified RayTracer.Data.Shape as S
       ),
   )
 import RayTracer.Data.Tuple
-  ( Tuple,
-    point,
+  ( point,
     (.^),
   )
 import RayTracer.Transformation (identity)
@@ -52,14 +51,13 @@ import Prelude
   )
 
 data Sphere a = Sphere
-  { origin :: !(Tuple a),
-    transformation :: !(Matrix a),
+  { transformation :: !(Matrix a),
     material :: !(M.Material a)
   }
   deriving (Show, Eq)
 
 sphere :: (Fractional a) => Sphere a
-sphere = Sphere (point 0 0 0) identity M.material
+sphere = Sphere identity M.material
 
 instance (Num a, Floating a, Ord a) => S.Shape Sphere a where
   transformation = transformation
