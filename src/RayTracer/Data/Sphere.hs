@@ -7,10 +7,6 @@ module RayTracer.Data.Sphere
   )
 where
 
-import Data.Maybe
-  ( fromJust,
-    maybe,
-  )
 import RayTracer.Data.Intersection
   ( intersection,
     intersections,
@@ -21,25 +17,20 @@ import qualified RayTracer.Data.Material as M
   )
 import RayTracer.Data.Matrix
   ( Matrix,
-    inverse,
-    transpose,
-    (*^),
   )
 import RayTracer.Data.Ray
   ( Ray (Ray),
-    transform,
   )
 import qualified RayTracer.Data.Shape as S
   ( Shape
-      ( intersect,
+      ( localIntersect,
+        localNormalAt,
         material,
-        normalAt,
         transformation
       ),
   )
 import RayTracer.Data.Tuple
-  ( Tuple (w),
-    normalize,
+  ( Tuple,
     point,
     (.^),
   )
@@ -51,10 +42,8 @@ import Prelude
     Num,
     Ord,
     Show,
-    fmap,
     otherwise,
     sqrt,
-    ($),
     (*),
     (+),
     (-),
@@ -75,26 +64,16 @@ sphere = Sphere (point 0 0 0) identity M.material
 instance (Num a, Floating a, Ord a) => S.Shape Sphere a where
   transformation = transformation
   material = material
-
-  intersect r s = maybe [] (`intersect_` s) r2
+  localIntersect r s
+    | discriminant < 0 = intersections []
+    | otherwise = intersections [intersection t1 s, intersection t2 s]
     where
-      r2 = fmap (`transform` r) $ inverse $ transformation s
-      intersect_ r s
-        | discriminant < 0 = intersections []
-        | otherwise = intersections [intersection t1 s, intersection t2 s]
-        where
-          Ray o d = r
-          sphereToRay = o - point 0 0 0
-          a = d .^ d
-          b = 2 * d .^ sphereToRay
-          c = sphereToRay .^ sphereToRay - 1
-          discriminant = b * b - 4 * a * c
-          t1 = ((- b) - sqrt discriminant) / (2 * a)
-          t2 = ((- b) + sqrt discriminant) / (2 * a)
-
-  normalAt s worldPoint = normalize $ worldNormal {w = 0}
-    where
-      t = fromJust $ inverse (transformation s)
-      objectPoint = t *^ worldPoint
-      objectNormal = objectPoint - point 0 0 0
-      worldNormal = transpose t *^ objectNormal
+      Ray o d = r
+      sphereToRay = o - point 0 0 0
+      a = d .^ d
+      b = 2 * d .^ sphereToRay
+      c = sphereToRay .^ sphereToRay - 1
+      discriminant = b * b - 4 * a * c
+      t1 = ((- b) - sqrt discriminant) / (2 * a)
+      t2 = ((- b) + sqrt discriminant) / (2 * a)
+  localNormalAt _ p = p - point 0 0 0
