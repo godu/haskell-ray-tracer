@@ -1,5 +1,5 @@
 module RayTracer.Data.Intersection
-  ( Intersection (t, object),
+  ( Intersection (Intersection, t, object),
     intersection,
     intersections,
     hit,
