@@ -12,9 +12,6 @@ import RayTracer.Data.Intersection
   )
 import qualified RayTracer.Data.Intersection.Computations as C (overPoint, point, prepareComputations)
 import RayTracer.Data.Ray (ray)
-import RayTracer.Data.Shape
-  ( intersect,
-  )
 import RayTracer.Data.Sphere
   ( Sphere (transformation),
     sphere,
@@ -45,13 +42,13 @@ spec :: Spec
 spec = do
   it "An intersection encapsulates t and object" $ do
     let s = sphere
-        i = intersection 3.5 sphere
+        i = intersection 3.5 s
     t i `shouldBe` 3.5
     object i `shouldBe` s
   it "Aggregating intersections" $ do
     let s = sphere
-        i1 = intersection 1 sphere
-        i2 = intersection 2 sphere
+        i1 = intersection 1 s
+        i2 = intersection 2 s
         xs = intersections [i2, i1]
     length xs `shouldBe` 2
     (t <$> xs) `shouldBe` [1, 2]

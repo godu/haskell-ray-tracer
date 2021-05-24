@@ -21,16 +21,12 @@ import Prelude
     Eq,
     Floating,
     Fractional,
-    Num,
+    Num (abs, fromInteger, negate, signum, (*), (+), (-)),
     Ord,
     Show,
-    fromInteger,
-    negate,
     sqrt,
+    undefined,
     (&&),
-    (*),
-    (+),
-    (-),
     (.),
     (/),
     (==),
@@ -58,6 +54,9 @@ instance Num a => Num (Tuple a) where
 
   (Tuple a b c _) * (Tuple a' b' c' _) =
     vector (b * c' - c * b') (c * a' - a * c') (a * b' - b * a')
+
+  abs = undefined
+  signum = undefined
 
 tuple :: a -> a -> a -> a -> Tuple a
 tuple = Tuple

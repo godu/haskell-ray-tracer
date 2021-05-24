@@ -24,13 +24,11 @@ import Test.Hspec
     shouldNotBe,
   )
 import Prelude
-  ( map,
-    pure,
+  ( pure,
     ($),
     (*),
     (/),
     (<$>),
-    (=<<),
   )
 
 spec :: Spec

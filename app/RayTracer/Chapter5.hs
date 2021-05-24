@@ -27,7 +27,6 @@ import Prelude
     (*),
     (+),
     (-),
-    (.),
     (/),
     (<$>),
   )
@@ -58,4 +57,4 @@ main = [show finalCanvas]
         r = ray rayOrigin (normalize (position - rayOrigin))
         xs = r `intersect` shape
 
-    finalCanvas = updateCanvas fuchsia initialCanvas pixels
+    finalCanvas = updateCanvas color initialCanvas pixels

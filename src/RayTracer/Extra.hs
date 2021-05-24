@@ -6,15 +6,11 @@ where
 
 import Prelude
   ( Bool,
-    Eq,
     Fractional,
     Ord,
-    Show,
     abs,
-    fromInteger,
     ($),
     (-),
-    (/),
     (>=),
   )
 

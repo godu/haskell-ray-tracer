@@ -23,7 +23,6 @@ import Data.Maybe
     catMaybes,
     fromMaybe,
   )
-import Data.Tuple (swap)
 import qualified Data.Vector as V
   ( Vector,
     and,
@@ -41,17 +40,12 @@ import RayTracer.Data.Tuple
   )
 import RayTracer.Extra ((~=))
 import Prelude
-  ( Bool,
-    Eq,
+  ( Eq ((==)),
     Fractional,
     Int,
-    Maybe,
-    Num,
+    Num (abs, fromInteger, signum, (*), (+), (-)),
     Ord,
     Show,
-    String,
-    fmap,
-    foldr,
     min,
     negate,
     not,
@@ -60,21 +54,16 @@ import Prelude
     product,
     pure,
     quotRem,
-    show,
     sum,
     take,
-    uncurry,
+    undefined,
     zip,
     ($),
     (&&),
-    (*),
-    (+),
-    (-),
     (.),
     (/),
     (<$>),
     (<>),
-    (==),
     (||),
   )
 
@@ -91,8 +80,8 @@ instance (Ord a, Fractional a) => Eq (Matrix a) where
 instance Num a => Num (Matrix a) where
   a * b = Matrix (w'', h'') $ V.fromList $ compute a b <$> cells
     where
-      Matrix (w, h) as = a
-      Matrix (w', h') bs = b
+      Matrix (w, h) _ = a
+      Matrix (w', h') _ = b
       w'' = min w w'
       h'' = min h h'
 
@@ -104,11 +93,17 @@ instance Num a => Num (Matrix a) where
         sum $ product . toList <$> zip (a `rowAt` x) (b `columnAt` y)
 
       rowAt :: Matrix a -> Int -> [a]
-      (Matrix (w, h) xs) `rowAt` i =
+      (Matrix (_, h) xs) `rowAt` i =
         catMaybes $ (V.!?) xs . (+) (h * i) <$> [0 .. (h - 1)]
       columnAt :: Matrix a -> Int -> [a]
       (Matrix (_, h) xs) `columnAt` i =
         catMaybes $ (V.!?) xs . (+) i . (*) h <$> [0 .. (w - 1)]
+
+  (+) = undefined
+  (-) = undefined
+  abs = undefined
+  signum = undefined
+  fromInteger = undefined
 
 fromList :: Int -> Int -> [a] -> Matrix a
 fromList x y as = Matrix (x, y) $ V.fromList $ take (x * y) as
@@ -156,7 +151,7 @@ submatrix x y (Matrix (w, h) as) =
   Matrix (w - 1, h - 1) $
     V.ifilter (\i _ -> not (belongsTo (w, h) (x, y) i)) as
   where
-    belongsTo (w, h) (x, y) i = x' == x || y' == y
+    belongsTo (_, h) (x, y) i = x' == x || y' == y
       where
         (x', y') = i `quotRem` h
 
@@ -175,7 +170,7 @@ inverse a
   where
     Matrix (w, h) as = a
     d = determinant a
-    go i v = c / d
+    go i _ = c / d
       where
         (x, y) = i `quotRem` h
         c = cofactor y x a

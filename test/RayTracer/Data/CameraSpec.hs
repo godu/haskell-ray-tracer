@@ -12,7 +12,7 @@ import RayTracer.Data.Camera
   )
 import RayTracer.Data.Canvas (at)
 import RayTracer.Data.Color (color)
-import RayTracer.Data.Ray (Ray (direction, origin), ray)
+import RayTracer.Data.Ray (Ray (direction, origin))
 import RayTracer.Data.Tuple (point, vector)
 import RayTracer.Data.World (defaultWorld)
 import RayTracer.Extra ((~=))
@@ -29,9 +29,7 @@ import Test.Hspec
     shouldSatisfy,
   )
 import Prelude
-  ( Bool (True),
-    Double,
-    Num ((*)),
+  ( Num ((*)),
     negate,
     pi,
     return,

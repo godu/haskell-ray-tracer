@@ -5,12 +5,10 @@ where
 
 import RayTracer.Data.Canvas (canvas)
 import RayTracer.Data.Matrix
-  ( one,
-    (*^),
+  ( (*^),
   )
 import RayTracer.Data.Tuple
-  ( Tuple,
-    point,
+  ( point,
     x,
     z,
   )
@@ -25,17 +23,13 @@ import RayTracer.Transformation
     translation,
   )
 import Prelude
-  ( Double,
-    Floating,
-    Int,
-    String,
+  ( String,
     floor,
     fromIntegral,
     pi,
     show,
     ($),
     (*),
-    (-),
     (/),
     (<$>),
   )

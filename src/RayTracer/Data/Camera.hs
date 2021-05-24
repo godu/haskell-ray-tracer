@@ -22,14 +22,12 @@ import RayTracer.Data.Canvas (Canvas, bulk, canvas)
 import RayTracer.Data.Matrix (Matrix, inverse, (*^))
 import RayTracer.Data.Ray (Ray, ray)
 import RayTracer.Data.Shape (Shape)
-import RayTracer.Data.Tuple (normalize, point, vector)
+import RayTracer.Data.Tuple (normalize, point)
 import RayTracer.Data.World (World, colorAt)
 import RayTracer.Transformation (identity)
 import Prelude
   ( Eq,
     Floating,
-    Foldable (foldr),
-    Fractional,
     Int,
     Maybe,
     Num ((*), (+), (-)),
@@ -37,13 +35,11 @@ import Prelude
     RealFrac,
     Show,
     fromIntegral,
-    maybe,
     quotRem,
     tan,
     ($),
     (/),
     (<$>),
-    (<>),
   )
 
 data Camera a = Camera
@@ -97,7 +93,7 @@ render camera world = image
         $ mapMaybe
           (renderPixel canvas)
           pixels
-    renderPixel canvas pixel = (pixel,) <$> color
+    renderPixel _ pixel = (pixel,) <$> color
       where
         ray = rayForPixel camera pixel
         color = colorAt world <$> ray

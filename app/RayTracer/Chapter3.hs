@@ -3,7 +3,6 @@ module RayTracer.Chapter3
   )
 where
 
-import Data.Maybe (fromJust)
 import RayTracer.Data.Matrix
   ( fromList,
     inverse,
@@ -14,12 +13,8 @@ import RayTracer.Data.Matrix
   )
 import RayTracer.Data.Tuple (vector)
 import Prelude
-  ( IO,
-    Monad (return),
-    Semigroup ((<>)),
-    Show (show),
+  ( Show (show),
     String,
-    print,
     ($),
     (*),
     (<$>),

@@ -8,13 +8,11 @@ module RayTracer.Data.Sphere
 where
 
 import Data.Maybe
-  ( Maybe,
-    fromJust,
+  ( fromJust,
     maybe,
   )
 import RayTracer.Data.Intersection
-  ( Intersection,
-    intersection,
+  ( intersection,
     intersections,
   )
 import qualified RayTracer.Data.Material as M
@@ -31,7 +29,14 @@ import RayTracer.Data.Ray
   ( Ray (Ray),
     transform,
   )
-import qualified RayTracer.Data.Shape as Shape (Shape (intersect, material, normalAt))
+import qualified RayTracer.Data.Shape as S
+  ( Shape
+      ( intersect,
+        material,
+        normalAt,
+        transformation
+      ),
+  )
 import RayTracer.Data.Tuple
   ( Tuple (w),
     normalize,
@@ -55,8 +60,6 @@ import Prelude
     (-),
     (/),
     (<),
-    (<$>),
-    (<*>),
   )
 
 data Sphere a = Sphere
@@ -69,7 +72,10 @@ data Sphere a = Sphere
 sphere :: (Fractional a) => Sphere a
 sphere = Sphere (point 0 0 0) identity M.material
 
-instance (Num a, Floating a, Ord a) => Shape.Shape Sphere a where
+instance (Num a, Floating a, Ord a) => S.Shape Sphere a where
+  transformation = transformation
+  material = material
+
   intersect r s = maybe [] (`intersect_` s) r2
     where
       r2 = fmap (`transform` r) $ inverse $ transformation s
@@ -92,5 +98,3 @@ instance (Num a, Floating a, Ord a) => Shape.Shape Sphere a where
       objectPoint = t *^ worldPoint
       objectNormal = objectPoint - point 0 0 0
       worldNormal = transpose t *^ objectNormal
-
-  material = material

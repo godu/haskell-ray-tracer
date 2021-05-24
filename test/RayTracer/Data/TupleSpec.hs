@@ -29,11 +29,9 @@ import Test.Hspec
     shouldSatisfy,
   )
 import Prelude
-  ( Bool (..),
-    sqrt,
+  ( sqrt,
     ($),
     (*),
-    (+),
     (-),
     (/),
   )

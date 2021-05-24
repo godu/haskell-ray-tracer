@@ -6,7 +6,6 @@ module RayTracer.Data.Ray
   )
 where
 
-import RayTracer.Extra ((~=))
 import qualified RayTracer.Data.Matrix as M
   ( Matrix,
     (*^),
@@ -17,10 +16,8 @@ import qualified RayTracer.Data.Tuple as T
   )
 import Prelude
   ( Eq,
-    Num,
+    Num ((+)),
     Show,
-    (*),
-    (+),
   )
 
 data Ray a = Ray

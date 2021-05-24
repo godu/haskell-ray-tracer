@@ -16,12 +16,10 @@ import Test.Hspec
     shouldBe,
   )
 import Prelude
-  ( Real,
-    ($),
+  ( ($),
     (*),
     (+),
     (-),
-    (/),
   )
 
 spec :: Spec

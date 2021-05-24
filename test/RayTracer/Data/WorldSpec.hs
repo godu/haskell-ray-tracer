@@ -7,7 +7,6 @@ import RayTracer.Data.Color (color)
 import RayTracer.Data.Intersection (intersection, t)
 import RayTracer.Data.Intersection.Computations (prepareComputations)
 import RayTracer.Data.Light (pointLight)
-import RayTracer.Data.Material (Material (ambient))
 import qualified RayTracer.Data.Material as M
   ( Material (ambient, color, specular),
     diffuse,
@@ -27,13 +26,10 @@ import Test.Hspec
     shouldSatisfy,
   )
 import Prelude
-  ( Bool (False, True),
-    Double,
-    Maybe (Nothing),
+  ( Double,
     fmap,
     head,
     return,
-    words,
     (!!),
     ($),
   )
@@ -107,8 +103,8 @@ spec = do
         w =
           defaultWorld
             { objects =
-                [ s1 {material = (material s1) {ambient = 1}},
-                  s2 {material = (material s2) {ambient = 1}}
+                [ s1 {material = (material s1) {M.ambient = 1}},
+                  s2 {material = (material s2) {M.ambient = 1}}
                 ]
             }
         r = ray (point 0 0 0.75) (vector 0 0 (-1))

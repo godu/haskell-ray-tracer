@@ -10,14 +10,12 @@ import Data.List
   ( find,
     sort,
   )
-import Data.Maybe (Maybe (Nothing))
-import RayTracer.Data.Tuple (Tuple)
+import Data.Maybe (Maybe)
 import Prelude
   ( Eq,
     Num,
     Ord,
     Show,
-    id,
     (.),
     (<=),
     (>),

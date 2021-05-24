@@ -37,10 +37,8 @@ import Prelude
     String,
     fmap,
     length,
-    map,
     otherwise,
     show,
-    uncurry,
     unlines,
     words,
     ($),
@@ -82,7 +80,7 @@ positions (Canvas w h _) =
 instance (Num a, RealFrac a) => Show (Canvas a) where
   show c = "P3\n" <> show w <> " " <> show h <> "\n255\n" <> pixels <> "\n"
     where
-      Canvas w h ps = c
+      Canvas w h _ = c
       pixels =
         unlines $
           concat $
@@ -93,7 +91,7 @@ instance (Num a, RealFrac a) => Show (Canvas a) where
 joinUntil :: String -> (String -> Bool) -> [String] -> [String]
 joinUntil break cond (x : xs) = joinUntil_ break cond xs x
   where
-    joinUntil_ break cond [] acc = [acc]
+    joinUntil_ _ _ [] acc = [acc]
     joinUntil_ break cond (x : xs) acc
       | cond (acc <> break <> x) = joinUntil_ break cond xs (acc <> break <> x)
       | otherwise = acc : joinUntil_ break cond xs x

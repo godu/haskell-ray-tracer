@@ -3,68 +3,32 @@ module RayTracer.Chapter7
   )
 where
 
-import Data.Foldable
-  ( Foldable,
-  )
-import Data.Maybe (maybe)
 import qualified RayTracer.Data.Camera as C (camera, render, transformation)
-import RayTracer.Data.Canvas
-  ( Canvas,
-    canvas,
-  )
 import qualified RayTracer.Data.Color as C
-  ( Color,
-    black,
-    color,
-  )
-import RayTracer.Data.Intersection
-  ( Intersection (object, t),
-    hit,
+  ( color,
   )
 import RayTracer.Data.Light (pointLight)
 import qualified RayTracer.Data.Material as M
   ( Material (color, diffuse, specular),
-    lighting,
     material,
-  )
-import qualified RayTracer.Data.Ray as R
-  ( Ray (direction),
-    position,
-    ray,
-  )
-import RayTracer.Data.Shape
-  ( intersect,
-    normalAt,
   )
 import RayTracer.Data.Sphere
   ( Sphere (material, transformation),
     sphere,
   )
 import qualified RayTracer.Data.Tuple as T
-  ( normalize,
-    point,
+  ( point,
     vector,
   )
 import qualified RayTracer.Data.World as W (World (lights, objects), world)
-import RayTracer.Projectile (fuchsia)
 import RayTracer.Transformation (rotationX, rotationY, scaling, translation, viewTransform)
 import Prelude
   ( Floating (pi),
-    Int,
     String,
-    filter,
-    fromIntegral,
     negate,
-    otherwise,
-    quotRem,
     show,
-    ($),
     (*),
-    (+),
-    (-),
-    (.),
     (/),
-    (<$>),
   )
 
 main :: [String]

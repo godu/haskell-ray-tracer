@@ -7,14 +7,14 @@ where
 import qualified RayTracer.Data.Intersection as I (Intersection (object, t))
 import RayTracer.Data.Ray (Ray (direction), position)
 import RayTracer.Data.Shape (Shape, normalAt)
-import RayTracer.Data.Sphere (Sphere)
 import RayTracer.Data.Tuple (Tuple, (*^), (.^))
 import RayTracer.Extra (epsilon)
 import Prelude
-  ( Bool (True),
+  ( Bool,
     Eq,
+    Floating,
     Fractional,
-    Num (negate, (*), (+)),
+    Num (negate, (+)),
     Ord ((<)),
     Show,
     ($),
@@ -31,7 +31,7 @@ data Computations a o = Computations
   }
   deriving (Eq, Show)
 
-prepareComputations :: (Eq a, Num a, Shape o a, Ord a, Fractional a) => I.Intersection a o -> Ray a -> Computations a o
+prepareComputations :: (Eq a, Num a, Shape o a, Ord a, Fractional a, Floating a) => I.Intersection a o -> Ray a -> Computations a o
 prepareComputations intersection ray =
   Computations
     { t = _t,

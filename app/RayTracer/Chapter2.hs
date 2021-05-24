@@ -20,10 +20,8 @@ import RayTracer.Projectile
     updateCanvas,
   )
 import Prelude
-  ( IO,
-    String,
+  ( String,
     floor,
-    fmap,
     show,
     ($),
     (-),

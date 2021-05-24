@@ -32,7 +32,6 @@ import System.Environment (getArgs)
 import Prelude
   ( IO,
     String,
-    Traversable (traverse),
     print,
     show,
     unlines,

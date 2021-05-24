@@ -13,7 +13,7 @@ import Data.Maybe (listToMaybe)
 import RayTracer.Data.Color (Color, black, color)
 import RayTracer.Data.Intersection (Intersection (t), hit, intersections)
 import RayTracer.Data.Intersection.Computations (prepareComputations)
-import qualified RayTracer.Data.Intersection.Computations as C (Computations (eyev, normalv, object, overPoint, point))
+import qualified RayTracer.Data.Intersection.Computations as C (Computations (eyev, normalv, object, overPoint))
 import RayTracer.Data.Light (Light (position), pointLight)
 import RayTracer.Data.Material (lighting)
 import qualified RayTracer.Data.Material as M
@@ -31,8 +31,7 @@ import qualified RayTracer.Data.Shape as SS
   )
 import RayTracer.Data.Sphere (Sphere)
 import qualified RayTracer.Data.Sphere as S
-  ( Sphere,
-    material,
+  ( material,
     sphere,
     transformation,
   )
@@ -40,8 +39,7 @@ import RayTracer.Data.Tuple (Tuple, magnitude, normalize, point)
 import RayTracer.Transformation (scaling)
 import Prelude
   ( Bool (False, True),
-    Double,
-    Eq ((/=)),
+    Eq,
     Floating,
     Foldable (sum),
     Fractional,
@@ -49,10 +47,8 @@ import Prelude
     Num ((-)),
     Ord ((<)),
     RealFrac,
-    Semigroup ((<>)),
-    Show (show),
+    Show,
     concat,
-    head,
     maybe,
     return,
     ($),

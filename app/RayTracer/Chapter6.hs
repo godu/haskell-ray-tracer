@@ -5,15 +5,10 @@ module RayTracer.Chapter6
   )
 where
 
-import Data.Foldable
-  ( Foldable,
-    foldr,
-  )
 import Data.Maybe (maybe)
-import RayTracer.Data.Canvas (Canvas, bulk, canvas)
+import RayTracer.Data.Canvas (bulk, canvas)
 import qualified RayTracer.Data.Color as C
-  ( Color,
-    black,
+  ( black,
     color,
   )
 import RayTracer.Data.Intersection
@@ -46,11 +41,8 @@ import qualified RayTracer.Data.Tuple as T
 import RayTracer.Projectile (fuchsia)
 import Prelude
   ( Bool (False),
-    Int,
     String,
-    filter,
     fromIntegral,
-    otherwise,
     quotRem,
     show,
     ($),

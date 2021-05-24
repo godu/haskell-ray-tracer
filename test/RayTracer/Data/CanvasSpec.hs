@@ -8,7 +8,6 @@ import Data.Foldable
     foldr,
     traverse_,
   )
-import Data.Ix (range)
 import RayTracer.Data.Canvas
   ( at,
     bulk,
@@ -26,18 +25,12 @@ import Test.Hspec
     shouldBe,
   )
 import Prelude
-  ( Real,
-    drop,
+  ( drop,
     last,
     lines,
     show,
     take,
     ($),
-    (*),
-    (+),
-    (-),
-    (/),
-    (<$>),
   )
 
 spec :: Spec

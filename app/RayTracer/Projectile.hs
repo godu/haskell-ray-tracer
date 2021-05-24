@@ -11,7 +11,6 @@ where
 
 import Data.Foldable
   ( Foldable,
-    foldr,
   )
 import Data.List
   ( takeWhile,

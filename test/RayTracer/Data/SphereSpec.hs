@@ -8,7 +8,6 @@ import qualified RayTracer.Data.Material as M
   ( Material (ambient),
     material,
   )
-import RayTracer.Data.Matrix (fromList)
 import RayTracer.Data.Ray (ray)
 import RayTracer.Data.Shape
   ( intersect,

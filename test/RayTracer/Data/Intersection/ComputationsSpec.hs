@@ -12,9 +12,6 @@ import RayTracer.Data.Intersection.Computations
     prepareComputations,
   )
 import RayTracer.Data.Ray (ray)
-import RayTracer.Data.Shape
-  ( intersect,
-  )
 import RayTracer.Data.Sphere
   ( sphere,
   )
@@ -30,8 +27,7 @@ import Test.Hspec
     shouldSatisfy,
   )
 import Prelude
-  ( Bool (False, True),
-    ($),
+  ( ($),
   )
 
 spec :: Spec

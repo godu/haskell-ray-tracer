@@ -3,7 +3,6 @@ module RayTracer.Chapter1
   )
 where
 
-import Data.Foldable (traverse_)
 import RayTracer.Data.Tuple
   ( normalize,
     point,
@@ -16,11 +15,9 @@ import RayTracer.Projectile
     fire,
   )
 import Prelude
-  ( Monad (return),
-    Semigroup ((<>)),
+  ( Semigroup ((<>)),
     Show (show),
     String,
-    Traversable (traverse),
     ($),
     (<$>),
   )
