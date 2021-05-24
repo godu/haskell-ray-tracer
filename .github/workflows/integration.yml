@@ -29,7 +29,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: Integration
     strategy:
-      max-parallel: 1
       matrix:
         exec:
           - 1
