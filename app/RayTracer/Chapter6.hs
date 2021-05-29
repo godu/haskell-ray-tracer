@@ -17,9 +17,12 @@ import RayTracer.Data.Intersection
   )
 import RayTracer.Data.Light (pointLight)
 import qualified RayTracer.Data.Material as M
-  ( Material (color),
+  ( Material (pattern),
     lighting,
     material,
+  )
+import RayTracer.Data.Pattern
+  ( colorPattern,
   )
 import qualified RayTracer.Data.Ray as R
   ( Ray (direction),
@@ -64,7 +67,7 @@ main = [show finalCanvas]
     pixelSize = wallSize / fromIntegral canvasPixels
     half = wallSize / 2
     initialCanvas = canvas (canvasPixels, canvasPixels)
-    shape = sphere {material = M.material {M.color = fuchsia}}
+    shape = sphere {material = M.material {M.pattern = colorPattern $ fuchsia}}
     light = pointLight (T.point (-10) 10 (-10)) (C.color 1 1 1)
 
     pixels =

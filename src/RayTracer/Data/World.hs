@@ -17,11 +17,12 @@ import qualified RayTracer.Data.Intersection.Computations as C (Computations (ey
 import RayTracer.Data.Light (Light (position), pointLight)
 import RayTracer.Data.Material (lighting)
 import qualified RayTracer.Data.Material as M
-  ( color,
-    diffuse,
+  ( diffuse,
     material,
+    pattern,
     specular,
   )
+import RayTracer.Data.Pattern (colorPattern)
 import RayTracer.Data.Ray (Ray, ray)
 import RayTracer.Data.Shape (Shape)
 import qualified RayTracer.Data.Shape as SS
@@ -72,7 +73,7 @@ defaultWorld = World [s1, s2] (return l)
       S.sphere
         { S.material =
             M.material
-              { M.color = color 0.8 1.0 0.6,
+              { M.pattern = colorPattern $ color 0.8 1.0 0.6,
                 M.diffuse = 0.7,
                 M.specular = 0.2
               }

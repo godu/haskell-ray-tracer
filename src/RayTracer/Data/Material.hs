@@ -1,5 +1,5 @@
 module RayTracer.Data.Material
-  ( Material (color, ambient, diffuse, specular, shininess),
+  ( Material (pattern, ambient, diffuse, specular, shininess),
     material,
     lighting,
   )
@@ -12,6 +12,7 @@ import qualified RayTracer.Data.Color as C
     (*^),
   )
 import RayTracer.Data.Light (Light (intensity, position))
+import RayTracer.Data.Pattern (Pattern, colorPattern, stripeAt)
 import RayTracer.Data.Tuple
   ( Tuple,
     normalize,
@@ -33,7 +34,7 @@ import Prelude
   )
 
 data Material a = Material
-  { color :: !(C.Color a),
+  { pattern :: !(Pattern a),
     ambient :: !a,
     diffuse :: !a,
     specular :: !a,
@@ -42,7 +43,9 @@ data Material a = Material
   deriving (Show, Eq)
 
 material :: Fractional a => Material a
-material = Material (C.color 1 1 1) 0.1 0.9 0.9 200.0
+material = Material pattern 0.1 0.9 0.9 200.0
+  where
+    pattern = colorPattern $ C.color 1 1 1
 
 lighting ::
   (Floating a, Ord a, RealFrac a) =>
@@ -55,7 +58,8 @@ lighting ::
   C.Color a
 lighting m light point eyev normalv inShadow = if inShadow then ambient else ambient + diffuse + specular
   where
-    Material color ambient_ diffuse_ specular_ shininess_ = m
+    Material pattern_ ambient_ diffuse_ specular_ shininess_ = m
+    color = pattern_ `stripeAt` point
     effectiveColor = color * intensity light
     lightv = normalize $ position light - point
     ambient = effectiveColor C.*^ ambient_

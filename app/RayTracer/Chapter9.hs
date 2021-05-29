@@ -16,8 +16,11 @@ import RayTracer.Data.Intersection
   )
 import RayTracer.Data.Light (pointLight)
 import qualified RayTracer.Data.Material as M
-  ( Material (color, diffuse, specular),
+  ( Material (diffuse, pattern, specular),
     material,
+  )
+import RayTracer.Data.Pattern
+  ( colorPattern,
   )
 import qualified RayTracer.Data.Plane as P
   ( Plane
@@ -85,7 +88,7 @@ main = [show canvas]
         P.plane
           { P.material =
               M.material
-                { M.color = C.color 1 0.9 0.9,
+                { M.pattern = colorPattern $ C.color 1 0.9 0.9,
                   M.specular = 0
                 }
           }
@@ -95,7 +98,7 @@ main = [show canvas]
           { S.transformation = translation (-0.5) 1 0.5,
             S.material =
               M.material
-                { M.color = C.color 0.1 1 0.5,
+                { M.pattern = colorPattern $ C.color 0.1 1 0.5,
                   M.diffuse = 0.7,
                   M.specular = 0.3
                 }
@@ -106,7 +109,7 @@ main = [show canvas]
           { S.transformation = translation 1.5 0.5 (-0.5) * scaling 0.5 0.5 0.5,
             S.material =
               M.material
-                { M.color = C.color 0.5 1 0.1,
+                { M.pattern = colorPattern $ C.color 0.5 1 0.1,
                   M.diffuse = 0.7,
                   M.specular = 0.3
                 }
@@ -117,7 +120,7 @@ main = [show canvas]
           { S.transformation = translation (-1.5) 0.33 (-0.75) * scaling 0.33 0.33 0.33,
             S.material =
               M.material
-                { M.color = C.color 1 0.8 0.1,
+                { M.pattern = colorPattern $ C.color 1 0.8 0.1,
                   M.diffuse = 0.7,
                   M.specular = 0.3
                 }

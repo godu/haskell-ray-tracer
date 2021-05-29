@@ -3,20 +3,53 @@ module RayTracer.Data.WorldSpec
   )
 where
 
-import RayTracer.Data.Color (color)
-import RayTracer.Data.Intersection (intersection, t)
-import RayTracer.Data.Intersection.Computations (prepareComputations)
-import RayTracer.Data.Light (pointLight)
+import RayTracer.Data.Color
+  ( color,
+  )
+import RayTracer.Data.Intersection
+  ( intersection,
+    t,
+  )
+import RayTracer.Data.Intersection.Computations
+  ( prepareComputations,
+  )
+import RayTracer.Data.Light
+  ( pointLight,
+  )
 import qualified RayTracer.Data.Material as M
-  ( Material (ambient, color, specular),
+  ( Material (ambient, pattern, specular),
     diffuse,
     material,
   )
-import RayTracer.Data.Ray (ray)
-import RayTracer.Data.Sphere (Sphere, material, sphere, transformation)
-import RayTracer.Data.Tuple (point, vector)
-import RayTracer.Data.World (World (lights, objects), colorAt, defaultWorld, intersect, isShadowed, shadeHit, world)
-import RayTracer.Transformation (scaling, translation)
+import RayTracer.Data.Pattern
+  ( colorPattern,
+  )
+import RayTracer.Data.Ray
+  ( ray,
+  )
+import RayTracer.Data.Sphere
+  ( Sphere,
+    material,
+    sphere,
+    transformation,
+  )
+import RayTracer.Data.Tuple
+  ( point,
+    vector,
+  )
+import RayTracer.Data.World
+  ( World (lights, objects),
+    colorAt,
+    defaultWorld,
+    intersect,
+    isShadowed,
+    shadeHit,
+    world,
+  )
+import RayTracer.Transformation
+  ( scaling,
+    translation,
+  )
 import Test.Hspec
   ( Spec,
     it,
@@ -48,7 +81,7 @@ spec = do
           sphere
             { material =
                 M.material
-                  { M.color = color 0.8 1.0 0.6,
+                  { M.pattern = colorPattern $ color 0.8 1.0 0.6,
                     M.diffuse = 0.7,
                     M.specular = 0.2
                   }
@@ -109,7 +142,7 @@ spec = do
             }
         r = ray (point 0 0 0.75) (vector 0 0 (-1))
         c = w `colorAt` r
-    c `shouldBe` M.color (material s2)
+    colorPattern c `shouldBe` M.pattern (material s2)
 
   it "There is no shadow when nothing is collinear with point and light" $ do
     let w = defaultWorld

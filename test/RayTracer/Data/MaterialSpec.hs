@@ -4,19 +4,27 @@ module RayTracer.Data.MaterialSpec
 where
 
 import qualified RayTracer.Data.Color as C
-  ( color,
+  ( black,
+    color,
+    white,
   )
-import RayTracer.Data.Light (pointLight)
+import RayTracer.Data.Light
+  ( pointLight,
+  )
 import RayTracer.Data.Material
   ( Material
       ( ambient,
-        color,
         diffuse,
+        pattern,
         shininess,
         specular
       ),
     lighting,
     material,
+  )
+import RayTracer.Data.Pattern
+  ( colorPattern,
+    stripePattern,
   )
 import RayTracer.Data.Tuple
   ( point,
@@ -38,7 +46,7 @@ spec :: Spec
 spec = do
   it "The default material" $ do
     let m = material
-    color m `shouldBe` C.color 1 1 1
+    pattern m `shouldBe` colorPattern (C.color 1 1 1)
     ambient m `shouldBe` 0.1
     diffuse m `shouldBe` 0.9
     specular m `shouldBe` 0.9
@@ -78,3 +86,12 @@ spec = do
         light = pointLight (point 0 0 (-10)) (C.color 1 1 1)
         inShadow = True
     lighting m light position eyev normalv inShadow `shouldBe` C.color 0.1 0.1 0.1
+
+  it "Lighting with a pattern applied" $ do
+    let m' = m {pattern = stripePattern C.white C.black, ambient = 1, diffuse = 0, specular = 0}
+        eyev = vector 0 0 (-1)
+        normalv = vector 0 0 (-1)
+        light = pointLight (point 0 0 (-10)) (C.color 1 1 1)
+        inShadow = False
+    lighting m' light (point 0.9 0 0) eyev normalv inShadow `shouldBe` C.white
+    lighting m' light (point 1.1 0 0) eyev normalv inShadow `shouldBe` C.black
