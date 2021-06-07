@@ -1,46 +1,39 @@
 module RayTracer.Data.Pattern
   ( black,
     white,
-    Pattern (a, b),
+    Pattern (ColorPattern, StripePattern, a, b, transformation),
     colorPattern,
     stripePattern,
-    stripeAt,
   )
 where
 
-import Data.Fixed (mod')
 import RayTracer.Data.Color
   ( Color,
     black,
     white,
   )
-import RayTracer.Data.Tuple
-  ( Tuple (Tuple),
-  )
+import RayTracer.Data.Matrix (Matrix)
+import RayTracer.Transformation (identity)
 import Prelude
   ( Eq,
-    RealFrac,
+    Num,
     Show,
-    otherwise,
-    (<),
   )
 
 data Pattern a
-  = ColorPattern !(Color a)
+  = ColorPattern
+      { transformation :: !(Matrix a),
+        color :: !(Color a)
+      }
   | StripePattern
-      { a :: !(Color a),
+      { transformation :: !(Matrix a),
+        a :: !(Color a),
         b :: !(Color a)
       }
   deriving (Eq, Show)
 
-colorPattern :: Color a -> Pattern a
-colorPattern = ColorPattern
+colorPattern :: Num a => Color a -> Pattern a
+colorPattern = ColorPattern identity
 
-stripePattern :: Color a -> Color a -> Pattern a
-stripePattern = StripePattern
-
-stripeAt :: (RealFrac a) => Pattern a -> Tuple a -> Color a
-stripeAt (ColorPattern a) _ = a
-stripeAt (StripePattern a b) (Tuple x _ _ _)
-  | x `mod'` 2 < 1 = a
-  | otherwise = b
+stripePattern :: Num a => Color a -> Color a -> Pattern a
+stripePattern = StripePattern identity

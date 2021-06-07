@@ -15,11 +15,10 @@ import RayTracer.Data.Intersection (Intersection (t), hit, intersections)
 import RayTracer.Data.Intersection.Computations (prepareComputations)
 import qualified RayTracer.Data.Intersection.Computations as C (Computations (eyev, normalv, object, overPoint))
 import RayTracer.Data.Light (Light (position), pointLight)
-import RayTracer.Data.Material (lighting)
 import qualified RayTracer.Data.Material as M
   ( diffuse,
     material,
-    pattern,
+    pattern_,
     specular,
   )
 import RayTracer.Data.Pattern (colorPattern)
@@ -37,6 +36,7 @@ import qualified RayTracer.Data.Sphere as S
     transformation,
   )
 import RayTracer.Data.Tuple (Tuple, magnitude, normalize, point)
+import RayTracer.Data.Material.Extra (lighting)
 import RayTracer.Transformation (scaling)
 import Prelude
   ( Bool (False, True),
@@ -73,7 +73,7 @@ defaultWorld = World [s1, s2] (return l)
       S.sphere
         { S.material =
             M.material
-              { M.pattern = colorPattern $ color 0.8 1.0 0.6,
+              { M.pattern_ = colorPattern $ color 0.8 1.0 0.6,
                 M.diffuse = 0.7,
                 M.specular = 0.2
               }
@@ -97,6 +97,7 @@ shadeHit w c =
     ( \light ->
         lighting
           (SS.material $ C.object c)
+          (C.object c)
           light
           (C.overPoint c)
           (C.eyev c)

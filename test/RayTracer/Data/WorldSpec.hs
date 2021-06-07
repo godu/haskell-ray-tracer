@@ -17,7 +17,7 @@ import RayTracer.Data.Light
   ( pointLight,
   )
 import qualified RayTracer.Data.Material as M
-  ( Material (ambient, pattern, specular),
+  ( Material (ambient, pattern_, specular),
     diffuse,
     material,
   )
@@ -81,7 +81,7 @@ spec = do
           sphere
             { material =
                 M.material
-                  { M.pattern = colorPattern $ color 0.8 1.0 0.6,
+                  { M.pattern_ = colorPattern $ color 0.8 1.0 0.6,
                     M.diffuse = 0.7,
                     M.specular = 0.2
                   }
@@ -142,7 +142,7 @@ spec = do
             }
         r = ray (point 0 0 0.75) (vector 0 0 (-1))
         c = w `colorAt` r
-    colorPattern c `shouldBe` M.pattern (material s2)
+    colorPattern c `shouldBe` M.pattern_ (material s2)
 
   it "There is no shadow when nothing is collinear with point and light" $ do
     let w = defaultWorld
