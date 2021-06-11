@@ -14,58 +14,10 @@ module RayTracer.Data.Matrix
   )
 where
 
-import Data.List
-  ( concatMap,
-    replicate,
-  )
 import Data.Maybe
-  ( Maybe (Nothing),
-    catMaybes,
-    fromMaybe,
-  )
 import qualified Data.Vector as V
-  ( Vector,
-    and,
-    fromList,
-    ifilter,
-    imap,
-    toList,
-    update,
-    zipWith,
-    (!?),
-  )
-import RayTracer.Data.Tuple
-  ( Tuple (w, x, y, z),
-    tuple,
-  )
-import RayTracer.Extra ((~=))
-import Prelude
-  ( Eq ((==)),
-    Fractional,
-    Int,
-    Num (abs, fromInteger, signum, (*), (+), (-)),
-    Ord,
-    Show,
-    min,
-    negate,
-    not,
-    odd,
-    otherwise,
-    product,
-    pure,
-    quotRem,
-    sum,
-    take,
-    undefined,
-    zip,
-    ($),
-    (&&),
-    (.),
-    (/),
-    (<$>),
-    (<>),
-    (||),
-  )
+import qualified RayTracer.Data.Tuple as T
+import RayTracer.Extra
 
 data Matrix a = Matrix
   { dimension :: !(Int, Int),
@@ -115,12 +67,12 @@ update :: (Int, Int) -> a -> Matrix a -> Matrix a
 update (x, y) a (Matrix (w, h) as) =
   Matrix (w, h) $ V.update as $ V.fromList [(x * h + y, a)]
 
-(*^) :: Num a => Matrix a -> Tuple a -> Tuple a
+(*^) :: Num a => Matrix a -> T.Tuple a -> T.Tuple a
 m *^ t = toTuple $ (m *) $ toMatrix t
   where
-    toMatrix t = fromList 4 1 [x t, y t, z t, w t]
+    toMatrix t = fromList 4 1 [T.x t, T.y t, T.z t, T.w t]
     toTuple m =
-      tuple
+      T.tuple
         (fromMaybe 0 $ m `at` (0, 0))
         (fromMaybe 0 $ m `at` (1, 0))
         (fromMaybe 0 $ m `at` (2, 0))

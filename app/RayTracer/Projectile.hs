@@ -9,37 +9,10 @@ module RayTracer.Projectile
   )
 where
 
-import Data.Foldable
-  ( Foldable,
-  )
 import Data.List
-  ( takeWhile,
-    unfoldr,
-  )
 import RayTracer.Data.Canvas
-  ( Canvas,
-    bulk,
-  )
 import RayTracer.Data.Color
-  ( Color,
-    color,
-  )
-import RayTracer.Data.Tuple (Tuple (y))
-import Prelude
-  ( Bool,
-    Fractional,
-    Functor,
-    Int,
-    Num,
-    Ord,
-    Show,
-    pure,
-    ($),
-    (+),
-    (.),
-    (<),
-    (<$>),
-  )
+import RayTracer.Data.Tuple
 
 data Projectile a = Projectile
   { position :: !(Tuple a),

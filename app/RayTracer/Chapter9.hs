@@ -6,67 +6,24 @@ module RayTracer.Chapter9
   )
 where
 
-import qualified RayTracer.Data.Camera as C (camera, render, transformation)
+import RayTracer.Chapter5 hiding (main)
+import RayTracer.Chapter6 hiding (main)
+import qualified RayTracer.Data.Camera as C
 import qualified RayTracer.Data.Color as C
-  ( color,
-  )
 import RayTracer.Data.Intersection
-  ( Intersection (Intersection),
-    intersection,
-  )
-import RayTracer.Data.Light (pointLight)
+import RayTracer.Data.Light
 import qualified RayTracer.Data.Material as M
-  ( Material (diffuse, pattern_, specular),
-    material,
-  )
-import RayTracer.Data.Pattern
-  ( colorPattern,
-  )
-import qualified RayTracer.Data.Plane as P
-  ( Plane
-      ( material
-      ),
-    plane,
-  )
 import qualified RayTracer.Data.Shape as SS
-  ( Shape
-      ( localIntersect,
-        localNormalAt,
-        material,
-        transformation
-      ),
-  )
-import qualified RayTracer.Data.Sphere as S
-  ( Sphere (material, transformation),
-    sphere,
-  )
+import qualified RayTracer.Data.Shape.Plane as P
+import qualified RayTracer.Data.Shape.Sphere as S
 import qualified RayTracer.Data.Tuple as T
-  ( point,
-    vector,
-  )
-import qualified RayTracer.Data.World as W (World (lights, objects), world)
+import qualified RayTracer.Data.World as W
 import RayTracer.Transformation
-  ( scaling,
-    translation,
-    viewTransform,
-  )
 import Prelude
-  ( Eq,
-    Floating (pi),
-    Num,
-    Ord,
-    Show,
-    String,
-    show,
-    ($),
-    (*),
-    (/),
-    (<$>),
-  )
 
-data Shape a = Plane (P.Plane a) | Sphere (S.Sphere a) deriving (Show, Eq)
+data Shape p a = Plane (P.Plane p a) | Sphere (S.Sphere p a) deriving (Show, Eq)
 
-instance (Num a, Floating a, Ord a) => SS.Shape Shape a where
+instance (Num a, Floating a, Ord a, RealFrac a) => SS.Shape Shape Pattern a where
   transformation (Plane p) = SS.transformation p
   transformation (Sphere s) = SS.transformation s
   material (Plane p) = SS.material p
@@ -80,24 +37,27 @@ instance (Num a, Floating a, Ord a) => SS.Shape Shape a where
   localNormalAt (Plane p) = SS.localNormalAt p
   localNormalAt (Sphere s) = SS.localNormalAt s
 
+plane :: (Fractional a, RealFrac a) => P.Plane Pattern a
+plane = P.Plane identity material
+
 main :: [String]
 main = [show canvas]
   where
     floor =
       Plane $
-        P.plane
+        plane
           { P.material =
-              M.material
+              material
                 { M.pattern_ = colorPattern $ C.color 1 0.9 0.9,
                   M.specular = 0
                 }
           }
     middle =
       Sphere $
-        S.sphere
+        sphere
           { S.transformation = translation (-0.5) 1 0.5,
             S.material =
-              M.material
+              material
                 { M.pattern_ = colorPattern $ C.color 0.1 1 0.5,
                   M.diffuse = 0.7,
                   M.specular = 0.3
@@ -105,10 +65,10 @@ main = [show canvas]
           }
     right =
       Sphere $
-        S.sphere
+        sphere
           { S.transformation = translation 1.5 0.5 (-0.5) * scaling 0.5 0.5 0.5,
             S.material =
-              M.material
+              material
                 { M.pattern_ = colorPattern $ C.color 0.5 1 0.1,
                   M.diffuse = 0.7,
                   M.specular = 0.3
@@ -116,10 +76,10 @@ main = [show canvas]
           }
     left =
       Sphere $
-        S.sphere
+        sphere
           { S.transformation = translation (-1.5) 0.33 (-0.75) * scaling 0.33 0.33 0.33,
             S.material =
-              M.material
+              material
                 { M.pattern_ = colorPattern $ C.color 1 0.8 0.1,
                   M.diffuse = 0.7,
                   M.specular = 0.3

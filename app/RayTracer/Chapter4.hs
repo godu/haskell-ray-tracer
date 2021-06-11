@@ -3,57 +3,32 @@ module RayTracer.Chapter4
   )
 where
 
-import RayTracer.Data.Canvas (canvas)
-import RayTracer.Data.Matrix
-  ( (*^),
-  )
-import RayTracer.Data.Tuple
-  ( point,
-    x,
-    z,
-  )
+import qualified RayTracer.Data.Canvas as C
+import qualified RayTracer.Data.Matrix as M
+import qualified RayTracer.Data.Tuple as T
 import RayTracer.Projectile
-  ( fuchsia,
-    updateCanvas,
-  )
-import RayTracer.Transformation
-  ( identity,
-    rotationY,
-    scaling,
-    translation,
-  )
-import Prelude
-  ( String,
-    floor,
-    fromIntegral,
-    pi,
-    show,
-    ($),
-    (*),
-    (/),
-    (<$>),
-  )
+import qualified RayTracer.Transformation as T
 
 main :: [String]
 main = [show finalCanvas]
   where
     width = 550
     height = 550
-    initialCanvas = canvas (width, height)
+    initialCanvas = C.canvas (width, height)
 
-    zero = point 0 0 1
+    zero = T.point 0 0 1
     points =
       ( \i ->
-          ( translation (1 / 2) 0 (1 / 2)
-              * scaling (3 / 8) (3 / 8) (3 / 8)
-              * rotationY (i * pi / 6)
-              * identity
+          ( T.translation (1 / 2) 0 (1 / 2)
+              * T.scaling (3 / 8) (3 / 8) (3 / 8)
+              * T.rotationY (i * pi / 6)
+              * T.identity
           )
-            *^ zero
+            M.*^ zero
       )
         <$> [0 .. 11]
 
     toPixel t =
-      (floor $ x t * fromIntegral height, floor $ z t * fromIntegral width)
+      (floor $ T.x t * fromIntegral height, floor $ T.z t * fromIntegral width)
 
     finalCanvas = updateCanvas fuchsia initialCanvas $ toPixel <$> points

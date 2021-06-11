@@ -3,18 +3,10 @@ module RayTracer.Data.LightSpec
   )
 where
 
-import RayTracer.Data.Color (color)
+import RayTracer.Data.Color
 import RayTracer.Data.Light
-  ( Light (intensity, position),
-    pointLight,
-  )
-import RayTracer.Data.Tuple (point)
+import RayTracer.Data.Tuple
 import Test.Hspec
-  ( Spec,
-    it,
-    shouldBe,
-  )
-import Prelude (($))
 
 spec :: Spec
 spec = do

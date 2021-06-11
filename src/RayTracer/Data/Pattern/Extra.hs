@@ -1,37 +1,16 @@
 module RayTracer.Data.Pattern.Extra
-  ( stripeAt,
-    stripeAtObject,
+  ( patternAtShape,
   )
 where
 
-import Data.Fixed (mod')
-import RayTracer.Data.Color
-  ( Color,
-  )
-import RayTracer.Data.Matrix (inverse, (*^))
-import RayTracer.Data.Pattern (Pattern (ColorPattern, StripePattern, transformation))
-import qualified RayTracer.Data.Shape as S (Shape (transformation))
-import RayTracer.Data.Tuple
-  ( Tuple (Tuple),
-  )
-import Prelude
-  ( Applicative ((<*>)),
-    Maybe,
-    Num,
-    RealFrac,
-    otherwise,
-    (<),
-    (<$>),
-  )
+import qualified RayTracer.Data.Color as C
+import RayTracer.Data.Matrix
+import RayTracer.Data.Pattern
+import qualified RayTracer.Data.Shape as S
+import qualified RayTracer.Data.Tuple as T
 
-stripeAt :: (RealFrac a) => Pattern a -> Tuple a -> Color a
-stripeAt (ColorPattern _ a) _ = a
-stripeAt (StripePattern _ a b) (Tuple x _ _ _)
-  | x `mod'` 2 < 1 = a
-  | otherwise = b
-
-stripeAtObject :: (S.Shape o a, Num a, RealFrac a) => Pattern a -> o a -> Tuple a -> Maybe (Color a)
-stripeAtObject pattern_ object worldPoint = stripeAt pattern_ <$> patternPoint
+patternAtShape :: (S.Shape o p a, RealFrac a, Pattern p a) => p a -> o p a -> T.Tuple a -> Maybe (C.Color a)
+patternAtShape pattern_ object worldPoint = patternAt pattern_ <$> patternPoint
   where
     objectPoint = (*^ worldPoint) <$> inverse (S.transformation object)
     patternPoint = (*^) <$> inverse (transformation pattern_) <*> objectPoint

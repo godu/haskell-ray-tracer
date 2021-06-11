@@ -4,12 +4,9 @@ module RayTracer.Data.Light
   )
 where
 
-import RayTracer.Data.Color (Color)
-import RayTracer.Data.Tuple (Tuple)
+import RayTracer.Data.Color
+import RayTracer.Data.Tuple
 import Prelude
-  ( Eq,
-    Show,
-  )
 
 data Light a = Light
   { position :: !(Tuple a),

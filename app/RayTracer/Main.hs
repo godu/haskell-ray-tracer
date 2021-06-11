@@ -1,27 +1,16 @@
 module Main (main) where
 
-import Data.Foldable (traverse_)
-import qualified RayTracer.Chapter1 as Chapter1 (main)
-import qualified RayTracer.Chapter2 as Chapter2 (main)
-import qualified RayTracer.Chapter3 as Chapter3 (main)
-import qualified RayTracer.Chapter4 as Chapter4 (main)
-import qualified RayTracer.Chapter5 as Chapter5 (main)
-import qualified RayTracer.Chapter6 as Chapter6 (main)
-import qualified RayTracer.Chapter7 as Chapter7 (main)
-import qualified RayTracer.Chapter8 as Chapter8 (main)
-import qualified RayTracer.Chapter9 as Chapter9 (main)
-import System.Environment (getArgs)
-import Prelude
-  ( IO,
-    String,
-    print,
-    show,
-    unlines,
-    writeFile,
-    ($),
-    (<>),
-    (=<<),
-  )
+import Data.Foldable
+import qualified RayTracer.Chapter1 as Chapter1
+import qualified RayTracer.Chapter2 as Chapter2
+import qualified RayTracer.Chapter3 as Chapter3
+import qualified RayTracer.Chapter4 as Chapter4
+import qualified RayTracer.Chapter5 as Chapter5
+import qualified RayTracer.Chapter6 as Chapter6
+import qualified RayTracer.Chapter7 as Chapter7
+import qualified RayTracer.Chapter8 as Chapter8
+import qualified RayTracer.Chapter9 as Chapter9
+import System.Environment
 
 main :: IO ()
 main = run =<< getArgs

@@ -7,30 +7,17 @@ module RayTracer.Data.Intersection
 where
 
 import Data.List
-  ( find,
-    sort,
-  )
-import Data.Maybe (Maybe)
-import Prelude
-  ( Eq,
-    Num,
-    Ord,
-    Show,
-    (.),
-    (<=),
-    (>),
-  )
 
-data Intersection a o = Intersection {t :: !a, object :: !(o a)} deriving (Show, Eq)
+data Intersection o a = Intersection {t :: !a, object :: !(o a)} deriving (Show, Eq)
 
-instance (Ord a, Eq (o a)) => Ord (Intersection a o) where
+instance (Ord a, Eq (o a)) => Ord (Intersection o a) where
   a <= b = t a <= t b
 
-intersection :: a -> o a -> Intersection a o
+intersection :: a -> o a -> Intersection o a
 intersection = Intersection
 
-intersections :: (Ord a, Eq (o a)) => [Intersection a o] -> [Intersection a o]
+intersections :: (Ord a, Eq (o a)) => [Intersection o a] -> [Intersection o a]
 intersections = sort
 
-hit :: (Ord a, Num a) => [Intersection a o] -> Maybe (Intersection a o)
+hit :: (Ord a, Num a) => [Intersection o a] -> Maybe (Intersection o a)
 hit = find ((> 0) . t)

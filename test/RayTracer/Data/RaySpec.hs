@@ -4,26 +4,9 @@ module RayTracer.Data.RaySpec
 where
 
 import RayTracer.Data.Ray
-  ( direction,
-    origin,
-    position,
-    ray,
-    transform,
-  )
 import RayTracer.Data.Tuple
-  ( point,
-    vector,
-  )
 import RayTracer.Transformation
-  ( scaling,
-    translation,
-  )
 import Test.Hspec
-  ( Spec,
-    it,
-    shouldBe,
-  )
-import Prelude (($))
 
 spec :: Spec
 spec = do

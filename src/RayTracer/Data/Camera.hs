@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE TupleSections #-}
 
 module RayTracer.Data.Camera
@@ -16,37 +17,22 @@ module RayTracer.Data.Camera
   )
 where
 
-import Control.Applicative (liftA2)
-import Data.Maybe (mapMaybe)
-import RayTracer.Data.Canvas (Canvas, bulk, canvas)
-import RayTracer.Data.Matrix (Matrix, inverse, (*^))
-import RayTracer.Data.Ray (Ray, ray)
-import RayTracer.Data.Shape (Shape)
-import RayTracer.Data.Tuple (normalize, point)
-import RayTracer.Data.World (World, colorAt)
-import RayTracer.Transformation (identity)
-import Prelude
-  ( Eq,
-    Floating,
-    Int,
-    Maybe,
-    Num ((*), (+), (-)),
-    Ord ((>=)),
-    RealFrac,
-    Show,
-    fromIntegral,
-    quotRem,
-    tan,
-    ($),
-    (/),
-    (<$>),
-  )
+import Control.Applicative
+import Data.Maybe
+import qualified RayTracer.Data.Canvas as C
+import qualified RayTracer.Data.Matrix as M
+import qualified RayTracer.Data.Pattern as P
+import qualified RayTracer.Data.Ray as R
+import qualified RayTracer.Data.Shape as S
+import qualified RayTracer.Data.Tuple as T
+import qualified RayTracer.Data.World as W
+import RayTracer.Transformation
 
 data Camera a = Camera
   { hsize :: !Int,
     vsize :: !Int,
     fieldOfView :: !a,
-    transformation :: !(Matrix a),
+    transformation :: !(M.Matrix a),
     halfWidth :: !a,
     halfHeight :: !a,
     pixelSize :: !a
@@ -70,30 +56,30 @@ camera hsize vsize fieldOfView =
     halfHeight = if aspect >= 1 then halfView / aspect else halfView
     pixelSize = (halfWidth * 2) / fromIntegral hsize
 
-rayForPixel :: (Eq a, Floating a) => Camera a -> (Int, Int) -> Maybe (Ray a)
-rayForPixel c (px, py) = liftA2 ray origin direction
+rayForPixel :: (Eq a, Floating a) => Camera a -> (Int, Int) -> Maybe (R.Ray a)
+rayForPixel c (px, py) = liftA2 R.ray origin direction
   where
     xOffset = (fromIntegral px + 0.5) * pixelSize c
     yOffset = (fromIntegral py + 0.5) * pixelSize c
     worldX = halfWidth c - xOffset
     worldY = halfHeight c - yOffset
 
-    t = inverse $ transformation c
-    pixel = (*^ point worldX worldY (-1)) <$> t
-    origin = (*^ point 0 0 0) <$> t
-    direction = normalize <$> liftA2 (-) pixel origin
+    t = M.inverse $ transformation c
+    pixel = (M.*^ T.point worldX worldY (-1)) <$> t
+    origin = (M.*^ T.point 0 0 0) <$> t
+    direction = T.normalize <$> liftA2 (-) pixel origin
 
-render :: (Shape o a, Eq a, Floating a, RealFrac a, Eq (o a)) => Camera a -> World o a -> Canvas a
+render :: (S.Shape o p a, Eq a, Floating a, RealFrac a, Eq (o p a), P.Pattern p a) => Camera a -> W.World (o p) a -> C.Canvas a
 render camera world = image
   where
     pixels = (`quotRem` vsize camera) <$> [0 .. hsize camera * vsize camera - 1]
     image =
-      bulk
-        (canvas (hsize camera, vsize camera))
+      C.bulk
+        (C.canvas (hsize camera, vsize camera))
         $ mapMaybe
-          (renderPixel canvas)
+          (renderPixel C.canvas)
           pixels
     renderPixel _ pixel = (pixel,) <$> color
       where
         ray = rayForPixel camera pixel
-        color = colorAt world <$> ray
+        color = W.colorAt world <$> ray

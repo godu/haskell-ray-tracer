@@ -3,33 +3,10 @@ module RayTracer.Data.MatrixSpec
   )
 where
 
-import Data.Maybe (fromJust)
+import Data.Maybe
 import RayTracer.Data.Matrix
-  ( at,
-    cofactor,
-    determinant,
-    fromList,
-    inverse,
-    minor,
-    one,
-    submatrix,
-    transpose,
-    (*^),
-  )
-import RayTracer.Data.Tuple (tuple)
+import qualified RayTracer.Data.Tuple as T
 import Test.Hspec
-  ( Spec,
-    it,
-    shouldBe,
-    shouldNotBe,
-  )
-import Prelude
-  ( pure,
-    ($),
-    (*),
-    (/),
-    (<$>),
-  )
 
 spec :: Spec
 spec = do
@@ -98,14 +75,14 @@ spec = do
 
   it "A matrix multiplied by a tuple" $ do
     let m = fromList 4 4 [1, 2, 3, 4, 2, 4, 4, 2, 8, 6, 4, 1, 0, 0, 0, 1]
-    let t = tuple 1 2 3 1
-    m *^ t `shouldBe` tuple 18 24 33 1
+    let t = T.tuple 1 2 3 1
+    m *^ t `shouldBe` T.tuple 18 24 33 1
 
   it "Multiplying a matrix by the identity matrix" $ do
     let a = fromList 4 4 [0, 1, 2, 4, 1, 2, 4, 8, 2, 4, 8, 16, 4, 8, 16, 32]
     a * one 4 `shouldBe` a
   it "Multiplying the identity matrix by a tuple" $ do
-    let a = tuple 1 2 3 4
+    let a = T.tuple 1 2 3 4
     one 4 *^ a `shouldBe` a
 
   it "Transposing a matrix" $ do

@@ -1,31 +1,19 @@
-module RayTracer.Data.PlaneSpec
+module RayTracer.Data.Shape.PlaneSpec
   ( spec,
   )
 where
 
-import RayTracer.Data.Intersection (intersection)
-import RayTracer.Data.Plane
-  ( plane,
-  )
-import RayTracer.Data.Ray (ray)
+import RayTracer.Data.Intersection
+import RayTracer.Data.Ray
 import qualified RayTracer.Data.Shape as S
-  ( Shape
-      ( localIntersect,
-        localNormalAt
-      ),
-  )
+import RayTracer.Data.Shape.Plane
 import RayTracer.Data.Tuple
-  ( point,
-    vector,
-  )
+import qualified RayTracer.Spec as RS
+import RayTracer.Transformation
 import Test.Hspec
-  ( Spec,
-    it,
-    shouldBe,
-  )
-import Prelude
-  ( ($),
-  )
+
+plane :: (Fractional a, RealFrac a) => Plane RS.Pattern a
+plane = Plane identity RS.material
 
 spec :: Spec
 spec = do

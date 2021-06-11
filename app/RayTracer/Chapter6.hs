@@ -2,60 +2,30 @@
 
 module RayTracer.Chapter6
   ( main,
+    material,
+    sphere,
   )
 where
 
-import Data.Maybe (maybe)
-import RayTracer.Data.Canvas (bulk, canvas)
+import RayTracer.Chapter5 hiding (main)
+import qualified RayTracer.Data.Canvas as C
 import qualified RayTracer.Data.Color as C
-  ( black,
-    color,
-  )
-import RayTracer.Data.Intersection
-  ( Intersection (object, t),
-    hit,
-  )
-import RayTracer.Data.Light (pointLight)
+import qualified RayTracer.Data.Intersection as I
+import qualified RayTracer.Data.Light as L
 import qualified RayTracer.Data.Material as M
-  ( Material (pattern_),
-    material,
-  )
-import RayTracer.Data.Pattern
-  ( colorPattern,
-  )
+import qualified RayTracer.Data.Material.Extra as M
 import qualified RayTracer.Data.Ray as R
-  ( Ray (direction),
-    position,
-    ray,
-  )
-import RayTracer.Data.Shape
-  ( intersect,
-    normalAt,
-  )
-import RayTracer.Data.Sphere
-  ( Sphere (material),
-    sphere,
-  )
+import qualified RayTracer.Data.Shape as S
+import qualified RayTracer.Data.Shape.Sphere as SS
 import qualified RayTracer.Data.Tuple as T
-  ( normalize,
-    point,
-  )
-import RayTracer.Data.Material.Extra (lighting)
-import RayTracer.Projectile (fuchsia)
-import Prelude
-  ( Bool (False),
-    String,
-    fromIntegral,
-    quotRem,
-    show,
-    ($),
-    (*),
-    (+),
-    (-),
-    (.),
-    (/),
-    (<$>),
-  )
+import RayTracer.Projectile
+import RayTracer.Transformation
+
+material :: (RealFrac a) => M.Material Pattern a
+material = M.Material (colorPattern C.white) 0.1 0.9 0.9 200.0
+
+sphere :: (Num a, RealFrac a) => SS.Sphere Pattern a
+sphere = SS.Sphere identity material
 
 main :: [String]
 main = [show finalCanvas]
@@ -66,9 +36,9 @@ main = [show finalCanvas]
     canvasPixels = 200
     pixelSize = wallSize / fromIntegral canvasPixels
     half = wallSize / 2
-    initialCanvas = canvas (canvasPixels, canvasPixels)
-    shape = sphere {material = M.material {M.pattern_ = colorPattern fuchsia}}
-    light = pointLight (T.point (-10) 10 (-10)) (C.color 1 1 1)
+    initialCanvas = C.canvas (canvasPixels, canvasPixels)
+    shape = sphere {SS.material = material {M.pattern_ = colorPattern fuchsia}}
+    light = L.pointLight (T.point (-10) 10 (-10)) (C.color 1 1 1)
 
     pixels =
       cast . (`quotRem` canvasPixels) <$> [0 .. canvasPixels * canvasPixels - 1]
@@ -79,15 +49,22 @@ main = [show finalCanvas]
         worldY = half - pixelSize * fromIntegral y
         position = T.point worldX worldY wallZ
         ray = R.ray rayOrigin $ T.normalize (position - rayOrigin)
-        xs = ray `intersect` shape
+        xs = ray `S.intersect` shape
 
-        intersection = hit xs
+        intersection = I.hit xs
 
         computeColor intersection = color
           where
-            point = R.position (t intersection) ray
-            normal = object intersection `normalAt` point
+            point = R.position (I.t intersection) ray
+            normal = I.object intersection `S.normalAt` point
             eye = - (R.direction ray)
             color =
-              lighting (material $ object intersection) (object intersection) light point eye normal False
-    finalCanvas = bulk initialCanvas pixels
+              M.lighting
+                (S.material $ I.object intersection)
+                (I.object intersection)
+                light
+                point
+                eye
+                normal
+                False
+    finalCanvas = C.bulk initialCanvas pixels

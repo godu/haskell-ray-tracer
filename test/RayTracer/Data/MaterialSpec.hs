@@ -4,50 +4,26 @@ module RayTracer.Data.MaterialSpec
 where
 
 import qualified RayTracer.Data.Color as C
-  ( black,
-    color,
-    white,
-  )
 import RayTracer.Data.Light
-  ( pointLight,
-  )
 import RayTracer.Data.Material
-  ( Material
-      ( ambient,
-        diffuse,
-        pattern_,
-        shininess,
-        specular
-      ),
-    material,
-  )
-import RayTracer.Data.Pattern
-  ( colorPattern,
-    stripePattern,
-  )
-import RayTracer.Data.Sphere (sphere)
+import RayTracer.Data.Material.Extra
+import qualified RayTracer.Data.Shape.Sphere as S
 import RayTracer.Data.Tuple
-  ( point,
-    vector,
-  )
-import RayTracer.Data.Material.Extra (lighting)
+import qualified RayTracer.Spec as RS
+import RayTracer.Transformation
 import Test.Hspec
-  ( Spec,
-    it,
-    shouldBe,
-  )
-import Prelude
-  ( Bool (False, True),
-    sqrt,
-    ($),
-    (/),
-  )
+
+material :: (RealFrac a) => Material RS.Pattern a
+material = Material (RS.colorPattern C.white) 0.1 0.9 0.9 200.0
+
+sphere :: (Num a, RealFrac a) => S.Sphere RS.Pattern a
+sphere = S.Sphere identity material
 
 spec :: Spec
 spec = do
   it "The default material" $ do
     let m = material
-    pattern_ m `shouldBe` colorPattern (C.color 1 1 1)
+    pattern_ m `shouldBe` RS.colorPattern (C.color 1 1 1)
     ambient m `shouldBe` 0.1
     diffuse m `shouldBe` 0.9
     specular m `shouldBe` 0.9
@@ -89,7 +65,7 @@ spec = do
     lighting m sphere light position eyev normalv inShadow `shouldBe` C.color 0.1 0.1 0.1
 
   it "Lighting with a pattern applied" $ do
-    let m' = m {pattern_ = stripePattern C.white C.black, ambient = 1, diffuse = 0, specular = 0}
+    let m' = m {pattern_ = RS.stripePattern C.white C.black, ambient = 1, diffuse = 0, specular = 0}
         eyev = vector 0 0 (-1)
         normalv = vector 0 0 (-1)
         light = pointLight (point 0 0 (-10)) (C.color 1 1 1)

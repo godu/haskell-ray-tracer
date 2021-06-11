@@ -1,65 +1,26 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 
-module RayTracer.Data.Sphere
-  ( Sphere (transformation, material),
-    sphere,
+module RayTracer.Data.Shape.Sphere
+  ( Sphere (Sphere, transformation, material),
   )
 where
 
 import RayTracer.Data.Intersection
-  ( intersection,
-    intersections,
-  )
 import qualified RayTracer.Data.Material as M
-  ( Material,
-    material,
-  )
 import RayTracer.Data.Matrix
-  ( Matrix,
-  )
+import qualified RayTracer.Data.Pattern as P
 import RayTracer.Data.Ray
-  ( Ray (Ray),
-  )
 import qualified RayTracer.Data.Shape as S
-  ( Shape
-      ( localIntersect,
-        localNormalAt,
-        material,
-        transformation
-      ),
-  )
 import RayTracer.Data.Tuple
-  ( point,
-    (.^),
-  )
-import RayTracer.Transformation (identity)
-import Prelude
-  ( Eq,
-    Floating,
-    Fractional,
-    Num,
-    Ord,
-    Show,
-    otherwise,
-    sqrt,
-    (*),
-    (+),
-    (-),
-    (/),
-    (<),
-  )
 
-data Sphere a = Sphere
+data Sphere p a = Sphere
   { transformation :: !(Matrix a),
-    material :: !(M.Material a)
+    material :: !(M.Material p a)
   }
   deriving (Show, Eq)
 
-sphere :: (Fractional a) => Sphere a
-sphere = Sphere identity M.material
-
-instance (Num a, Floating a, Ord a) => S.Shape Sphere a where
+instance (Num a, Floating a, Ord a, P.Pattern p a, Eq (p a)) => S.Shape Sphere p a where
   transformation = transformation
   material = material
   localIntersect r s

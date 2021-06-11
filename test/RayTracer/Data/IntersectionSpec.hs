@@ -3,40 +3,15 @@ module RayTracer.Data.IntersectionSpec
   )
 where
 
-import Data.Maybe (Maybe (Just, Nothing))
 import RayTracer.Data.Intersection
-  ( Intersection (object, t),
-    hit,
-    intersection,
-    intersections,
-  )
-import qualified RayTracer.Data.Intersection.Computations as C (overPoint, point, prepareComputations)
-import RayTracer.Data.Ray (ray)
-import RayTracer.Data.Sphere
-  ( Sphere (transformation),
-    sphere,
-  )
-import RayTracer.Data.Tuple
-  ( point,
-    vector,
-    z,
-  )
-import RayTracer.Extra (epsilon)
-import RayTracer.Transformation (translation)
+import qualified RayTracer.Data.Intersection.Computations as C
+import qualified RayTracer.Data.Ray as R
+import RayTracer.Data.Shape.Sphere
+import qualified RayTracer.Data.Tuple as T
+import RayTracer.Extra
+import RayTracer.Spec
+import RayTracer.Transformation
 import Test.Hspec
-  ( Spec,
-    it,
-    shouldBe,
-    shouldSatisfy,
-  )
-import Prelude
-  ( Ord ((<), (>)),
-    length,
-    negate,
-    ($),
-    (/),
-    (<$>),
-  )
 
 spec :: Spec
 spec = do
@@ -81,9 +56,9 @@ spec = do
     hit xs `shouldBe` Just i4
 
   it "The hit should offset the point" $ do
-    let r = ray (point 0 0 (-5)) (vector 0 0 1)
+    let r = R.ray (T.point 0 0 (-5)) (T.vector 0 0 1)
         shape = sphere {transformation = translation 0 0 1}
         i = intersection 5 shape
         comps = C.prepareComputations i r
-    z (C.overPoint comps) `shouldSatisfy` (< negate (epsilon / 2))
-    z (C.point comps) `shouldSatisfy` (> z (C.overPoint comps))
+    T.z (C.overPoint comps) `shouldSatisfy` (< negate (epsilon / 2))
+    T.z (C.point comps) `shouldSatisfy` (> T.z (C.overPoint comps))

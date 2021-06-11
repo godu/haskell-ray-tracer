@@ -12,29 +12,29 @@ module RayTracer.Data.Shape
   )
 where
 
-import Data.Maybe (fromJust)
-import RayTracer.Data.Intersection (Intersection)
-import RayTracer.Data.Material (Material)
-import RayTracer.Data.Matrix (Matrix, inverse, transpose, (*^))
-import RayTracer.Data.Ray (Ray, transform)
-import RayTracer.Data.Tuple (Tuple (w), normalize)
-import Prelude (Eq, Floating, Fractional, Functor (fmap), Maybe (Just, Nothing), ($))
+import Data.Maybe
+import RayTracer.Data.Intersection
+import RayTracer.Data.Material
+import RayTracer.Data.Matrix
+import qualified RayTracer.Data.Pattern as P
+import RayTracer.Data.Ray
+import qualified RayTracer.Data.Tuple as T
 
-class Shape o a where
-  transformation :: (Shape o a) => o a -> Matrix a
-  material :: (Shape o a) => o a -> Material a
-  intersect :: (Eq a, Fractional a, Shape o a) => Ray a -> o a -> [Intersection a o]
+class (P.Pattern p a, Eq (o p a)) => Shape o p a where
+  transformation :: (Shape o p a) => o p a -> Matrix a
+  material :: (Shape o p a) => o p a -> Material p a
+  intersect :: (Eq a, Fractional a, Shape o p a) => Ray a -> o p a -> [Intersection (o p) a]
   intersect r s = case localRay of
     Nothing -> []
     Just r -> localIntersect r s
     where
       localRay = fmap (`transform` r) $ inverse $ transformation s
-  localIntersect :: (Shape o a) => Ray a -> o a -> [Intersection a o]
-  normalAt :: (Eq a, Floating a, Fractional a, Shape o a) => o a -> Tuple a -> Tuple a
-  normalAt s p = normalize $ worldNormal {w = 0}
+  localIntersect :: (Shape o p a) => Ray a -> o p a -> [Intersection (o p) a]
+  normalAt :: (Eq a, Floating a, Fractional a, Shape o p a) => o p a -> T.Tuple a -> T.Tuple a
+  normalAt s p = T.normalize $ worldNormal {T.w = 0}
     where
       t = fromJust $ inverse (transformation s)
       localPoint = t *^ p
       localNormal = localNormalAt s localPoint
       worldNormal = transpose t *^ localNormal
-  localNormalAt :: (Shape o a) => o a -> Tuple a -> Tuple a
+  localNormalAt :: (Shape o p a) => o p a -> T.Tuple a -> T.Tuple a

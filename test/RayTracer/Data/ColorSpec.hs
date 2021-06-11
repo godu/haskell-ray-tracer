@@ -4,23 +4,7 @@ module RayTracer.Data.ColorSpec
 where
 
 import RayTracer.Data.Color
-  ( blue,
-    color,
-    green,
-    red,
-    (*^),
-  )
 import Test.Hspec
-  ( Spec,
-    it,
-    shouldBe,
-  )
-import Prelude
-  ( ($),
-    (*),
-    (+),
-    (-),
-  )
 
 spec :: Spec
 spec = do

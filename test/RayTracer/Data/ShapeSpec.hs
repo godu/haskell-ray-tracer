@@ -7,73 +7,30 @@ module RayTracer.Data.ShapeSpec
 where
 
 import RayTracer.Data.Intersection
-  ( intersection,
-    intersections,
-  )
 import qualified RayTracer.Data.Material as M
-  ( Material (ambient),
-    material,
-  )
 import RayTracer.Data.Matrix
-  ( Matrix,
-  )
+import qualified RayTracer.Data.Pattern as P
 import RayTracer.Data.Ray
-  ( Ray (Ray),
-    ray,
-  )
 import qualified RayTracer.Data.Shape as S
-  ( Shape
-      ( intersect,
-        localIntersect,
-        localNormalAt,
-        material,
-        normalAt,
-        transformation
-      ),
-  )
 import RayTracer.Data.Tuple
-  ( Tuple (Tuple),
-    magnitude,
-    point,
-    vector,
-  )
+import qualified RayTracer.Spec as RS
 import RayTracer.Transformation
-  ( identity,
-    rotationZ,
-    scaling,
-    translation,
-  )
 import Test.Hspec
-  ( Spec,
-    it,
-    shouldBe,
-  )
-import Prelude
-  ( Double,
-    Eq,
-    Floating (sqrt),
-    Num (negate, (*), (+)),
-    Ord,
-    Show,
-    pi,
-    ($),
-    (/),
-  )
 
-data TestShape a = TestShape
+data TestShape p a = TestShape
   { transformation :: !(Matrix a),
-    material :: !(M.Material a)
+    material :: !(M.Material p a)
   }
   deriving (Show, Eq)
 
-instance (Num a, Floating a, Ord a) => S.Shape TestShape a where
+instance (Num a, Floating a, Ord a, P.Pattern p a) => S.Shape TestShape p a where
   transformation = transformation
   material = material
   localIntersect (Ray o d) s = intersections [intersection (magnitude o + magnitude d) s]
   localNormalAt _ (Tuple x y z _) = vector x y z
 
-testShape :: TestShape Double
-testShape = TestShape identity M.material
+testShape :: TestShape RS.Pattern Double
+testShape = TestShape identity RS.material
 
 spec :: Spec
 spec = do
@@ -86,10 +43,10 @@ spec = do
 
   it "The default material" $ do
     let s = testShape
-    material s `shouldBe` M.material
+    material s `shouldBe` RS.material
   it "Assigning a material" $ do
-    let s = testShape {material = M.material {M.ambient = 1}}
-    material s `shouldBe` M.material {M.ambient = 1}
+    let s = testShape {material = RS.material {M.ambient = 1}}
+    material s `shouldBe` RS.material {M.ambient = 1}
 
   it "The default transformation" $ do
     let s = testShape

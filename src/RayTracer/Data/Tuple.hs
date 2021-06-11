@@ -15,22 +15,7 @@ module RayTracer.Data.Tuple
   )
 where
 
-import RayTracer.Extra ((~=))
-import Prelude
-  ( Bool,
-    Eq,
-    Floating,
-    Fractional,
-    Num (abs, fromInteger, negate, signum, (*), (+), (-)),
-    Ord,
-    Show,
-    sqrt,
-    undefined,
-    (&&),
-    (.),
-    (/),
-    (==),
-  )
+import RayTracer.Extra
 
 data Tuple a = Tuple
   { x :: !a,

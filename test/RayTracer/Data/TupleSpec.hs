@@ -4,37 +4,7 @@ module RayTracer.Data.TupleSpec
 where
 
 import RayTracer.Data.Tuple
-  ( isPoint,
-    isVector,
-    magnitude,
-    normalize,
-    point,
-    reflect,
-    tuple,
-    vector,
-    w,
-    x,
-    y,
-    z,
-    zero,
-    (*^),
-    (.^),
-    (/^),
-  )
 import Test.Hspec
-  ( Spec,
-    it,
-    shouldBe,
-    shouldNotSatisfy,
-    shouldSatisfy,
-  )
-import Prelude
-  ( sqrt,
-    ($),
-    (*),
-    (-),
-    (/),
-  )
 
 spec :: Spec
 spec = do

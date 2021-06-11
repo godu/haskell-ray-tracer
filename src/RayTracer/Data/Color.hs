@@ -7,26 +7,7 @@ module RayTracer.Data.Color
   )
 where
 
-import RayTracer.Extra ((~=))
-import Prelude
-  ( Eq,
-    Fractional,
-    Num (abs, fromInteger, signum, (*), (+), (-)),
-    Ord,
-    RealFrac,
-    Show,
-    floor,
-    max,
-    min,
-    show,
-    undefined,
-    unwords,
-    ($),
-    (&&),
-    (.),
-    (<$>),
-    (==),
-  )
+import RayTracer.Extra
 
 data Color a = Color
   { red :: !a,

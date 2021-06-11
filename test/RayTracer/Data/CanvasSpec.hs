@@ -3,35 +3,10 @@ module RayTracer.Data.CanvasSpec
   )
 where
 
-import Data.Foldable
-  ( concat,
-    foldr,
-    traverse_,
-  )
+import qualified Data.Foldable as F
 import RayTracer.Data.Canvas
-  ( at,
-    bulk,
-    canvas,
-    height,
-    pixels,
-    positions,
-    replace,
-    width,
-  )
-import RayTracer.Data.Color (color)
+import RayTracer.Data.Color
 import Test.Hspec
-  ( Spec,
-    it,
-    shouldBe,
-  )
-import Prelude
-  ( drop,
-    last,
-    lines,
-    show,
-    take,
-    ($),
-  )
 
 spec :: Spec
 spec = do
@@ -39,7 +14,7 @@ spec = do
     let actual = canvas (10, 20)
     width actual `shouldBe` 10
     height actual `shouldBe` 20
-    traverse_ (`shouldBe` color 0 0 0) $ pixels actual
+    F.traverse_ (`shouldBe` color 0 0 0) $ pixels actual
   it "Writing pixels to a canvas" $ do
     let initial = canvas (10, 20)
     let red = color 1 0 0

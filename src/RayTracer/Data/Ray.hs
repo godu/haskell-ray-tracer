@@ -7,18 +7,7 @@ module RayTracer.Data.Ray
 where
 
 import qualified RayTracer.Data.Matrix as M
-  ( Matrix,
-    (*^),
-  )
 import qualified RayTracer.Data.Tuple as T
-  ( Tuple,
-    (*^),
-  )
-import Prelude
-  ( Eq,
-    Num ((+)),
-    Show,
-  )
 
 data Ray a = Ray
   { origin :: !(T.Tuple a),

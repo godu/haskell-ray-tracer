@@ -11,19 +11,7 @@ module RayTracer.Transformation
 where
 
 import RayTracer.Data.Matrix
-  ( Matrix,
-    fromList,
-    one,
-    update,
-  )
-import RayTracer.Data.Tuple (Tuple (x, y, z), normalize)
-import Prelude
-  ( Floating,
-    Num (negate, (*), (-)),
-    cos,
-    sin,
-    ($),
-  )
+import RayTracer.Data.Tuple
 
 identity :: Num a => Matrix a
 identity = one 4

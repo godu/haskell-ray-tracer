@@ -1,7 +1,10 @@
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE UndecidableInstances #-}
+
 module RayTracer.Data.World
-  ( World (objects, lights),
+  ( World (World, objects, lights),
     world,
-    defaultWorld,
     intersect,
     shadeHit,
     colorAt,
@@ -9,89 +12,39 @@ module RayTracer.Data.World
   )
 where
 
-import Data.Maybe (listToMaybe)
-import RayTracer.Data.Color (Color, black, color)
-import RayTracer.Data.Intersection (Intersection (t), hit, intersections)
-import RayTracer.Data.Intersection.Computations (prepareComputations)
-import qualified RayTracer.Data.Intersection.Computations as C (Computations (eyev, normalv, object, overPoint))
-import RayTracer.Data.Light (Light (position), pointLight)
-import qualified RayTracer.Data.Material as M
-  ( diffuse,
-    material,
-    pattern_,
-    specular,
-  )
-import RayTracer.Data.Pattern (colorPattern)
-import RayTracer.Data.Ray (Ray, ray)
-import RayTracer.Data.Shape (Shape)
+import Data.Maybe
+import RayTracer.Data.Color
+import qualified RayTracer.Data.Intersection as I
+import RayTracer.Data.Intersection.Computations
+import qualified RayTracer.Data.Intersection.Computations as C
+import qualified RayTracer.Data.Light as L
+import RayTracer.Data.Material.Extra
+import RayTracer.Data.Ray
 import qualified RayTracer.Data.Shape as SS
-  ( Shape,
-    intersect,
-    material,
-  )
-import RayTracer.Data.Sphere (Sphere)
-import qualified RayTracer.Data.Sphere as S
-  ( material,
-    sphere,
-    transformation,
-  )
-import RayTracer.Data.Tuple (Tuple, magnitude, normalize, point)
-import RayTracer.Data.Material.Extra (lighting)
-import RayTracer.Transformation (scaling)
-import Prelude
-  ( Bool (False, True),
-    Eq,
-    Floating,
-    Foldable (sum),
-    Fractional,
-    Maybe (Just, Nothing),
-    Num ((-)),
-    Ord ((<)),
-    RealFrac,
-    Show,
-    concat,
-    maybe,
-    return,
-    ($),
-    (.),
-    (<$>),
-  )
+import qualified RayTracer.Data.Tuple as T
 
 data World o a = World
   { objects :: ![o a],
-    lights :: ![Light a]
+    lights :: ![L.Light a]
   }
-  deriving (Show, Eq)
+
+instance (Eq (o p a), Ord a, Fractional a) => Eq (World (o p) a) where
+  a == b = objects a == objects b && lights a == lights b
+
+instance (Show (o p a), Show a, RealFrac a) => Show (World (o p) a) where
+  show a = "World { object=" <> show (objects a) <> ", lights=" <> show (lights a) <> " }"
 
 world :: World o a
 world = World [] []
 
-defaultWorld :: Fractional a => World Sphere a
-defaultWorld = World [s1, s2] (return l)
-  where
-    s1 =
-      S.sphere
-        { S.material =
-            M.material
-              { M.pattern_ = colorPattern $ color 0.8 1.0 0.6,
-                M.diffuse = 0.7,
-                M.specular = 0.2
-              }
-        }
-    s2 =
-      S.sphere
-        { S.transformation = scaling 0.5 0.5 0.5
-        }
-    l = pointLight (point (-10) 10 (-10)) (color 1 1 1)
-
 intersect ::
-  (Num a, Floating a, Eq a, Ord a, Fractional a, SS.Shape o a, Eq (o a)) =>
+  (Num a, Floating a, Eq a, Ord a, Fractional a, SS.Shape o p a, Eq (o p a)) =>
   Ray a ->
-  World o a ->
-  [Intersection a o]
-intersect r w = intersections $ concat $ SS.intersect r <$> objects w
+  World (o p) a ->
+  [I.Intersection (o p) a]
+intersect r w = I.intersections $ concat $ SS.intersect r <$> objects w
 
-shadeHit :: (Num a, Floating a, RealFrac a, SS.Shape o a, Eq (o a)) => World o a -> C.Computations a o -> Color a
+shadeHit :: (Num a, Floating a, RealFrac a, SS.Shape o p a, Eq (o p a), SS.Shape o p a) => World (o p) a -> C.Computations (o p) a -> Color a
 shadeHit w c =
   sum $
     ( \light ->
@@ -106,22 +59,22 @@ shadeHit w c =
     )
       <$> lights w
 
-colorAt :: (Fractional a, Eq (o a), Floating a, RealFrac a, Shape o a) => World o a -> Ray a -> Color a
+colorAt :: (Fractional a, Eq (o p a), Floating a, RealFrac a, SS.Shape o p a) => World (o p) a -> Ray a -> Color a
 colorAt w r =
   maybe
     black
     (\i -> shadeHit w $ prepareComputations i r)
-    $ hit $
+    $ I.hit $
       r `intersect` w
 
-isShadowed :: (Num a, Floating a, Ord a, Shape o a, Eq (o a)) => World o a -> Tuple a -> Bool
+isShadowed :: (Num a, Floating a, Ord a, SS.Shape o p a, Eq (o p a)) => World (o p) a -> T.Tuple a -> Bool
 isShadowed w p = case listToMaybe (lights w) of
   Nothing -> True
-  Just l -> maybe False ((< distance) . t) h
+  Just l -> maybe False ((< distance) . I.t) h
     where
-      v = position l - p
-      distance = magnitude v
-      direction = normalize v
+      v = L.position l - p
+      distance = T.magnitude v
+      direction = T.normalize v
       r = ray p direction
-      intersections = intersect r w
-      h = hit intersections
+      intersections = r `intersect` w
+      h = I.hit intersections

@@ -4,16 +4,6 @@ module RayTracer.Extra
   )
 where
 
-import Prelude
-  ( Bool,
-    Fractional,
-    Ord,
-    abs,
-    ($),
-    (-),
-    (>=),
-  )
-
 epsilon :: Fractional a => a
 epsilon = 0.0001
 
