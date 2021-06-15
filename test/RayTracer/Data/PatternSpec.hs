@@ -12,6 +12,7 @@ import qualified RayTracer.Data.Matrix as M
 import qualified RayTracer.Data.Pattern as P
 import RayTracer.Data.Pattern.Extra
 import qualified RayTracer.Data.Pattern.GradientPattern as GP
+import qualified RayTracer.Data.Pattern.RingPattern as RP
 import qualified RayTracer.Data.Pattern.StripePattern as SP
 import qualified RayTracer.Data.Shape.Sphere as S
 import RayTracer.Data.Tuple
@@ -100,9 +101,16 @@ spec = do
         pattern_ = testPattern {transformation = translation 0.5 1 1.5}
     patternAtShape pattern_ shape (point 2.5 3 3.5) `shouldBe` return (color 0.75 0.5 0.25)
 
-  it "A gradient liearly interpolates between colors" $ do
+  it "A gradient linearly interpolates between colors" $ do
     let pattern_ = GP.gradientPattern white black
     pattern_ `P.patternAt` point 0 0 0 `shouldBe` white
     pattern_ `P.patternAt` point 0.25 0 0 `shouldBe` color 0.75 0.75 0.75
     pattern_ `P.patternAt` point 0.5 0 0 `shouldBe` color 0.5 0.5 0.5
     pattern_ `P.patternAt` point 0.75 0 0 `shouldBe` color 0.25 0.25 0.25
+
+  it "A ring should extend in both x and z" $ do
+    let pattern_ = RP.ringPattern white black
+    pattern_ `P.patternAt` point 0 0 0 `shouldBe` white
+    pattern_ `P.patternAt` point 1 0 0 `shouldBe` black
+    pattern_ `P.patternAt` point 0 0 1 `shouldBe` black
+    pattern_ `P.patternAt` point 0.708 0 0.708 `shouldBe` black
