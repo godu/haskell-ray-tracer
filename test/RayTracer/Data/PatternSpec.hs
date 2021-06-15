@@ -10,6 +10,7 @@ import RayTracer.Data.Color
 import qualified RayTracer.Data.Material as M
 import qualified RayTracer.Data.Matrix as M
 import qualified RayTracer.Data.Pattern as P
+import qualified RayTracer.Data.Pattern.CheckersPattern as CP
 import RayTracer.Data.Pattern.Extra
 import qualified RayTracer.Data.Pattern.GradientPattern as GP
 import qualified RayTracer.Data.Pattern.RingPattern as RP
@@ -114,3 +115,19 @@ spec = do
     pattern_ `P.patternAt` point 1 0 0 `shouldBe` black
     pattern_ `P.patternAt` point 0 0 1 `shouldBe` black
     pattern_ `P.patternAt` point 0.708 0 0.708 `shouldBe` black
+
+  it "Checkers should repeat in x" $ do
+    let pattern_ = CP.checkersPattern white black
+    pattern_ `P.patternAt` point 0 0 0 `shouldBe` white
+    pattern_ `P.patternAt` point 0.99 0 0 `shouldBe` white
+    pattern_ `P.patternAt` point 1.01 0 0 `shouldBe` black
+  it "Checkers should repeat in y" $ do
+    let pattern_ = CP.checkersPattern white black
+    pattern_ `P.patternAt` point 0 0 0 `shouldBe` white
+    pattern_ `P.patternAt` point 0 0.99 0 `shouldBe` white
+    pattern_ `P.patternAt` point 0 1.01 0 `shouldBe` black
+  it "Checkers should repeat in z" $ do
+    let pattern_ = CP.checkersPattern white black
+    pattern_ `P.patternAt` point 0 0 0 `shouldBe` white
+    pattern_ `P.patternAt` point 0 0 0.99 `shouldBe` white
+    pattern_ `P.patternAt` point 0 0 1.01 `shouldBe` black

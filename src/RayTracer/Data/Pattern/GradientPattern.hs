@@ -20,7 +20,7 @@ data GradientPattern a = GradientPattern
   }
   deriving (Eq, Show)
 
-gradientPattern :: RealFrac a => C.Color a -> C.Color a -> GradientPattern a
+gradientPattern :: Num a => C.Color a -> C.Color a -> GradientPattern a
 gradientPattern = GradientPattern identity
 
 instance (RealFrac a) => P.Pattern GradientPattern a where

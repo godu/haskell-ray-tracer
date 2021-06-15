@@ -21,7 +21,7 @@ data StripePattern a = StripePattern
   }
   deriving (Eq, Show)
 
-stripePattern :: RealFrac a => Color a -> Color a -> StripePattern a
+stripePattern :: Num a => Color a -> Color a -> StripePattern a
 stripePattern = StripePattern identity
 
 instance RealFrac a => P.Pattern StripePattern a where
