@@ -3,7 +3,7 @@ cradle:
     - path: "./src"
       component: "haskell-ray-tracer:lib"
 
-    - path: "./app/RayTracer/Main.hs"
+    - path: "./app/Main.hs"
       component: "haskell-ray-tracer:exe:haskell-ray-tracer-exec"
 
     - path: "./app/RayTracer/Chapter1.hs"

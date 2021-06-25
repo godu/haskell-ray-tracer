@@ -23,7 +23,7 @@ library:
     - vector
 executables:
   haskell-ray-tracer-exec:
-    main: RayTracer/Main.hs
+    main: Main.hs
     source-dirs: app
     dependencies:
       - haskell-ray-tracer
