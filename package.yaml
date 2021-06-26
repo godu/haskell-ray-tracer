@@ -11,9 +11,9 @@ extra-source-files:
   - README.md
 dependencies:
   - base >= 4.7 && < 5
-ghc-options:
-  - -W
-  - -Werror
+# ghc-options:
+#   - -W
+#   - -Werror
 library:
   source-dirs: src
   dependencies:
@@ -27,15 +27,15 @@ executables:
     source-dirs: app
     dependencies:
       - haskell-ray-tracer
-    ghc-options:
-      - -O2
-      - -threaded
-      - -rtsopts
-      - -with-rtsopts=-N
-      - -fexcess-precision
-      - -optc-O3
-      - -optc-ffast-math
-      - -funfolding-use-threshold=16
+    # ghc-options:
+    #   - -O2
+    #   - -threaded
+    #   - -rtsopts
+    #   - -with-rtsopts=-N
+    #   - -fexcess-precision
+    #   - -optc-O3
+    #   - -optc-ffast-math
+    #   - -funfolding-use-threshold=16
 tests:
   haskell-ray-tracer-test:
     main: Spec.hs
