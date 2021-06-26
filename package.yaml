@@ -15,9 +15,6 @@ dependencies:
   - base >= 4.7 && < 5
 
 ghc-options:
-  - -threaded
-  - -rtsopts
-  - -with-rtsopts=-N
   - -Wall
   - -Wcompat
   - -Widentities
@@ -41,6 +38,10 @@ executables:
   haskell-ray-tracer-exec:
     main: Main.hs
     source-dirs: app
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
     dependencies:
       - haskell-ray-tracer
 tests:

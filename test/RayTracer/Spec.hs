@@ -21,18 +21,20 @@ import RayTracer.Transformation
 
 data Pattern a
   = ColorPattern (CP.ColorPattern a)
-  | StripePattern (SP.StripePattern a)
+  | StripePattern (SP.StripePattern Pattern a)
   deriving (Eq, Show)
 
 colorPattern :: Num a => C.Color a -> Pattern a
 colorPattern = ColorPattern . CP.colorPattern
 
-stripePattern :: RealFrac a => C.Color a -> C.Color a -> Pattern a
+stripePattern :: RealFrac a => Pattern a -> Pattern a -> Pattern a
 stripePattern a = StripePattern . SP.stripePattern a
 
 instance (RealFrac a) => P.Pattern Pattern a where
-  transformation (ColorPattern a) = P.transformation a
-  transformation (StripePattern a) = P.transformation a
+  getTransformation (ColorPattern p) = P.getTransformation p
+  getTransformation (StripePattern p) = P.getTransformation p
+  setTransformation (ColorPattern p) = ColorPattern . P.setTransformation p
+  setTransformation (StripePattern p) = StripePattern . P.setTransformation p
   patternAt (ColorPattern a) = P.patternAt a
   patternAt (StripePattern a) = P.patternAt a
 
@@ -43,7 +45,7 @@ sphere :: (RealFrac a) => S.Sphere Pattern a
 sphere = S.Sphere identity material
 
 world :: (Fractional a, RealFrac a) => W.World (S.Sphere Pattern) a
-world = W.World [s1, s2] (return l)
+world = W.World [s1, s2] (pure l)
   where
     s1 =
       sphere

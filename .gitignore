@@ -3,3 +3,4 @@ haskell-ray-tracer.cabal
 z3
 *~
 .output
+.DS_Store

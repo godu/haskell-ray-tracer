@@ -34,18 +34,18 @@ spec = do
   it "Constructing a ray through the center of the canvas" $ do
     let c = C.camera 201 101 (pi / 2)
         r = C.rayForPixel c (100, 50)
-    R.origin <$> r `shouldBe` return (T.point 0 0 0)
-    R.direction <$> r `shouldBe` return (T.vector 0 0 (-1))
+    R.origin <$> r `shouldBe` pure (T.point 0 0 0)
+    R.direction <$> r `shouldBe` pure (T.vector 0 0 (-1))
   it "Constructing a ray through a corner of the canvas" $ do
     let c = C.camera 201 101 (pi / 2)
         r = C.rayForPixel c (0, 0)
-    R.origin <$> r `shouldBe` return (T.point 0 0 0)
-    R.direction <$> r `shouldBe` return (T.vector 0.66519 0.33259 (-0.66851))
+    R.origin <$> r `shouldBe` pure (T.point 0 0 0)
+    R.direction <$> r `shouldBe` pure (T.vector 0.66519 0.33259 (-0.66851))
   it "Constructing a ray when the camera is transformed" $ do
     let c = (C.camera 201 101 (pi / 2)) {C.transformation = T.rotationY (pi / 4) * T.translation 0 (-2) 5}
         r = C.rayForPixel c (100, 50)
-    R.origin <$> r `shouldBe` return (T.point 0 2 (-5))
-    R.direction <$> r `shouldBe` return (T.vector (sqrt 2 / 2) 0 (negate $ sqrt 2 / 2))
+    R.origin <$> r `shouldBe` pure (T.point 0 2 (-5))
+    R.direction <$> r `shouldBe` pure (T.vector (sqrt 2 / 2) 0 (negate $ sqrt 2 / 2))
   it "Rendering a world with a camera" $ do
     let w = world
         from = T.point 0 0 (-5)

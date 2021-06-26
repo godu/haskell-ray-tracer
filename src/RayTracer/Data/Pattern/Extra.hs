@@ -1,16 +1,23 @@
 module RayTracer.Data.Pattern.Extra
   ( patternAtShape,
+    patternAtPattern,
   )
 where
 
-import qualified RayTracer.Data.Color as C
-import RayTracer.Data.Matrix
-import RayTracer.Data.Pattern
-import qualified RayTracer.Data.Shape as S
-import qualified RayTracer.Data.Tuple as T
+import RayTracer.Data.Color (Color)
+import RayTracer.Data.Matrix (inverse, (*^))
+import RayTracer.Data.Pattern (Pattern (getTransformation, patternAt))
+import RayTracer.Data.Shape (Shape (transformation))
+import RayTracer.Data.Tuple (Tuple)
 
-patternAtShape :: (S.Shape o p a, RealFrac a) => p a -> o p a -> T.Tuple a -> Maybe (C.Color a)
-patternAtShape pattern_ object worldPoint = patternAt pattern_ <$> patternPoint
+patternAtShape :: (Shape o p a, RealFrac a) => p a -> o p a -> Tuple a -> Maybe (Color a)
+patternAtShape pattern_ object worldPoint = patternAt pattern_ =<< patternPoint
   where
-    objectPoint = (*^ worldPoint) <$> inverse (S.transformation object)
-    patternPoint = (*^) <$> inverse (transformation pattern_) <*> objectPoint
+    objectPoint = (*^ worldPoint) <$> inverse (transformation object)
+    patternPoint = (*^) <$> inverse (getTransformation pattern_) <*> objectPoint
+
+patternAtPattern :: (Pattern p a, Fractional a, Eq a) => p a -> Tuple a -> Maybe (Color a)
+patternAtPattern pattern_ point = patternAt pattern_ =<< patternPoint
+  where
+    objectPoint = (*^ point) <$> inverse (getTransformation pattern_)
+    patternPoint = (*^) <$> inverse (getTransformation pattern_) <*> objectPoint

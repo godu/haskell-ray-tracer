@@ -1,14 +1,16 @@
 module RayTracer.Data.Pattern
   ( Pattern,
-    transformation,
+    getTransformation,
+    setTransformation,
     patternAt,
   )
 where
 
-import RayTracer.Data.Color
-import RayTracer.Data.Matrix
-import qualified RayTracer.Data.Tuple as T
+import RayTracer.Data.Color (Color)
+import RayTracer.Data.Matrix (Matrix)
+import RayTracer.Data.Tuple (Tuple)
 
 class (Eq (p a)) => Pattern p a where
-  transformation :: p a -> Matrix a
-  patternAt :: p a -> T.Tuple a -> Color a
+  getTransformation :: p a -> Matrix a
+  setTransformation :: p a -> Matrix a -> p a
+  patternAt :: p a -> Tuple a -> Maybe (Color a)

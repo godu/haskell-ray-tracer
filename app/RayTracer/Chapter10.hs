@@ -1,11 +1,17 @@
-module RayTracer.Chapter9
+module RayTracer.Chapter10
   ( main,
     Shape (Plane, Sphere),
     plane,
   )
 where
 
-import RayTracer.Chapter5 (Pattern, colorPattern)
+import RayTracer.Chapter5
+  ( Pattern,
+    blendedPattern,
+    colorPattern,
+    perturbedPattern,
+    stripePattern,
+  )
 import RayTracer.Chapter6 (material, sphere)
 import RayTracer.Data.Camera
   ( Camera (transformation),
@@ -18,7 +24,10 @@ import RayTracer.Data.Intersection
     intersection,
   )
 import RayTracer.Data.Light (pointLight)
-import RayTracer.Data.Material (Material (diffuse, pattern_, specular))
+import RayTracer.Data.Material
+  ( Material (diffuse, pattern_, specular),
+  )
+import RayTracer.Data.Pattern (setTransformation)
 import qualified RayTracer.Data.Shape as SS (Shape (localIntersect, localNormalAt, material, transformation))
 import qualified RayTracer.Data.Shape.Plane as P (Plane (Plane, material))
 import qualified RayTracer.Data.Shape.Sphere as S (Sphere (material, transformation))
@@ -26,6 +35,7 @@ import RayTracer.Data.Tuple (point, vector)
 import RayTracer.Data.World (World (lights, objects), world)
 import RayTracer.Transformation
   ( identity,
+    rotationY,
     scaling,
     translation,
     viewTransform,
@@ -59,7 +69,22 @@ main = [show canvas]
         plane
           { P.material =
               material
-                { pattern_ = colorPattern $ color 1 0.9 0.9,
+                { pattern_ =
+                    blendedPattern
+                      ( ( `setTransformation`
+                            (scaling 0.5 0.5 0.5 * rotationY (pi / 3))
+                        )
+                          $ stripePattern
+                            (colorPattern $ color 0.2 0 0)
+                            (colorPattern $ color 0.5 0 0)
+                      )
+                      ( ( `setTransformation`
+                            (scaling 0.5 0.5 0.5 * rotationY (- pi / 3))
+                        )
+                          $ stripePattern
+                            (colorPattern $ color 0.5 0.5 0.5)
+                            (colorPattern $ color 0.2 0.2 0.2)
+                      ),
                   specular = 0
                 }
           }
@@ -69,7 +94,13 @@ main = [show canvas]
           { S.transformation = translation (-0.5) 1 0.5,
             S.material =
               material
-                { pattern_ = colorPattern $ color 0.1 1 0.5,
+                { pattern_ =
+                    ( `setTransformation`
+                        (scaling 0.25 0.25 0.25)
+                    )
+                      $ perturbedPattern
+                        (colorPattern $ color 1 1 1)
+                        (colorPattern $ color 0 1 0),
                   diffuse = 0.7,
                   specular = 0.3
                 }

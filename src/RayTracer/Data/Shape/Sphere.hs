@@ -3,21 +3,21 @@ module RayTracer.Data.Shape.Sphere
   )
 where
 
-import RayTracer.Data.Intersection
-import qualified RayTracer.Data.Material as M
-import RayTracer.Data.Matrix
-import qualified RayTracer.Data.Pattern as P
-import RayTracer.Data.Ray
-import qualified RayTracer.Data.Shape as S
-import RayTracer.Data.Tuple
+import RayTracer.Data.Intersection (intersection, intersections)
+import RayTracer.Data.Material (Material)
+import RayTracer.Data.Matrix (Matrix)
+import RayTracer.Data.Pattern (Pattern)
+import RayTracer.Data.Ray (Ray (Ray))
+import qualified RayTracer.Data.Shape as S (Shape (..))
+import RayTracer.Data.Tuple (point, (.^))
 
 data Sphere p a = Sphere
   { transformation :: !(Matrix a),
-    material :: !(M.Material p a)
+    material :: !(Material p a)
   }
   deriving (Show, Eq)
 
-instance (Num a, Floating a, Ord a, P.Pattern p a, Eq (p a)) => S.Shape Sphere p a where
+instance (Num a, Floating a, Ord a, Pattern p a, Eq (p a)) => S.Shape Sphere p a where
   transformation = transformation
   material = material
   localIntersect r s

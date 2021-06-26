@@ -3,8 +3,12 @@ module RayTracer.Chapter1
   )
 where
 
-import qualified RayTracer.Data.Tuple as T
+import RayTracer.Data.Tuple (normalize, point, vector, (*^))
 import RayTracer.Projectile
+  ( Environment (Environment),
+    Projectile (Projectile),
+    fire,
+  )
 
 main :: [String]
 main =
@@ -13,11 +17,11 @@ main =
     <> ["Fire optimal projectile"]
     <> (show <$> fire environment secondProjectile)
   where
-    gravity = T.vector 0 (-0.1) 0
-    wind = T.vector (-0.1) 0 0
+    gravity = vector 0 (-0.1) 0
+    wind = vector (-0.1) 0 0
     environment = Environment gravity wind
 
-    position = T.point 0 1 0
-    velocity = T.normalize $ T.vector 1 1 0
+    position = point 0 1 0
+    velocity = normalize $ vector 1 1 0
     projectile = Projectile position velocity
-    secondProjectile = Projectile position (velocity T.*^ 2)
+    secondProjectile = Projectile position (velocity *^ 2)

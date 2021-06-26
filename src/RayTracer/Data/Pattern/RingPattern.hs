@@ -4,25 +4,26 @@ module RayTracer.Data.Pattern.RingPattern
   )
 where
 
-import qualified RayTracer.Data.Color as C
-import RayTracer.Data.Matrix
-import qualified RayTracer.Data.Pattern as P
-import qualified RayTracer.Data.Tuple as T
-import RayTracer.Transformation
+import RayTracer.Data.Matrix (Matrix)
+import RayTracer.Data.Pattern (Pattern (..))
+import RayTracer.Data.Pattern.Extra (patternAtPattern)
+import RayTracer.Data.Tuple (Tuple (Tuple))
+import RayTracer.Transformation (identity)
 
-data RingPattern a = RingPattern
+data RingPattern p a = RingPattern
   { transformation :: !(Matrix a),
-    a :: !(C.Color a),
-    b :: !(C.Color a)
+    a :: !(p a),
+    b :: !(p a)
   }
   deriving (Eq, Show)
 
-ringPattern :: Num a => C.Color a -> C.Color a -> RingPattern a
+ringPattern :: Num a => p a -> p a -> RingPattern p a
 ringPattern = RingPattern identity
 
-instance (RealFrac a, Floating a) => P.Pattern RingPattern a where
-  transformation = transformation
-  patternAt (RingPattern _ a b) (T.Tuple x _ z _) =
-    if even $ floor $ sqrt (x * x + z * z)
-      then a
-      else b
+instance (RealFrac a, Floating a, Pattern p a) => Pattern (RingPattern p) a where
+  getTransformation = transformation
+  setTransformation p t = p {transformation = t}
+  patternAt (RingPattern _ a b) p@(Tuple x _ z _) =
+    patternAtPattern
+      (if even $ floor $ sqrt (x * x + z * z) then a else b)
+      p

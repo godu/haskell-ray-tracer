@@ -15,7 +15,7 @@ module RayTracer.Data.Tuple
   )
 where
 
-import RayTracer.Extra
+import RayTracer.Extra ((~=))
 
 data Tuple a = Tuple
   { x :: !a,

@@ -4,20 +4,20 @@ module RayTracer.Data.Intersection.Computations
   )
 where
 
-import qualified RayTracer.Data.Intersection as I
-import RayTracer.Data.Ray
-import RayTracer.Data.Shape
-import qualified RayTracer.Data.Tuple as T
-import RayTracer.Extra
+import qualified RayTracer.Data.Intersection as I (Intersection (..))
+import RayTracer.Data.Ray (Ray (direction), position)
+import RayTracer.Data.Shape (Shape (normalAt))
+import RayTracer.Data.Tuple (Tuple, (*^), (.^))
+import RayTracer.Extra (epsilon)
 
 data Computations o a = Computations
   { t :: !a,
     object :: !(o a),
-    point :: !(T.Tuple a),
-    eyev :: !(T.Tuple a),
-    normalv :: !(T.Tuple a),
+    point :: !(Tuple a),
+    eyev :: !(Tuple a),
+    normalv :: !(Tuple a),
     inside :: !Bool,
-    overPoint :: !(T.Tuple a)
+    overPoint :: !(Tuple a)
   }
   deriving (Eq, Show)
 
@@ -38,6 +38,6 @@ prepareComputations intersection ray =
     _point = position _t ray
     _eyev = negate $ direction ray
     _normalv = normalAt _object _point
-    _inside = (_normalv T..^ _eyev) < 0
+    _inside = (_normalv .^ _eyev) < 0
     __normalv = if _inside then negate _normalv else _normalv
-    _overPoint = _point + __normalv T.*^ epsilon
+    _overPoint = _point + __normalv *^ epsilon

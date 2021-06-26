@@ -3,17 +3,29 @@ module RayTracer.Chapter7
   )
 where
 
-import RayTracer.Chapter5 hiding (main)
-import RayTracer.Chapter6 hiding (main)
-import qualified RayTracer.Data.Camera as C
-import qualified RayTracer.Data.Canvas as C
-import qualified RayTracer.Data.Color as C
-import qualified RayTracer.Data.Light as L
-import qualified RayTracer.Data.Material as M
-import qualified RayTracer.Data.Shape.Sphere as S
-import qualified RayTracer.Data.Tuple as T
-import qualified RayTracer.Data.World as W
+import RayTracer.Chapter5 (Pattern, colorPattern)
+import RayTracer.Chapter6 (material, sphere)
+import RayTracer.Data.Camera
+  ( Camera (transformation),
+    camera,
+    render,
+  )
+import RayTracer.Data.Canvas (Canvas)
+import RayTracer.Data.Color (color)
+import RayTracer.Data.Light (pointLight)
+import RayTracer.Data.Material
+  ( Material (diffuse, pattern_, specular),
+  )
+import qualified RayTracer.Data.Shape.Sphere as S (Sphere (material, transformation))
+import RayTracer.Data.Tuple (point, vector)
+import RayTracer.Data.World (World (lights, objects), world)
 import RayTracer.Transformation
+  ( rotationX,
+    rotationY,
+    scaling,
+    translation,
+    viewTransform,
+  )
 
 main :: [String]
 main = [show canvas]
@@ -24,8 +36,8 @@ main = [show canvas]
         { S.transformation = scaling 10 0.01 10,
           S.material =
             material
-              { M.pattern_ = colorPattern (C.color 1 0.9 0.9),
-                M.specular = 0
+              { pattern_ = colorPattern (color 1 0.9 0.9),
+                specular = 0
               }
         }
 
@@ -34,8 +46,8 @@ main = [show canvas]
         { S.transformation = translation 0 0 5 * rotationY (negate pi / 4) * rotationX (pi / 2) * scaling 10 0.01 10,
           S.material =
             material
-              { M.pattern_ = colorPattern (C.color 1 0.9 0.9),
-                M.specular = 0
+              { pattern_ = colorPattern (color 1 0.9 0.9),
+                specular = 0
               }
         }
 
@@ -44,8 +56,8 @@ main = [show canvas]
         { S.transformation = translation 0 0 5 * rotationY (pi / 4) * rotationX (pi / 2) * scaling 10 0.01 10,
           S.material =
             material
-              { M.pattern_ = colorPattern (C.color 1 0.9 0.9),
-                M.specular = 0
+              { pattern_ = colorPattern (color 1 0.9 0.9),
+                specular = 0
               }
         }
 
@@ -54,9 +66,9 @@ main = [show canvas]
         { S.transformation = translation (-0.5) 1 0.5,
           S.material =
             material
-              { M.pattern_ = colorPattern $ C.color 0.1 1 0.5,
-                M.diffuse = 0.7,
-                M.specular = 0.3
+              { pattern_ = colorPattern $ color 0.1 1 0.5,
+                diffuse = 0.7,
+                specular = 0.3
               }
         }
 
@@ -65,9 +77,9 @@ main = [show canvas]
         { S.transformation = translation 1.5 0.5 (-0.5) * scaling 0.5 0.5 0.5,
           S.material =
             material
-              { M.pattern_ = colorPattern $ C.color 0.5 1 0.1,
-                M.diffuse = 0.7,
-                M.specular = 0.3
+              { pattern_ = colorPattern $ color 0.5 1 0.1,
+                diffuse = 0.7,
+                specular = 0.3
               }
         }
 
@@ -76,15 +88,15 @@ main = [show canvas]
         { S.transformation = translation (-1.5) 0.33 (-0.75) * scaling 0.33 0.33 0.33,
           S.material =
             material
-              { M.pattern_ = colorPattern $ C.color 1 0.8 0.1,
-                M.diffuse = 0.7,
-                M.specular = 0.3
+              { pattern_ = colorPattern $ color 1 0.8 0.1,
+                diffuse = 0.7,
+                specular = 0.3
               }
         }
 
-    world =
-      W.world
-        { W.objects =
+    world' =
+      world
+        { objects =
             [ floor,
               leftWall,
               rightWall,
@@ -92,13 +104,13 @@ main = [show canvas]
               right,
               left
             ],
-          W.lights = [L.pointLight (T.point (-10) 10 (-10)) (C.color 1 1 1)]
+          lights = [pointLight (point (-10) 10 (-10)) (color 1 1 1)]
         }
 
-    camera =
-      (C.camera 320 160 (pi / 3))
-        { C.transformation = viewTransform (T.point 0 1.5 (-5)) (T.point 0 1 0) (T.vector 0 1 0)
+    camera' =
+      (camera 320 160 (pi / 3))
+        { transformation = viewTransform (point 0 1.5 (-5)) (point 0 1 0) (vector 0 1 0)
         }
 
-    canvas :: C.Canvas Double
-    canvas = C.render camera world
+    canvas :: Canvas Double
+    canvas = render camera' world'

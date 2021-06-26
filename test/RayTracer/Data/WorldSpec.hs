@@ -3,6 +3,7 @@ module RayTracer.Data.WorldSpec
   )
 where
 
+import Control.Monad (mzero)
 import qualified RayTracer.Data.Color as C
 import qualified RayTracer.Data.Intersection as I
 import RayTracer.Data.Intersection.Computations
@@ -40,7 +41,7 @@ spec = do
             { S.transformation = scaling 0.5 0.5 0.5
             }
         w = world
-    W.lights w `shouldBe` return l
+    W.lights w `shouldBe` pure l
     W.objects w `shouldContain` [s1]
     W.objects w `shouldContain` [s2]
 
@@ -61,7 +62,7 @@ spec = do
   it "Shading an intersection from the inside" $ do
     let w =
           world
-            { W.lights = return $ L.pointLight (T.point 0 0.25 0) (C.color 1 1 1)
+            { W.lights = pure $ L.pointLight (T.point 0 0.25 0) (C.color 1 1 1)
             }
         r = R.ray (T.point 0 0 0) (T.vector 0 0 1)
         shape = W.objects w !! 1
@@ -81,17 +82,19 @@ spec = do
         c = w `W.colorAt` r
     c `shouldBe` C.color 0.38066 0.47583 0.2855
   it "The color with an intersection behind the ray" $ do
-    let [s1, s2] = W.objects world
-        w =
-          world
-            { W.objects =
-                [ s1 {S.material = (S.material s1) {M.ambient = 1}},
-                  s2 {S.material = (S.material s2) {M.ambient = 1}}
-                ]
-            }
-        r = R.ray (T.point 0 0 0.75) (T.vector 0 0 (-1))
-        c = w `W.colorAt` r
-    colorPattern c `shouldBe` M.pattern_ (S.material s2)
+    case (W.objects world) of
+      [s1, s2] ->
+        let w =
+              world
+                { W.objects =
+                    [ s1 {S.material = (S.material s1) {M.ambient = 1}},
+                      s2 {S.material = (S.material s2) {M.ambient = 1}}
+                    ]
+                }
+            r = R.ray (T.point 0 0 0.75) (T.vector 0 0 (-1))
+            c = w `W.colorAt` r
+         in colorPattern c `shouldBe` M.pattern_ (S.material s2)
+      _ -> mzero
 
   it "There is no shadow when nothing is collinear with T.point and light" $ do
     let w = world

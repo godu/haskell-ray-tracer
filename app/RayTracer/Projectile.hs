@@ -8,9 +8,9 @@ module RayTracer.Projectile
 where
 
 import Data.List (unfoldr)
-import RayTracer.Data.Canvas
-import RayTracer.Data.Color
-import RayTracer.Data.Tuple
+import RayTracer.Data.Canvas (Canvas, bulk)
+import RayTracer.Data.Color (Color, color)
+import RayTracer.Data.Tuple (Tuple (y))
 
 data Projectile a = Projectile
   { position :: !(Tuple a),

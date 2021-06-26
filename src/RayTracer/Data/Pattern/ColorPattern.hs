@@ -4,20 +4,21 @@ module RayTracer.Data.Pattern.ColorPattern
   )
 where
 
-import qualified RayTracer.Data.Color as C
-import RayTracer.Data.Matrix
-import qualified RayTracer.Data.Pattern as P
-import RayTracer.Transformation
+import RayTracer.Data.Color (Color)
+import RayTracer.Data.Matrix (Matrix)
+import RayTracer.Data.Pattern (Pattern (..))
+import RayTracer.Transformation (identity)
 
 data ColorPattern a = ColorPattern
   { transformation :: !(Matrix a),
-    color :: !(C.Color a)
+    color :: !(Color a)
   }
   deriving (Eq, Show)
 
-colorPattern :: Num a => C.Color a -> ColorPattern a
+colorPattern :: Num a => Color a -> ColorPattern a
 colorPattern = ColorPattern identity
 
-instance (Ord a, Fractional a) => P.Pattern ColorPattern a where
-  transformation = transformation
-  patternAt (ColorPattern _ a) _ = a
+instance (Ord a, Fractional a) => Pattern ColorPattern a where
+  getTransformation = transformation
+  setTransformation p t = p {transformation = t}
+  patternAt (ColorPattern _ a) _ = pure a

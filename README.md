@@ -46,9 +46,19 @@
   ![chapter-9](https://raw.githubusercontent.com/godu/haskell-ray-tracer/gh-pages/chapter-9.jpg)
 </details>
 
+<details>
+  <summary>Chapter 10</summary>
+  
+  ![chapter-10](https://raw.githubusercontent.com/godu/haskell-ray-tracer/gh-pages/chapter-10.jpg)
+</details>
+
 ## Contribute
 
 ```
 // Lint & Format
-$ stack install hlint ormolu
+$ stack install hlint ormolu retrie apply-refact
+
+// Regenerate hie.yaml
+$ stack install implicit-hie
+$ gen-hie > hie.yaml
 ```

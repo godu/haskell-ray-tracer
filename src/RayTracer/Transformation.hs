@@ -10,8 +10,8 @@ module RayTracer.Transformation
   )
 where
 
-import RayTracer.Data.Matrix
-import RayTracer.Data.Tuple
+import RayTracer.Data.Matrix (Matrix, fromList, one, update)
+import RayTracer.Data.Tuple (Tuple (x, y, z), normalize)
 
 identity :: Num a => Matrix a
 identity = one 4

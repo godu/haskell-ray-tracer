@@ -9,6 +9,9 @@ cradle:
     - path: "./app/RayTracer/Chapter1.hs"
       component: "haskell-ray-tracer:exe:haskell-ray-tracer-exec"
 
+    - path: "./app/RayTracer/Chapter10.hs"
+      component: "haskell-ray-tracer:exe:haskell-ray-tracer-exec"
+
     - path: "./app/RayTracer/Chapter2.hs"
       component: "haskell-ray-tracer:exe:haskell-ray-tracer-exec"
 
@@ -34,6 +37,9 @@ cradle:
       component: "haskell-ray-tracer:exe:haskell-ray-tracer-exec"
 
     - path: "./app/RayTracer/Projectile.hs"
+      component: "haskell-ray-tracer:exe:haskell-ray-tracer-exec"
+
+    - path: "./app/Paths_haskell_ray_tracer.hs"
       component: "haskell-ray-tracer:exe:haskell-ray-tracer-exec"
 
     - path: "./test"

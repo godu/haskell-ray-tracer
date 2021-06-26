@@ -13,11 +13,17 @@ import qualified RayTracer.Spec as RS
 import RayTracer.Transformation
 import Test.Hspec
 
-material :: (RealFrac a) => Material RS.Pattern a
+material :: Material RS.Pattern Double
 material = Material (RS.colorPattern C.white) 0.1 0.9 0.9 200.0
 
-sphere :: (RealFrac a) => S.Sphere RS.Pattern a
+sphere :: S.Sphere RS.Pattern Double
 sphere = S.Sphere identity material
+
+whitePattern :: RS.Pattern Double
+whitePattern = RS.colorPattern C.white
+
+blackPattern :: RS.Pattern Double
+blackPattern = RS.colorPattern C.black
 
 spec :: Spec
 spec = do
@@ -65,7 +71,13 @@ spec = do
     lighting m sphere light position eyev normalv inShadow `shouldBe` C.color 0.1 0.1 0.1
 
   it "Lighting with a pattern applied" $ do
-    let m' = m {pattern_ = RS.stripePattern C.white C.black, ambient = 1, diffuse = 0, specular = 0}
+    let m' =
+          m
+            { pattern_ = RS.stripePattern whitePattern blackPattern,
+              ambient = 1,
+              diffuse = 0,
+              specular = 0
+            }
         eyev = vector 0 0 (-1)
         normalv = vector 0 0 (-1)
         light = pointLight (point 0 0 (-10)) (C.color 1 1 1)

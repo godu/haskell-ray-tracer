@@ -7,7 +7,7 @@ module RayTracer.Data.Color
   )
 where
 
-import RayTracer.Extra
+import RayTracer.Extra ((~=))
 
 data Color a = Color
   { red :: !a,
@@ -40,6 +40,9 @@ instance Num a => Num (Color a) where
       a' = fromInteger a
   abs = undefined
   signum = undefined
+
+instance Functor Color where
+  fmap f (Color a b c) = Color (f a) (f b) (f c)
 
 (*^) :: (Num a) => Color a -> a -> Color a
 (Color a b c) *^ x = color (a * x) (b * x) (c * x)

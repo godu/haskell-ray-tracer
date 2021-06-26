@@ -10,15 +10,15 @@ module RayTracer.Data.Shape
   )
 where
 
-import Data.Maybe
-import RayTracer.Data.Intersection
-import RayTracer.Data.Material
-import RayTracer.Data.Matrix
-import qualified RayTracer.Data.Pattern as P
-import RayTracer.Data.Ray
-import qualified RayTracer.Data.Tuple as T
+import Data.Maybe (fromJust)
+import RayTracer.Data.Intersection (Intersection)
+import RayTracer.Data.Material (Material)
+import RayTracer.Data.Matrix (Matrix, inverse, transpose, (*^))
+import RayTracer.Data.Pattern (Pattern)
+import RayTracer.Data.Ray (Ray, transform)
+import RayTracer.Data.Tuple (Tuple (w), normalize)
 
-class (P.Pattern p a, Eq (o p a)) => Shape o p a where
+class (Pattern p a, Eq (o p a)) => Shape o p a where
   transformation :: o p a -> Matrix a
   material :: o p a -> Material p a
   intersect :: (Eq a, Fractional a) => Ray a -> o p a -> [Intersection (o p) a]
@@ -28,11 +28,11 @@ class (P.Pattern p a, Eq (o p a)) => Shape o p a where
     where
       localRay = fmap (`transform` r) $ inverse $ transformation s
   localIntersect :: Ray a -> o p a -> [Intersection (o p) a]
-  normalAt :: (Eq a, Floating a) => o p a -> T.Tuple a -> T.Tuple a
-  normalAt s p = T.normalize $ worldNormal {T.w = 0}
+  normalAt :: (Eq a, Floating a) => o p a -> Tuple a -> Tuple a
+  normalAt s p = normalize $ worldNormal {w = 0}
     where
       t = fromJust $ inverse (transformation s)
       localPoint = t *^ p
       localNormal = localNormalAt s localPoint
       worldNormal = transpose t *^ localNormal
-  localNormalAt :: o p a -> T.Tuple a -> T.Tuple a
+  localNormalAt :: o p a -> Tuple a -> Tuple a

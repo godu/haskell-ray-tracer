@@ -3,63 +3,74 @@ module RayTracer.Chapter8
   )
 where
 
-import RayTracer.Chapter5 hiding (main)
-import RayTracer.Chapter6 hiding (main)
-import qualified RayTracer.Data.Camera as C
-import qualified RayTracer.Data.Canvas as C
-import qualified RayTracer.Data.Color as C
-import qualified RayTracer.Data.Light as L
-import qualified RayTracer.Data.Material as M
-import qualified RayTracer.Data.Shape.Sphere as S
-import qualified RayTracer.Data.Tuple as T
-import qualified RayTracer.Data.World as W
+import RayTracer.Chapter5 (Pattern, colorPattern)
+import RayTracer.Chapter6 (material, sphere)
+import RayTracer.Data.Camera
+  ( Camera (transformation),
+    camera,
+    render,
+  )
+import RayTracer.Data.Canvas (Canvas)
+import RayTracer.Data.Color (color)
+import RayTracer.Data.Light (pointLight)
+import RayTracer.Data.Material
+  ( Material (ambient, diffuse, pattern_, shininess, specular),
+  )
+import qualified RayTracer.Data.Shape.Sphere as S (Sphere (material, transformation))
+import RayTracer.Data.Tuple (point, vector)
+import RayTracer.Data.World (World (lights, objects), world)
 import RayTracer.Transformation
+  ( rotationZ,
+    scaling,
+    translation,
+    viewTransform,
+  )
 
 main :: [String]
 main = [show canvas]
   where
     sphereMaterial =
       material
-        { M.pattern_ = colorPattern (C.color 1 1 1),
-          M.ambient = 0.2,
-          M.diffuse = 0.8,
-          M.specular = 0.3,
-          M.shininess = 200
+        { pattern_ = colorPattern (color 1 1 1),
+          ambient = 0.2,
+          diffuse = 0.8,
+          specular = 0.3,
+          shininess = 200
         }
 
     wristMaterial =
       sphereMaterial
-        { M.pattern_ = colorPattern (C.color 0.1 1 1)
+        { pattern_ = colorPattern (color 0.1 1 1)
         }
 
     palmMaterial =
       sphereMaterial
-        { M.pattern_ = colorPattern (C.color 0.1 0.1 1)
+        { pattern_ = colorPattern (color 0.1 0.1 1)
         }
 
     thumbMaterial =
       sphereMaterial
-        { M.pattern_ = colorPattern (C.color 0.1 0.1 1)
+        { pattern_ = colorPattern (color 0.1 0.1 1)
         }
 
     indexMaterial =
       sphereMaterial
-        { M.pattern_ = colorPattern (C.color 1 1 0.1)
+        { pattern_ = colorPattern (color 1 1 0.1)
         }
 
     middleMaterial =
       sphereMaterial
-        { M.pattern_ = colorPattern (C.color 0.1 1 0.1)
+        { pattern_ = colorPattern (color 0.1 1 0.1)
         }
 
     ringMaterial =
       sphereMaterial
-        { M.pattern_ = colorPattern (C.color 0.1 1 0.1)
+        { pattern_ = colorPattern (color 0.1 1 0.1)
         }
 
     pinkyMaterial =
       sphereMaterial
-        { M.pattern_ = colorPattern (C.color 0.1 0.5 0.1)
+        { pattern_ = colorPattern (color 0.1 0.5 0.1)
         }
 
     backdrop :: S.Sphere Pattern Double
@@ -67,10 +78,10 @@ main = [show canvas]
       sphere
         { S.material =
             material
-              { M.pattern_ = colorPattern (C.color 1 1 1),
-                M.ambient = 0,
-                M.diffuse = 0.5,
-                M.specular = 0
+              { pattern_ = colorPattern (color 1 1 1),
+                ambient = 0,
+                diffuse = 0.5,
+                specular = 0
               },
           S.transformation = translation 0 0 20 * scaling 200 200 0.01
         }
@@ -124,9 +135,9 @@ main = [show canvas]
               * scaling 2.5 0.6 0.6
         }
 
-    world =
-      W.world
-        { W.objects =
+    world' =
+      world
+        { objects =
             [ backdrop,
               wrist,
               palm,
@@ -136,14 +147,14 @@ main = [show canvas]
               ring,
               pinky
             ],
-          W.lights = [L.pointLight (T.point 0 0 (-100)) (C.color 1 1 1)]
+          lights = [pointLight (point 0 0 (-100)) (color 1 1 1)]
         }
 
-    camera =
-      (C.camera 400 200 (pi / 6))
-        { C.transformation =
-            viewTransform (T.point 40 0 (-70)) (T.point 0 0 (-5)) (T.vector 0 1 0)
+    camera' =
+      (camera 400 200 (pi / 6))
+        { transformation =
+            viewTransform (point 40 0 (-70)) (point 0 0 (-5)) (vector 0 1 0)
         }
 
-    canvas :: C.Canvas Double
-    canvas = C.render camera world
+    canvas :: Canvas Double
+    canvas = render camera' world'

@@ -8,20 +8,22 @@ module RayTracer.Data.World
   )
 where
 
-import Data.Maybe
-import RayTracer.Data.Color
-import qualified RayTracer.Data.Intersection as I
+import Data.Maybe (listToMaybe)
+import RayTracer.Data.Color (Color, black)
+import qualified RayTracer.Data.Intersection as I (Intersection (t), hit, intersections)
 import RayTracer.Data.Intersection.Computations
-import qualified RayTracer.Data.Intersection.Computations as C
-import qualified RayTracer.Data.Light as L
-import RayTracer.Data.Material.Extra
-import RayTracer.Data.Ray
-import qualified RayTracer.Data.Shape as SS
-import qualified RayTracer.Data.Tuple as T
+  ( Computations (eyev, normalv, object, overPoint),
+    prepareComputations,
+  )
+import RayTracer.Data.Light (Light (position))
+import RayTracer.Data.Material.Extra (lighting)
+import RayTracer.Data.Ray (Ray, ray)
+import qualified RayTracer.Data.Shape as S (Shape (intersect, material))
+import RayTracer.Data.Tuple (Tuple, magnitude, normalize)
 
 data World o a = World
   { objects :: ![o a],
-    lights :: ![L.Light a]
+    lights :: ![Light a]
   }
 
 instance (Eq (o p a), Ord a, Fractional a) => Eq (World (o p) a) where
@@ -34,28 +36,28 @@ world :: World o a
 world = World [] []
 
 intersect ::
-  (Floating a, Ord a, SS.Shape o p a) =>
+  (Floating a, Ord a, S.Shape o p a) =>
   Ray a ->
   World (o p) a ->
   [I.Intersection (o p) a]
-intersect r w = I.intersections $ concat $ SS.intersect r <$> objects w
+intersect r w = I.intersections $ concat $ S.intersect r <$> objects w
 
-shadeHit :: (Floating a, RealFrac a, SS.Shape o p a) => World (o p) a -> C.Computations (o p) a -> Color a
+shadeHit :: (Floating a, RealFrac a, S.Shape o p a) => World (o p) a -> Computations (o p) a -> Color a
 shadeHit w c =
   sum $
     ( \light ->
         lighting
-          (SS.material $ C.object c)
-          (C.object c)
+          (S.material $ object c)
+          (object c)
           light
-          (C.overPoint c)
-          (C.eyev c)
-          (C.normalv c)
-          (isShadowed w $ C.overPoint c)
+          (overPoint c)
+          (eyev c)
+          (normalv c)
+          (isShadowed w $ overPoint c)
     )
       <$> lights w
 
-colorAt :: (Fractional a, Floating a, RealFrac a, SS.Shape o p a) => World (o p) a -> Ray a -> Color a
+colorAt :: (Fractional a, Floating a, RealFrac a, S.Shape o p a) => World (o p) a -> Ray a -> Color a
 colorAt w r =
   maybe
     black
@@ -63,14 +65,14 @@ colorAt w r =
     $ I.hit $
       r `intersect` w
 
-isShadowed :: (Floating a, Ord a, SS.Shape o p a) => World (o p) a -> T.Tuple a -> Bool
+isShadowed :: (Floating a, Ord a, S.Shape o p a) => World (o p) a -> Tuple a -> Bool
 isShadowed w p = case listToMaybe (lights w) of
   Nothing -> True
   Just l -> maybe False ((< distance) . I.t) h
     where
-      v = L.position l - p
-      distance = T.magnitude v
-      direction = T.normalize v
+      v = position l - p
+      distance = magnitude v
+      direction = normalize v
       r = ray p direction
       intersections = r `intersect` w
       h = I.hit intersections

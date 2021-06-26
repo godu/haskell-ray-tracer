@@ -11,23 +11,29 @@ module RayTracer.Data.Canvas
   )
 where
 
-import Data.Ix
-import Data.Maybe
-import qualified Data.Vector as V
-import RayTracer.Data.Color
+import Data.Ix (range)
+import Data.Maybe (fromMaybe)
+import Data.Vector
+  ( Vector,
+    replicate,
+    (!?),
+    (//),
+  )
+import RayTracer.Data.Color (Color, black, color)
+import Prelude hiding (replicate)
 
 data Canvas a = Canvas
   { width :: !Int,
     height :: !Int,
-    pixels :: !(V.Vector (Color a))
+    pixels :: !(Vector (Color a))
   }
   deriving (Eq)
 
 canvas :: Num a => (Int, Int) -> Canvas a
-canvas (w, h) = Canvas w h $ V.replicate (w * h) black
+canvas (w, h) = Canvas w h $ replicate (w * h) black
 
 at :: Num a => Canvas a -> (Int, Int) -> Color a
-at (Canvas w _ pixels) (x, y) = fromMaybe (color 0 0 0) $ pixels V.!? (x + y * w)
+at (Canvas w _ pixels) (x, y) = fromMaybe (color 0 0 0) $ pixels !? (x + y * w)
 
 replace :: (Int, Int) -> Color a -> Canvas a -> Canvas a
 replace i a c = bulk c [(i, a)]
@@ -37,7 +43,7 @@ bulk (Canvas w h pixels) ps = Canvas w h nextPixels
   where
     toList = foldr (:) []
     ops = (\((x, y), c) -> (x + y * w, c)) <$> ps
-    nextPixels = pixels V.// toList ops
+    nextPixels = pixels // toList ops
 
 positions :: Canvas a -> [[(Int, Int)]]
 positions (Canvas w h _) =
