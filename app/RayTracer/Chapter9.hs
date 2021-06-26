@@ -3,6 +3,8 @@
 
 module RayTracer.Chapter9
   ( main,
+    Shape (Plane, Sphere),
+    plane,
   )
 where
 
