@@ -1,5 +1,3 @@
-{-# LANGUAGE TupleSections #-}
-
 module RayTracer.Projectile
   ( Projectile (Projectile),
     Environment (Environment),

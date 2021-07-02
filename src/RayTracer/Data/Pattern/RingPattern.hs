@@ -1,6 +1,3 @@
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-
 module RayTracer.Data.Pattern.RingPattern
   ( RingPattern (RingPattern, transformation, a, b),
     ringPattern,

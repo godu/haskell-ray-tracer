@@ -1,5 +1,3 @@
-{-# LANGUAGE MultiParamTypeClasses #-}
-
 module RayTracer.Data.Shape
   ( Shape
       ( material,

@@ -1,5 +1,3 @@
-{-# LANGUAGE TupleSections #-}
-
 module RayTracer.Data.Canvas
   ( Canvas (),
     canvas,

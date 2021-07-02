@@ -1,6 +1,3 @@
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-
 module RayTracer.Data.Pattern.StripePattern
   ( StripePattern (StripePattern, transformation, a, b),
     stripePattern,

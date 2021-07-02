@@ -51,3 +51,10 @@
   
   ![chapter-10](https://raw.githubusercontent.com/godu/haskell-ray-tracer/gh-pages/chapter-10.jpg)
 </details>
+
+## Contribute
+
+```
+// Lint & Format
+$ stack install hlint ormolu
+```

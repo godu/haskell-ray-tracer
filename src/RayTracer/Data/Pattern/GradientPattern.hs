@@ -1,6 +1,3 @@
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-
 module RayTracer.Data.Pattern.GradientPattern
   ( GradientPattern (GradientPattern, transformation, a, b),
     gradientPattern,

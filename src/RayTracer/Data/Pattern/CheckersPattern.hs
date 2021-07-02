@@ -1,6 +1,3 @@
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-
 module RayTracer.Data.Pattern.CheckersPattern
   ( CheckersPattern (CheckersPattern, transformation, a, b),
     checkersPattern,
