@@ -1,5 +1,3 @@
-{-# LANGUAGE TupleSections #-}
-
 module RayTracer.Chapter6
   ( main,
     material,

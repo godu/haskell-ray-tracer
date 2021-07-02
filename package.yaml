@@ -1,19 +1,26 @@
 name: haskell-ray-tracer
 version: 0.1.0.0
-description: |
-  Please see the README on GitHub
-  at <https://github.com/godu/haskell-ray-tracer#readme>
+github: godu/haskell-ray-tracer
+license: BSD3
 author: Arthur Weber
 maintainer: arthur.weber@viacesi.fr
-license: BSD3
-github: godu/haskell-ray-tracer
+copyright: "2021 Arthur Weber"
+
 extra-source-files:
   - README.md
+
+description: "The Ray Tracer Challenge: A Test-Driven Guide to Your First 3D Renderer"
+
 dependencies:
   - base >= 4.7 && < 5
+
 ghc-options:
+  - -threaded
+  - -rtsopts
+  - -with-rtsopts=-N
   - -W
   - -Werror
+
 library:
   source-dirs: src
   dependencies:
@@ -21,21 +28,13 @@ library:
     - foldl
     - semirings
     - vector
+
 executables:
   haskell-ray-tracer-exec:
     main: Main.hs
     source-dirs: app
     dependencies:
       - haskell-ray-tracer
-    ghc-options:
-      - -O2
-      - -threaded
-      - -rtsopts
-      - -with-rtsopts=-N
-      - -fexcess-precision
-      - -optc-O3
-      - -optc-ffast-math
-      - -funfolding-use-threshold=16
 tests:
   haskell-ray-tracer-test:
     main: Spec.hs
@@ -43,3 +42,10 @@ tests:
     dependencies:
       - haskell-ray-tracer
       - hspec
+
+default-extensions:
+  - Strict
+  - StrictData
+  - FlexibleInstances
+  - TupleSections
+  - MultiParamTypeClasses

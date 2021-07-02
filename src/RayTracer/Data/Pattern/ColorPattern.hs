@@ -1,6 +1,3 @@
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-
 module RayTracer.Data.Pattern.ColorPattern
   ( ColorPattern (ColorPattern, transformation, color),
     colorPattern,
