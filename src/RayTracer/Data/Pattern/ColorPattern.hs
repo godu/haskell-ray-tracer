@@ -18,6 +18,6 @@ data ColorPattern a = ColorPattern
 colorPattern :: Num a => C.Color a -> ColorPattern a
 colorPattern = ColorPattern identity
 
-instance (Num a, Ord a, Fractional a) => P.Pattern ColorPattern a where
+instance (Ord a, Fractional a) => P.Pattern ColorPattern a where
   transformation = transformation
   patternAt (ColorPattern _ a) _ = a

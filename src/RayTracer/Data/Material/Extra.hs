@@ -8,13 +8,12 @@ import RayTracer.Data.Color
 import qualified RayTracer.Data.Color as C
 import RayTracer.Data.Light
 import RayTracer.Data.Material
-import RayTracer.Data.Pattern
 import RayTracer.Data.Pattern.Extra
 import qualified RayTracer.Data.Shape as S
 import RayTracer.Data.Tuple
 
 lighting ::
-  (S.Shape o p a, Floating a, Ord a, RealFrac a, Pattern p a) =>
+  (S.Shape o p a, Floating a, RealFrac a) =>
   Material p a ->
   o p a ->
   Light a ->

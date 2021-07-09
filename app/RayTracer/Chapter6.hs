@@ -22,7 +22,7 @@ import RayTracer.Transformation
 material :: (RealFrac a) => M.Material Pattern a
 material = M.Material (colorPattern C.white) 0.1 0.9 0.9 200.0
 
-sphere :: (Num a, RealFrac a) => SS.Sphere Pattern a
+sphere :: (RealFrac a) => SS.Sphere Pattern a
 sphere = SS.Sphere identity material
 
 main :: [String]

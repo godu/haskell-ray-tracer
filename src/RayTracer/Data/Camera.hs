@@ -18,7 +18,6 @@ import Control.Applicative
 import Data.Maybe
 import qualified RayTracer.Data.Canvas as C
 import qualified RayTracer.Data.Matrix as M
-import qualified RayTracer.Data.Pattern as P
 import qualified RayTracer.Data.Ray as R
 import qualified RayTracer.Data.Shape as S
 import qualified RayTracer.Data.Tuple as T
@@ -66,7 +65,7 @@ rayForPixel c (px, py) = liftA2 R.ray origin direction
     origin = (M.*^ T.point 0 0 0) <$> t
     direction = T.normalize <$> liftA2 (-) pixel origin
 
-render :: (S.Shape o p a, Eq a, Floating a, RealFrac a, Eq (o p a), P.Pattern p a) => Camera a -> W.World (o p) a -> C.Canvas a
+render :: (S.Shape o p a, Floating a, RealFrac a) => Camera a -> W.World (o p) a -> C.Canvas a
 render camera world = image
   where
     pixels = (`quotRem` vsize camera) <$> [0 .. hsize camera * vsize camera - 1]

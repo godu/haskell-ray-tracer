@@ -16,7 +16,7 @@ import Test.Hspec
 material :: (RealFrac a) => Material RS.Pattern a
 material = Material (RS.colorPattern C.white) 0.1 0.9 0.9 200.0
 
-sphere :: (Num a, RealFrac a) => S.Sphere RS.Pattern a
+sphere :: (RealFrac a) => S.Sphere RS.Pattern a
 sphere = S.Sphere identity material
 
 spec :: Spec

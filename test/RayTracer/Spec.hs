@@ -39,7 +39,7 @@ instance (RealFrac a) => P.Pattern Pattern a where
 material :: (RealFrac a) => M.Material Pattern a
 material = M.Material (colorPattern C.white) 0.1 0.9 0.9 200.0
 
-sphere :: (Num a, RealFrac a) => S.Sphere Pattern a
+sphere :: (RealFrac a) => S.Sphere Pattern a
 sphere = S.Sphere identity material
 
 world :: (Fractional a, RealFrac a) => W.World (S.Sphere Pattern) a

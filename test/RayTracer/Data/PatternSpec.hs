@@ -20,7 +20,7 @@ import Test.Hspec
 material :: (RealFrac a) => M.Material SP.StripePattern a
 material = M.Material (SP.stripePattern white black) 0.1 0.9 0.9 200.0
 
-sphere :: (Num a, RealFrac a) => S.Sphere SP.StripePattern a
+sphere :: (RealFrac a) => S.Sphere SP.StripePattern a
 sphere = S.Sphere identity material
 
 newtype TestPattern a = TestPattern

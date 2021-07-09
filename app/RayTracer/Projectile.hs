@@ -7,7 +7,7 @@ module RayTracer.Projectile
   )
 where
 
-import Data.List
+import Data.List (unfoldr)
 import RayTracer.Data.Canvas
 import RayTracer.Data.Color
 import RayTracer.Data.Tuple
