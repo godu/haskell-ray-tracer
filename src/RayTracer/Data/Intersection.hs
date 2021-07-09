@@ -6,7 +6,7 @@ module RayTracer.Data.Intersection
   )
 where
 
-import Data.List
+import Data.List (find, sort)
 
 data Intersection o a = Intersection {t :: !a, object :: !(o a)} deriving (Show, Eq)
 

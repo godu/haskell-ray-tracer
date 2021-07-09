@@ -39,6 +39,7 @@ bulk (Canvas w h pixels) ps = Canvas w h nextPixels
     ops = (\((x, y), c) -> (x + y * w, c)) <$> ps
     nextPixels = pixels V.// toList ops
 
+positions :: Canvas a -> [[(Int, Int)]]
 positions (Canvas w h _) =
   (\a -> (,a) <$> range (0, w - 1)) <$> range (0, h - 1)
 

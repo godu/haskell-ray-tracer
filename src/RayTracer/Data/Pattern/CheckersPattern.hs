@@ -17,7 +17,7 @@ data CheckersPattern a = CheckersPattern
   }
   deriving (Eq, Show)
 
-checkersPattern :: (Num a, Fractional a) => C.Color a -> C.Color a -> CheckersPattern a
+checkersPattern :: (Fractional a) => C.Color a -> C.Color a -> CheckersPattern a
 checkersPattern = CheckersPattern identity
 
 instance (RealFrac a) => P.Pattern CheckersPattern a where

@@ -18,9 +18,15 @@ data Color a = Color
 color :: a -> a -> a -> Color a
 color = Color
 
-instance RealFrac a => Show (Color a) where
+instance (RealFrac a) => Show (Color a) where
   show (Color r g b) =
-    unwords $ show . max 0 . min 255 . floor . (*) 256 <$> [r, g, b]
+    unwords $
+      show
+        . max 0
+        . min 255
+        . floor
+        . (*) 256
+        <$> [r, g, b]
 
 instance (Ord a, Fractional a) => Eq (Color a) where
   (Color a b c) == (Color a' b' c') = (a ~= a') && (b ~= b') && (c ~= c')

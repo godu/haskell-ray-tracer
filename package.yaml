@@ -15,8 +15,16 @@ dependencies:
   - base >= 4.7 && < 5
 
 ghc-options:
-  - -W
+  - -Wall
+  - -Wcompat
+  - -Widentities
+  - -Wincomplete-record-updates
+  - -Wincomplete-uni-patterns
+  - -Wpartial-fields
+  - -Wredundant-constraints
   - -Werror
+  - -Wno-name-shadowing
+  - -Wno-type-defaults
 
 library:
   source-dirs: src

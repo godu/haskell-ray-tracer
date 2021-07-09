@@ -90,9 +90,9 @@ transpose (Matrix (w, h) as) = Matrix (w, h) bs
     bs = V.fromList $ catMaybes $ (as V.!?) <$> is
 
 determinant :: Num a => Matrix a -> a
-determinant (Matrix (2, 2) as) = (a * d) - (b * c)
-  where
-    [a, b, c, d] = V.toList as
+determinant (Matrix (2, 2) as) = case V.toList as of
+  [a, b, c, d] -> (a * d) - (b * c)
+  _ -> 0
 determinant a = sum $ go <$> [0 .. (y - 1)]
   where
     (_, y) = dimension a
@@ -115,7 +115,7 @@ cofactor x y
   | odd $ x + y = negate . minor x y
   | otherwise = minor x y
 
-inverse :: (Num a, Eq a, Fractional a) => Matrix a -> Maybe (Matrix a)
+inverse :: (Eq a, Fractional a) => Matrix a -> Maybe (Matrix a)
 inverse a
   | d == 0 = Nothing
   | otherwise = pure $ Matrix (w, h) $ V.imap go as

@@ -34,13 +34,13 @@ world :: World o a
 world = World [] []
 
 intersect ::
-  (Num a, Floating a, Eq a, Ord a, Fractional a, SS.Shape o p a, Eq (o p a)) =>
+  (Floating a, Ord a, SS.Shape o p a) =>
   Ray a ->
   World (o p) a ->
   [I.Intersection (o p) a]
 intersect r w = I.intersections $ concat $ SS.intersect r <$> objects w
 
-shadeHit :: (Num a, Floating a, RealFrac a, SS.Shape o p a, Eq (o p a), SS.Shape o p a) => World (o p) a -> C.Computations (o p) a -> Color a
+shadeHit :: (Floating a, RealFrac a, SS.Shape o p a) => World (o p) a -> C.Computations (o p) a -> Color a
 shadeHit w c =
   sum $
     ( \light ->
@@ -55,7 +55,7 @@ shadeHit w c =
     )
       <$> lights w
 
-colorAt :: (Fractional a, Eq (o p a), Floating a, RealFrac a, SS.Shape o p a) => World (o p) a -> Ray a -> Color a
+colorAt :: (Fractional a, Floating a, RealFrac a, SS.Shape o p a) => World (o p) a -> Ray a -> Color a
 colorAt w r =
   maybe
     black
@@ -63,7 +63,7 @@ colorAt w r =
     $ I.hit $
       r `intersect` w
 
-isShadowed :: (Num a, Floating a, Ord a, SS.Shape o p a, Eq (o p a)) => World (o p) a -> T.Tuple a -> Bool
+isShadowed :: (Floating a, Ord a, SS.Shape o p a) => World (o p) a -> T.Tuple a -> Bool
 isShadowed w p = case listToMaybe (lights w) of
   Nothing -> True
   Just l -> maybe False ((< distance) . I.t) h

@@ -58,19 +58,19 @@ isVector = (== 0) . w
 isPoint :: Num a => Eq a => Tuple a -> Bool
 isPoint = (== 1) . w
 
-zero :: (Eq a, Num a) => Tuple a
+zero :: (Num a) => Tuple a
 zero = 0
 
 (*^) :: Num a => Tuple a -> a -> Tuple a
-(Tuple a b c d) *^ x = tuple (a * x) (b * x) (c * x) (d * x)
+(Tuple a b c d) *^ n = tuple (a * n) (b * n) (c * n) (d * n)
 
 (/^) :: Fractional a => Tuple a -> a -> Tuple a
-a /^ x = a *^ (1 / x)
+a /^ n = a *^ (1 / n)
 
 magnitude :: Floating a => Tuple a -> a
 magnitude (Tuple a b c d) = sqrt (a * a + b * b + c * c + d * d)
 
-normalize :: (Fractional a, Floating a) => Tuple a -> Tuple a
+normalize :: (Floating a) => Tuple a -> Tuple a
 normalize v =
   tuple
     (a / m)

@@ -21,7 +21,7 @@ data Computations o a = Computations
   }
   deriving (Eq, Show)
 
-prepareComputations :: (Eq a, Num a, Shape o p a, Ord a, Fractional a, Floating a) => I.Intersection (o p) a -> Ray a -> Computations (o p) a
+prepareComputations :: (Shape o p a, Ord a, Fractional a, Floating a) => I.Intersection (o p) a -> Ray a -> Computations (o p) a
 prepareComputations intersection ray =
   Computations
     { t = _t,
