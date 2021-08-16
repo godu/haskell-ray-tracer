@@ -19,13 +19,9 @@ import RayTracer.Transformation
 import Test.Hspec
 
 material :: M.Material (SP.StripePattern ColorPattern) Double
-material =
-  M.Material
-    (SP.stripePattern whitePattern blackPattern)
-    0.1
-    0.9
-    0.9
-    200.0
+material = M.Material pattern_ 0.1 0.9 0.9 200.0 0.0
+  where
+    pattern_ = SP.stripePattern whitePattern blackPattern
 
 sphere :: S.Sphere (SP.StripePattern ColorPattern) Double
 sphere = S.Sphere identity material
@@ -44,7 +40,7 @@ testPattern :: TestPattern Double
 testPattern = TestPattern identity
 
 testMaterial :: M.Material TestPattern Double
-testMaterial = M.Material testPattern 0.1 0.9 0.9 200.0
+testMaterial = M.Material testPattern 0.1 0.9 0.9 200.0 0.0
 
 testSphere :: S.Sphere TestPattern Double
 testSphere = S.Sphere identity testMaterial

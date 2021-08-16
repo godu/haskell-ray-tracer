@@ -39,7 +39,7 @@ instance (RealFrac a) => P.Pattern Pattern a where
   patternAt (StripePattern a) = P.patternAt a
 
 material :: (RealFrac a) => M.Material Pattern a
-material = M.Material (colorPattern C.white) 0.1 0.9 0.9 200.0
+material = M.Material (colorPattern C.white) 0.1 0.9 0.9 200.0 0.0
 
 sphere :: (RealFrac a) => S.Sphere Pattern a
 sphere = S.Sphere identity material

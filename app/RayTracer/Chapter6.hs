@@ -25,7 +25,7 @@ import RayTracer.Projectile (fuchsia)
 import RayTracer.Transformation (identity)
 
 material :: (RealFrac a) => Material Pattern a
-material = Material (colorPattern white) 0.1 0.9 0.9 200.0
+material = Material (colorPattern white) 0.1 0.9 0.9 200.0 0.0
 
 sphere :: (RealFrac a) => SS.Sphere Pattern a
 sphere = SS.Sphere identity material

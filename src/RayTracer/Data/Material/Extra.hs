@@ -23,7 +23,7 @@ lighting ::
   Color a
 lighting m object light point eyev normalv inShadow = if inShadow then ambient else ambient + diffuse + specular
   where
-    Material pattern_ ambient_ diffuse_ specular_ shininess_ = m
+    Material pattern_ ambient_ diffuse_ specular_ shininess_ _ = m
     color = fromMaybe black $ patternAtShape pattern_ object point
     effectiveColor = color * intensity light
     lightv = normalize $ position light - point

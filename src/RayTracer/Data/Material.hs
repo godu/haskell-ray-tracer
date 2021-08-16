@@ -1,5 +1,5 @@
 module RayTracer.Data.Material
-  ( Material (Material, pattern_, ambient, diffuse, specular, shininess),
+  ( Material (Material, pattern_, ambient, diffuse, specular, shininess, reflective),
   )
 where
 
@@ -8,6 +8,7 @@ data Material p a = Material
     ambient :: !a,
     diffuse :: !a,
     specular :: !a,
-    shininess :: !a
+    shininess :: !a,
+    reflective :: !a
   }
   deriving (Show, Eq)

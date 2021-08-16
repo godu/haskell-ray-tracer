@@ -14,7 +14,7 @@ import RayTracer.Transformation
 import Test.Hspec
 
 material :: Material RS.Pattern Double
-material = Material (RS.colorPattern C.white) 0.1 0.9 0.9 200.0
+material = Material (RS.colorPattern C.white) 0.1 0.9 0.9 200.0 0.0
 
 sphere :: S.Sphere RS.Pattern Double
 sphere = S.Sphere identity material
@@ -84,3 +84,6 @@ spec = do
         inShadow = False
     lighting m' sphere light (point 0.9 0 0) eyev normalv inShadow `shouldBe` C.white
     lighting m' sphere light (point 1.1 0 0) eyev normalv inShadow `shouldBe` C.black
+
+  it "Reflectivity for the default material" $ do
+    reflective m `shouldBe` 0.0

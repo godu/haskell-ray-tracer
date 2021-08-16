@@ -104,7 +104,7 @@ instance (RealFrac a, Floating a) => P.Pattern Pattern a where
   patternAt (PerturbedPattern a) = P.patternAt a
 
 material :: (RealFrac a) => Material Pattern a
-material = Material (colorPattern white) 0.1 0.9 0.9 200.0
+material = Material (colorPattern white) 0.1 0.9 0.9 200.0 0.0
 
 sphere :: (RealFrac a) => SS.Sphere Pattern a
 sphere = SS.Sphere identity material
