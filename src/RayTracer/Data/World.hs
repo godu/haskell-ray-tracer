@@ -45,19 +45,22 @@ intersect ::
 intersect r w = I.intersections $ concat $ S.intersect r <$> objects w
 
 shadeHit :: (Floating a, RealFrac a, S.Shape o p a) => World (o p) a -> Computations (o p) a -> Color a
-shadeHit w c =
-  sum $
-    ( \light ->
-        lighting
-          (S.material $ object c)
-          (object c)
-          light
-          (overPoint c)
-          (eyev c)
-          (normalv c)
-          (isShadowed w $ overPoint c)
-    )
-      <$> lights w
+shadeHit w c = surface + reflected
+  where
+    surface =
+      sum $
+        ( \light ->
+            lighting
+              (S.material $ object c)
+              (object c)
+              light
+              (overPoint c)
+              (eyev c)
+              (normalv c)
+              (isShadowed w $ overPoint c)
+        )
+          <$> lights w
+    reflected = reflectedColor w c
 
 colorAt :: (Fractional a, Floating a, RealFrac a, S.Shape o p a) => World (o p) a -> Ray a -> Color a
 colorAt w r =

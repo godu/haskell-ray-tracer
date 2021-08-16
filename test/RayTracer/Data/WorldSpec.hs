@@ -141,25 +141,43 @@ spec = do
       _ -> mzero
 
   it "The reflected color for a reflective material" $ do
-    case W.objects world of
-      [s1, s2] ->
-        let shape =
-              Plane $
-                ( plane
-                    { P.material =
-                        (P.material plane)
-                          { M.reflective = 0.5
-                          },
-                      P.transformation = translation 0 (-1) 0
-                    }
-                )
-            w =
-              world
-                { W.objects = shape : (Sphere <$> [s1, s2])
+    let shape =
+          Plane $
+            ( plane
+                { P.material =
+                    (P.material plane)
+                      { M.reflective = 0.5
+                      },
+                  P.transformation = translation 0 (-1) 0
                 }
-            r = R.ray (T.point 0 0 (-3)) (T.vector 0 (- sqrt 2 / 2) (sqrt 2 / 2))
-            i = I.intersection (sqrt 2) shape
-            comps = prepareComputations i r
-            color = W.reflectedColor w comps
-         in color `shouldBe` C.color 0.19032 0.2379 0.14274
-      _ -> mzero
+            )
+        w =
+          world
+            { W.objects = shape : (Sphere <$> W.objects world)
+            }
+        r = R.ray (T.point 0 0 (-3)) (T.vector 0 (- sqrt 2 / 2) (sqrt 2 / 2))
+        i = I.intersection (sqrt 2) shape
+        comps = prepareComputations i r
+        color = W.reflectedColor w comps
+     in color `shouldBe` C.color 0.19032 0.2379 0.14274
+
+  it "shadeHit with a reflective material" $ do
+    let shape =
+          Plane $
+            ( plane
+                { P.material =
+                    (P.material plane)
+                      { M.reflective = 0.5
+                      },
+                  P.transformation = translation 0 (-1) 0
+                }
+            )
+        w =
+          world
+            { W.objects = shape : (Sphere <$> W.objects world)
+            }
+        r = R.ray (T.point 0 0 (-3)) (T.vector 0 (- sqrt 2 / 2) (sqrt 2 / 2))
+        i = I.intersection (sqrt 2) shape
+        comps = prepareComputations i r
+        color = W.shadeHit w comps
+     in color `shouldBe` C.color 0.87677 0.92436 0.82918
