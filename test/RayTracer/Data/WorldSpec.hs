@@ -8,6 +8,7 @@ import RayTracer.Data.Color (black)
 import qualified RayTracer.Data.Color as C
 import qualified RayTracer.Data.Intersection as I
 import RayTracer.Data.Intersection.Computations
+import RayTracer.Data.Light (pointLight)
 import qualified RayTracer.Data.Light as L
 import qualified RayTracer.Data.Material as M
 import qualified RayTracer.Data.Ray as R
@@ -144,10 +145,7 @@ spec = do
     let shape =
           Plane $
             ( plane
-                { P.material =
-                    (P.material plane)
-                      { M.reflective = 0.5
-                      },
+                { P.material = (P.material plane) {M.reflective = 0.5},
                   P.transformation = translation 0 (-1) 0
                 }
             )
@@ -165,10 +163,7 @@ spec = do
     let shape =
           Plane $
             ( plane
-                { P.material =
-                    (P.material plane)
-                      { M.reflective = 0.5
-                      },
+                { P.material = (P.material plane) {M.reflective = 0.5},
                   P.transformation = translation 0 (-1) 0
                 }
             )
@@ -181,3 +176,24 @@ spec = do
         comps = prepareComputations i r
         color = W.shadeHit w comps
      in color `shouldBe` C.color 0.87677 0.92436 0.82918
+
+  it "colorAt with mutually reflective surface" $ do
+    let lower =
+          ( plane
+              { P.material = (P.material plane) {M.reflective = 1},
+                P.transformation = translation 0 (-1) 0
+              }
+          )
+        upper =
+          ( plane
+              { P.material = (P.material plane) {M.reflective = 1},
+                P.transformation = translation 0 1 0
+              }
+          )
+        w =
+          world
+            { W.objects = [lower, upper],
+              W.lights = [pointLight (T.point 0 0 0) (C.color 1 1 1)]
+            }
+        r = R.ray (T.point 0 0 0) (T.vector 0 1 0)
+     in W.colorAt w r `shouldBe` C.color 11.4 11.4 11.4

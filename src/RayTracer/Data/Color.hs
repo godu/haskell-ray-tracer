@@ -18,7 +18,7 @@ data Color a = Color
 color :: a -> a -> a -> Color a
 color = Color
 
-instance (RealFrac a) => Show (Color a) where
+instance (RealFrac a, Show a) => Show (Color a) where
   show (Color r g b) =
     unwords $
       show
