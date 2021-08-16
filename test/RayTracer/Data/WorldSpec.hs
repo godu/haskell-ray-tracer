@@ -4,6 +4,7 @@ module RayTracer.Data.WorldSpec
 where
 
 import Control.Monad (mzero)
+import RayTracer.Data.Color (black)
 import qualified RayTracer.Data.Color as C
 import qualified RayTracer.Data.Intersection as I
 import RayTracer.Data.Intersection.Computations
@@ -82,7 +83,7 @@ spec = do
         c = w `W.colorAt` r
     c `shouldBe` C.color 0.38066 0.47583 0.2855
   it "The color with an intersection behind the ray" $ do
-    case (W.objects world) of
+    case W.objects world of
       [s1, s2] ->
         let w =
               world
@@ -125,3 +126,18 @@ spec = do
         i = I.intersection 4 s2
         comps = prepareComputations i r
     W.shadeHit w comps `shouldBe` C.color 0.1 0.1 0.1
+
+  it "The reflected color for a nonreflective material" $ do
+    case W.objects world of
+      [s1, s2] ->
+        let w :: W.World (S.Sphere Pattern) Double
+            w = world
+            s2' = s2 {S.material = (S.material s2) {M.ambient = 1}}
+            w' = w {W.objects = [s1, s2']}
+            r = R.ray (T.point 0 0 0) (T.vector 0 0 1)
+            i = I.intersection 1 s2'
+            comps = prepareComputations i r
+            color :: C.Color Double
+            color = W.reflectedColor w' comps
+         in color `shouldBe` black
+      _ -> mzero

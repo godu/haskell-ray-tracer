@@ -5,6 +5,7 @@ module RayTracer.Data.World
     shadeHit,
     colorAt,
     isShadowed,
+    reflectedColor,
   )
 where
 
@@ -76,3 +77,6 @@ isShadowed w p = case listToMaybe (lights w) of
       r = ray p direction
       intersections = r `intersect` w
       h = I.hit intersections
+
+reflectedColor :: (Floating a) => World o a -> Computations o a -> Color a
+reflectedColor _ _ = black
