@@ -10,13 +10,14 @@ module RayTracer.Data.World
 where
 
 import Data.Maybe (listToMaybe)
-import RayTracer.Data.Color (Color, black)
+import RayTracer.Data.Color (Color, black, (*^))
 import qualified RayTracer.Data.Intersection as I (Intersection (t), hit, intersections)
 import RayTracer.Data.Intersection.Computations
-  ( Computations (eyev, normalv, object, overPoint),
+  ( Computations (eyev, normalv, object, overPoint, reflectv),
     prepareComputations,
   )
 import RayTracer.Data.Light (Light (position))
+import qualified RayTracer.Data.Material as M
 import RayTracer.Data.Material.Extra (lighting)
 import RayTracer.Data.Ray (Ray, ray)
 import qualified RayTracer.Data.Shape as S (Shape (intersect, material))
@@ -78,5 +79,12 @@ isShadowed w p = case listToMaybe (lights w) of
       intersections = r `intersect` w
       h = I.hit intersections
 
-reflectedColor :: (Floating a) => World o a -> Computations o a -> Color a
-reflectedColor _ _ = black
+reflectedColor :: (S.Shape o p a, Floating a, RealFrac a) => World (o p) a -> Computations (o p) a -> Color a
+reflectedColor w comps =
+  if reflective == 0
+    then black
+    else color *^ reflective
+  where
+    reflective = M.reflective $ S.material $ object comps
+    reflectRay = ray (overPoint comps) (reflectv comps)
+    color = colorAt w reflectRay

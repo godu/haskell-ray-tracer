@@ -11,6 +11,7 @@ import RayTracer.Data.Intersection.Computations
 import qualified RayTracer.Data.Light as L
 import qualified RayTracer.Data.Material as M
 import qualified RayTracer.Data.Ray as R
+import qualified RayTracer.Data.Shape.Plane as P
 import qualified RayTracer.Data.Shape.Sphere as S
 import qualified RayTracer.Data.Tuple as T
 import qualified RayTracer.Data.World as W
@@ -130,14 +131,35 @@ spec = do
   it "The reflected color for a nonreflective material" $ do
     case W.objects world of
       [s1, s2] ->
-        let w :: W.World (S.Sphere Pattern) Double
-            w = world
-            s2' = s2 {S.material = (S.material s2) {M.ambient = 1}}
-            w' = w {W.objects = [s1, s2']}
+        let s2' = s2 {S.material = (S.material s2) {M.ambient = 1}}
+            w = world {W.objects = [s1, s2']}
             r = R.ray (T.point 0 0 0) (T.vector 0 0 1)
             i = I.intersection 1 s2'
             comps = prepareComputations i r
-            color :: C.Color Double
-            color = W.reflectedColor w' comps
+            color = W.reflectedColor w comps
          in color `shouldBe` black
+      _ -> mzero
+
+  it "The reflected color for a reflective material" $ do
+    case W.objects world of
+      [s1, s2] ->
+        let shape =
+              Plane $
+                ( plane
+                    { P.material =
+                        (P.material plane)
+                          { M.reflective = 0.5
+                          },
+                      P.transformation = translation 0 (-1) 0
+                    }
+                )
+            w =
+              world
+                { W.objects = shape : (Sphere <$> [s1, s2])
+                }
+            r = R.ray (T.point 0 0 (-3)) (T.vector 0 (- sqrt 2 / 2) (sqrt 2 / 2))
+            i = I.intersection (sqrt 2) shape
+            comps = prepareComputations i r
+            color = W.reflectedColor w comps
+         in color `shouldBe` C.color 0.19032 0.2379 0.14274
       _ -> mzero
