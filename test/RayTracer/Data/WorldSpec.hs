@@ -60,7 +60,7 @@ spec = do
         shape = head $ W.objects w
         i = I.intersection 4 shape
         comps = prepareComputations i r
-        c = W.shadeHit w comps
+        c = W.shadeHit W.depth w comps
     c `shouldBe` C.color 0.38066 0.47583 0.2855
   it "Shading an intersection from the inside" $ do
     let w =
@@ -71,18 +71,18 @@ spec = do
         shape = W.objects w !! 1
         i = I.intersection 0.5 shape
         comps = prepareComputations i r
-        c = W.shadeHit w comps
+        c = W.shadeHit W.depth w comps
     c `shouldBe` C.color 0.90498 0.90498 0.90498
 
   it "The color when a ray missing" $ do
     let w = world
         r = R.ray (T.point 0 0 (-5)) (T.vector 0 1 0)
-        c = w `W.colorAt` r
+        c = W.colorAt W.depth w r
     c `shouldBe` C.color 0 0 0
   it "The color when a hits" $ do
     let w = world
         r = R.ray (T.point 0 0 (-5)) (T.vector 0 0 1)
-        c = w `W.colorAt` r
+        c = W.colorAt W.depth w r
     c `shouldBe` C.color 0.38066 0.47583 0.2855
   it "The color with an intersection behind the ray" $ do
     case W.objects world of
@@ -95,7 +95,7 @@ spec = do
                     ]
                 }
             r = R.ray (T.point 0 0 0.75) (T.vector 0 0 (-1))
-            c = w `W.colorAt` r
+            c = W.colorAt W.depth w r
          in colorPattern c `shouldBe` M.pattern_ (S.material s2)
       _ -> mzero
 
@@ -127,7 +127,7 @@ spec = do
         r = R.ray (T.point 0 0 5) (T.vector 0 0 1)
         i = I.intersection 4 s2
         comps = prepareComputations i r
-    W.shadeHit w comps `shouldBe` C.color 0.1 0.1 0.1
+    W.shadeHit W.depth w comps `shouldBe` C.color 0.1 0.1 0.1
 
   it "The reflected color for a nonreflective material" $ do
     case W.objects world of
@@ -137,7 +137,7 @@ spec = do
             r = R.ray (T.point 0 0 0) (T.vector 0 0 1)
             i = I.intersection 1 s2'
             comps = prepareComputations i r
-            color = W.reflectedColor w comps
+            color = W.reflectedColor W.depth w comps
          in color `shouldBe` black
       _ -> mzero
 
@@ -156,7 +156,7 @@ spec = do
         r = R.ray (T.point 0 0 (-3)) (T.vector 0 (- sqrt 2 / 2) (sqrt 2 / 2))
         i = I.intersection (sqrt 2) shape
         comps = prepareComputations i r
-        color = W.reflectedColor w comps
+        color = W.reflectedColor W.depth w comps
      in color `shouldBe` C.color 0.19032 0.2379 0.14274
 
   it "shadeHit with a reflective material" $ do
@@ -174,7 +174,7 @@ spec = do
         r = R.ray (T.point 0 0 (-3)) (T.vector 0 (- sqrt 2 / 2) (sqrt 2 / 2))
         i = I.intersection (sqrt 2) shape
         comps = prepareComputations i r
-        color = W.shadeHit w comps
+        color = W.shadeHit W.depth w comps
      in color `shouldBe` C.color 0.87677 0.92436 0.82918
 
   it "colorAt with mutually reflective surface" $ do
@@ -196,4 +196,22 @@ spec = do
               W.lights = [pointLight (T.point 0 0 0) (C.color 1 1 1)]
             }
         r = R.ray (T.point 0 0 0) (T.vector 0 1 0)
-     in W.colorAt w r `shouldBe` C.color 11.4 11.4 11.4
+     in W.colorAt W.depth w r `shouldBe` C.color 11.4 11.4 11.4
+
+  it "The reflected color at the maximum recursive depth" $ do
+    let shape =
+          Plane $
+            ( plane
+                { P.material = (P.material plane) {M.reflective = 0.5},
+                  P.transformation = translation 0 (-1) 0
+                }
+            )
+        w =
+          world
+            { W.objects = shape : (Sphere <$> W.objects world)
+            }
+        r = R.ray (T.point 0 0 (-3)) (T.vector 0 (- sqrt 2 / 2) (sqrt 2 / 2))
+        i = I.intersection (sqrt 2) shape
+        comps = prepareComputations i r
+        color = W.reflectedColor 0 w comps
+     in color `shouldBe` C.color 0 0 0

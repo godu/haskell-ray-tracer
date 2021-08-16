@@ -1,5 +1,6 @@
 module RayTracer.Data.World
   ( World (World, objects, lights),
+    depth,
     world,
     intersect,
     shadeHit,
@@ -47,11 +48,8 @@ intersect ::
   [I.Intersection (o p) a]
 intersect r w = I.intersections $ concat $ S.intersect r <$> objects w
 
-shadeHit :: (Floating a, RealFrac a, S.Shape o p a) => World (o p) a -> Computations (o p) a -> Color a
-shadeHit = shadeHit' depth
-
-shadeHit' :: (Floating a, RealFrac a, S.Shape o p a) => Int -> World (o p) a -> Computations (o p) a -> Color a
-shadeHit' n w c = surface + reflected
+shadeHit :: (Floating a, RealFrac a, S.Shape o p a) => Int -> World (o p) a -> Computations (o p) a -> Color a
+shadeHit n w c = surface + reflected
   where
     surface =
       sum $
@@ -66,16 +64,13 @@ shadeHit' n w c = surface + reflected
               (isShadowed w $ overPoint c)
         )
           <$> lights w
-    reflected = reflectedColor' n w c
+    reflected = reflectedColor n w c
 
-colorAt :: (Floating a, RealFrac a, S.Shape o p a) => World (o p) a -> Ray a -> Color a
-colorAt = colorAt' depth
-
-colorAt' :: (Floating a, RealFrac a, S.Shape o p a) => Int -> World (o p) a -> Ray a -> Color a
-colorAt' n w r =
+colorAt :: (Floating a, RealFrac a, S.Shape o p a) => Int -> World (o p) a -> Ray a -> Color a
+colorAt n w r =
   maybe
     black
-    (\i -> shadeHit' n w $ prepareComputations i r)
+    (\i -> shadeHit n w $ prepareComputations i r)
     $ I.hit $
       r `intersect` w
 
@@ -91,15 +86,12 @@ isShadowed w p = case listToMaybe (lights w) of
       intersections = r `intersect` w
       h = I.hit intersections
 
-reflectedColor :: (S.Shape o p a, Floating a, RealFrac a) => World (o p) a -> Computations (o p) a -> Color a
-reflectedColor = reflectedColor' depth
-
-reflectedColor' :: (S.Shape o p a, Floating a, RealFrac a) => Int -> World (o p) a -> Computations (o p) a -> Color a
-reflectedColor' n w comps =
+reflectedColor :: (S.Shape o p a, Floating a, RealFrac a) => Int -> World (o p) a -> Computations (o p) a -> Color a
+reflectedColor n w comps =
   if n == 0 || reflective == 0
     then black
     else color *^ reflective
   where
     reflective = M.reflective $ S.material $ object comps
     reflectRay = ray (overPoint comps) (reflectv comps)
-    color = colorAt' (n - 1) w reflectRay
+    color = colorAt (n - 1) w reflectRay

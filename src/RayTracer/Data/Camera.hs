@@ -21,7 +21,7 @@ import RayTracer.Data.Matrix (Matrix, inverse, (*^))
 import RayTracer.Data.Ray (Ray, ray)
 import RayTracer.Data.Shape (Shape)
 import RayTracer.Data.Tuple (normalize, point)
-import RayTracer.Data.World (World, colorAt)
+import RayTracer.Data.World (World, colorAt, depth)
 import RayTracer.Transformation (identity)
 
 data Camera a = Camera
@@ -78,4 +78,4 @@ render camera world = image
     renderPixel _ pixel = (pixel,) <$> color
       where
         ray = rayForPixel camera pixel
-        color = colorAt world <$> ray
+        color = colorAt depth world <$> ray
