@@ -5,6 +5,7 @@ module RayTracer.Spec
     sphere,
     material,
     world,
+    plane,
   )
 where
 
@@ -14,6 +15,7 @@ import qualified RayTracer.Data.Material as M
 import qualified RayTracer.Data.Pattern as P
 import qualified RayTracer.Data.Pattern.ColorPattern as CP
 import qualified RayTracer.Data.Pattern.StripePattern as SP
+import RayTracer.Data.Shape.Plane (Plane (Plane))
 import qualified RayTracer.Data.Shape.Sphere as S
 import qualified RayTracer.Data.Tuple as T
 import qualified RayTracer.Data.World as W
@@ -43,6 +45,9 @@ material = M.Material (colorPattern C.white) 0.1 0.9 0.9 200.0 0.0
 
 sphere :: (RealFrac a) => S.Sphere Pattern a
 sphere = S.Sphere identity material
+
+plane :: (RealFrac a) => Plane Pattern a
+plane = Plane identity material
 
 world :: (Fractional a, RealFrac a) => W.World (S.Sphere Pattern) a
 world = W.World [s1, s2] (pure l)

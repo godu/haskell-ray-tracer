@@ -62,3 +62,10 @@ spec = do
         comps = C.prepareComputations i r
     T.z (C.overPoint comps) `shouldSatisfy` (< negate (epsilon / 2))
     T.z (C.point comps) `shouldSatisfy` (> T.z (C.overPoint comps))
+
+  it "Precomputing the reflection vector" $ do
+    let p = plane
+        r = R.ray (T.point 0 1 (-1)) (T.vector 0 (- sqrt 2 / 2) (sqrt 2 / 2))
+        i = intersection (sqrt 2) p
+        comps = C.prepareComputations i r
+    C.reflectv comps `shouldBe` T.vector 0 (sqrt 2 / 2) (sqrt 2 / 2)
