@@ -46,7 +46,7 @@ grad hash x y z =
 
 permutation :: [Int]
 permutation =
-  cycle $
+  cycle
     [ 151,
       160,
       137,

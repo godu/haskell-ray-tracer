@@ -15,8 +15,8 @@ module RayTracer.Data.Camera
 where
 
 import Control.Applicative (liftA2)
-import Data.Maybe (mapMaybe)
-import RayTracer.Data.Canvas (Canvas, bulk, canvas)
+import RayTracer.Data.Canvas (Canvas, canvas, imap)
+import RayTracer.Data.Color (black)
 import RayTracer.Data.Matrix (Matrix, inverse, (*^))
 import RayTracer.Data.Ray (Ray, ray)
 import RayTracer.Data.Shape (Shape)
@@ -66,16 +66,9 @@ rayForPixel c (px, py) = liftA2 ray origin direction
     direction = normalize <$> liftA2 (-) pixel origin
 
 render :: (Shape o p a, Floating a, RealFrac a) => Camera a -> World (o p) a -> Canvas a
-render camera world = image
+render camera world = imap renderPixel $ canvas (hsize camera, vsize camera)
   where
-    pixels = (`quotRem` vsize camera) <$> [0 .. hsize camera * vsize camera - 1]
-    image =
-      bulk
-        (canvas (hsize camera, vsize camera))
-        $ mapMaybe
-          (renderPixel canvas)
-          pixels
-    renderPixel _ pixel = (pixel,) <$> color
+    renderPixel pixel _ = color
       where
         ray = rayForPixel camera pixel
-        color = colorAt depth world <$> ray
+        color = maybe black (colorAt depth world) ray

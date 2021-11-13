@@ -1,3 +1,5 @@
+{-# LANGUAGE DeriveGeneric #-}
+
 module RayTracer.Data.Color
   ( Color (red, green, blue),
     color,
@@ -7,6 +9,7 @@ module RayTracer.Data.Color
   )
 where
 
+import GHC.Generics (Generic)
 import RayTracer.Extra ((~=))
 
 data Color a = Color
@@ -14,6 +17,7 @@ data Color a = Color
     green :: !a,
     blue :: !a
   }
+  deriving (Generic)
 
 color :: a -> a -> a -> Color a
 color = Color

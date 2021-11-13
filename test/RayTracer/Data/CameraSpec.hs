@@ -3,6 +3,7 @@ module RayTracer.Data.CameraSpec
   )
 where
 
+import Debug.Trace (traceShowId)
 import qualified RayTracer.Data.Camera as C
 import qualified RayTracer.Data.Canvas as CC
 import qualified RayTracer.Data.Color as CCC
@@ -52,5 +53,6 @@ spec = do
         to = T.point 0 0 0
         up = T.vector 0 1 0
         c = (C.camera 11 11 (pi / 2)) {C.transformation = T.viewTransform from to up}
-        image = C.render c w
+        image :: CC.Canvas Double
+        image = traceShowId $ C.render c w
     CC.at image (5, 5) `shouldBe` CCC.color 0.38066 0.47583 0.2855

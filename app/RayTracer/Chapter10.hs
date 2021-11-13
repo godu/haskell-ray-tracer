@@ -18,6 +18,7 @@ import RayTracer.Data.Camera
     camera,
     render,
   )
+import RayTracer.Data.Canvas (Canvas)
 import RayTracer.Data.Color (color)
 import RayTracer.Data.Intersection
   ( Intersection (Intersection),
@@ -136,4 +137,5 @@ main = [show canvas]
       (camera 320 160 (pi / 3))
         { transformation = viewTransform (point 0 1.5 (-5)) (point 0 1 0) (vector 0 1 0)
         }
+    canvas :: Canvas Double
     canvas = render camera' world'

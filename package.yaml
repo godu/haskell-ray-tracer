@@ -33,6 +33,10 @@ library:
     - foldl
     - semirings
     - vector
+    - parallel
+    - deepseq
+    - ilist
+    - split
 
 executables:
   haskell-ray-tracer-exec:

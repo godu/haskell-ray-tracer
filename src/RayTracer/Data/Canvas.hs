@@ -8,63 +8,71 @@ module RayTracer.Data.Canvas
     at,
     replace,
     bulk,
+    imap,
   )
 where
 
+import Control.DeepSeq (force)
+import Control.Parallel.Strategies (parListChunk, rpar, using)
 import Data.Ix (range)
-import Data.Maybe (fromMaybe)
-import Data.Vector
-  ( Vector,
-    replicate,
-    (!?),
-    (//),
-  )
-import RayTracer.Data.Color (Color, black, color)
-import Prelude hiding (replicate)
+import qualified Data.List.Index as LI (imap)
+import Data.List.Split (chunksOf)
+import Data.Tuple (swap)
+import GHC.Conc (numCapabilities)
+import RayTracer.Data.Color (Color, black)
 
 data Canvas a = Canvas
   { width :: !Int,
     height :: !Int,
-    pixels :: !(Vector (Color a))
+    pixels :: [Color a]
   }
   deriving (Eq)
 
 canvas :: Num a => (Int, Int) -> Canvas a
 canvas (w, h) = Canvas w h $ replicate (w * h) black
 
-at :: Num a => Canvas a -> (Int, Int) -> Color a
-at (Canvas w _ pixels) (x, y) = fromMaybe (color 0 0 0) $ pixels !? (x + y * w)
+at :: Canvas a -> (Int, Int) -> Color a
+at (Canvas w _ pixels) (x, y) = pixels !! (x + y * w)
 
 replace :: (Int, Int) -> Color a -> Canvas a -> Canvas a
-replace i a c = bulk c [(i, a)]
-
-bulk :: (Functor t, Foldable t) => Canvas a -> t ((Int, Int), Color a) -> Canvas a
-bulk (Canvas w h pixels) ps = Canvas w h nextPixels
+replace (x, y) a c = c {pixels = xs ++ (a : tail ys)}
   where
-    toList = foldr (:) []
-    ops = (\((x, y), c) -> (x + y * w, c)) <$> ps
-    nextPixels = pixels // toList ops
+    w = width c
+    (xs, ys) = splitAt (x + y * w) $ pixels c
+
+bulk :: (Foldable t) => Canvas a -> t ((Int, Int), Color a) -> Canvas a
+bulk = foldr (uncurry replace)
 
 positions :: Canvas a -> [[(Int, Int)]]
 positions (Canvas w h _) =
   (\a -> (,a) <$> range (0, w - 1)) <$> range (0, h - 1)
 
 instance (RealFrac a, Show a) => Show (Canvas a) where
-  show c = "P3\n" <> show w <> " " <> show h <> "\n255\n" <> pixels <> "\n"
+  show c@(Canvas w h _) = "P3\n" <> show w <> " " <> show h <> "\n255\n" <> showPixels c <> "\n"
     where
-      Canvas w h _ = c
-      pixels =
-        unlines $
-          concat $
-            (joinUntil " " ((<= 70) . length) <$> concatMap words)
-              . fmap (show . at c)
-              <$> positions c
+      showPixels =
+        unlines
+          . concat
+          . (`using` strategy)
+          . map
+            ( force . joinUntil " " ((<= 70) . length)
+                . concatMap words
+                . fmap show
+            )
+          . chunksOf w
+          . pixels
+      strategy = parListChunk chunkLength rpar
+        where
+          chunkLength = floor $ fromIntegral h / fromIntegral numCapabilities
 
-joinUntil :: String -> (String -> Bool) -> [String] -> [String]
-joinUntil break cond (x : xs) = joinUntil_ break cond xs x
+joinUntil :: [a] -> ([a] -> Bool) -> [[a]] -> [[a]]
+joinUntil break cond (x : xs) = go break cond xs x
   where
-    joinUntil_ _ _ [] acc = [acc]
-    joinUntil_ break cond (x : xs) acc
-      | cond (acc <> break <> x) = joinUntil_ break cond xs (acc <> break <> x)
-      | otherwise = acc : joinUntil_ break cond xs x
+    go _ _ [] acc = [acc]
+    go break cond (x : xs) acc
+      | cond (acc <> break <> x) = go break cond xs (acc <> break <> x)
+      | otherwise = acc : go break cond xs x
 joinUntil _ _ [] = []
+
+imap :: ((Int, Int) -> Color a -> Color a) -> Canvas a -> Canvas a
+imap f (Canvas w h pixels) = Canvas w h (LI.imap (f . swap . (`quotRem` w)) pixels)

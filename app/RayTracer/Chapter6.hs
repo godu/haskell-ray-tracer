@@ -6,7 +6,7 @@ module RayTracer.Chapter6
 where
 
 import RayTracer.Chapter5 (Pattern, colorPattern)
-import RayTracer.Data.Canvas (bulk, canvas)
+import RayTracer.Data.Canvas (Canvas, canvas, imap)
 import RayTracer.Data.Color (black, color, white)
 import RayTracer.Data.Intersection
   ( Intersection (object, t),
@@ -43,10 +43,7 @@ main = [show finalCanvas]
     shape = sphere {SS.material = material {pattern_ = colorPattern fuchsia}}
     light = pointLight (point (-10) 10 (-10)) (color 1 1 1)
 
-    pixels =
-      cast . (`quotRem` canvasPixels) <$> [0 .. canvasPixels * canvasPixels - 1]
-
-    cast (x, y) = ((x, y),) $ maybe black computeColor intersection
+    cast (x, y) _ = maybe black computeColor intersection
       where
         worldX = (- half) + pixelSize * fromIntegral x
         worldY = half - pixelSize * fromIntegral y
@@ -70,4 +67,5 @@ main = [show finalCanvas]
                 eye
                 normal
                 False
-    finalCanvas = bulk initialCanvas pixels
+    finalCanvas :: Canvas Double
+    finalCanvas = imap cast initialCanvas
